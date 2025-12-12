@@ -66,11 +66,12 @@ export const radioControl = style({
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '50%',
-  border: `2px solid ${vars.colors.border.default}`,
+  border: `3px solid ${vars.colors.action.primaryActive}`,
   backgroundColor: vars.colors.white,
   transition: `all ${durations.fast} ${easings.easeInOut}`,
   position: 'relative',
   flexShrink: 0,
+  cursor: 'pointer',
 
   '::after': {
     content: '""',
@@ -82,6 +83,13 @@ export const radioControl = style({
   },
 
   selectors: {
+    // Hover state
+    [`${radioInput}:hover:not(:disabled):not(:checked) + &`]: {
+      borderColor: vars.colors.action.primaryHover,
+      backgroundColor: vars.colors.white,
+    },
+
+    // Checked state
     [`${radioInput}:checked + &`]: {
       borderColor: vars.colors.action.primary,
       backgroundColor: vars.colors.white,
@@ -91,23 +99,37 @@ export const radioControl = style({
       transform: 'scale(1)',
     },
 
-    [`${radioInput}:hover:not(:disabled) + &`]: {
-      borderColor: vars.colors.action.primaryHover,
+    // Checked hover state
+    [`${radioInput}:checked:hover:not(:disabled) + &`]: {
+      borderColor: vars.colors.action.primaryActive,
     },
 
+    [`${radioInput}:checked:hover:not(:disabled) + &::after`]: {
+      backgroundColor: vars.colors.action.primaryHover,
+    },
+
+    // Focus state
     [`${radioInput}:focus-visible + &`]: {
       outline: `3px solid ${vars.colors.action.primary}`,
       outlineOffset: '3px',
     },
 
+    // Disabled state
     [`${radioInput}:disabled + &`]: {
       cursor: 'not-allowed',
       borderColor: vars.colors.border.subtle,
-      backgroundColor: vars.colors.background.tertiary,
+      backgroundColor: vars.colors.white,
+    },
+
+    // Disabled checked state
+    [`${radioInput}:disabled:checked + &`]: {
+      borderColor: vars.colors.border.subtle,
+      backgroundColor: vars.colors.white,
     },
 
     [`${radioInput}:disabled:checked + &::after`]: {
       backgroundColor: vars.colors.text.disabled,
+      transform: 'scale(1)',
     },
   },
 });

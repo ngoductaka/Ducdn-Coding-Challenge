@@ -39,6 +39,7 @@ export const vars = createGlobalTheme(':root', {
       primary: semanticLight.colors.action.primary,
       primaryHover: semanticLight.colors.action.primaryHover,
       primaryActive: semanticLight.colors.action.primaryActive,
+      primaryDefault: semanticLight.colors.action.primaryDefault,
       secondary: semanticLight.colors.action.secondary,
       secondaryHover: semanticLight.colors.action.secondaryHover,
       secondaryActive: semanticLight.colors.action.secondaryActive,
@@ -102,7 +103,10 @@ export const darkTheme = createTheme(vars, {
     background: semanticDark.colors.background,
     text: semanticDark.colors.text,
     border: semanticDark.colors.border,
-    action: semanticDark.colors.action,
+    action: {
+      ...semanticDark.colors.action,
+      primaryDefault: semanticDark.colors.action.primary, // Add the missing property
+    },
     feedback: semanticDark.colors.feedback,
   },
   spacing: semanticDark.spacing,

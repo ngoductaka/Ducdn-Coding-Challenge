@@ -31,9 +31,10 @@ export const semanticLight = {
       subtle: primitiveColors.neutral[100],
     },
     action: {
-      primary: primitiveColors.brand[600],
-      primaryHover: primitiveColors.brand[700],
-      primaryActive: primitiveColors.brand[800],
+      primary: primitiveColors.blue[600],
+      primaryHover: primitiveColors.blue[500],
+      primaryActive: primitiveColors.blue[700],
+      primaryDefault: primitiveColors.blue[200],
       secondary: primitiveColors.neutral[100],
       secondaryHover: primitiveColors.neutral[200],
       secondaryActive: primitiveColors.neutral[300],
