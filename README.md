@@ -30,13 +30,22 @@ npm run storybook
 ### Basic Usage
 
 ```tsx
-import { ThemeProvider, Button, Input, Modal } from '@company/react';
+import { ThemeProvider, Button, Input, Modal, Tabs, Checkbox, Radio } from '@company/react';
 
 function App() {
   return (
     <ThemeProvider defaultTheme="light">
       <Button variant="primary">Click me</Button>
       <Input label="Email" type="email" />
+      <Checkbox label="Accept terms" />
+      <Radio label="Option 1" name="options" value="1" />
+      <Tabs
+        items={[
+          { label: 'Home', value: 'home' },
+          { label: 'Profile', value: 'profile' },
+          { label: 'Settings', value: 'settings' },
+        ]}
+      />
     </ThemeProvider>
   );
 }
@@ -61,8 +70,11 @@ function App() {
 | ----------------- | ----------------------------------- | ----------------------- | ----------- |
 | **Button**        | 5 variants, 3 sizes                 | ✅ Full ARIA            | ✅ Complete |
 | **Input**         | Text, email, password, etc.         | ✅ Labels, errors       | ✅ Complete |
+| **Checkbox**      | Default, indeterminate, disabled    | ✅ Full ARIA, keyboard  | ✅ Complete |
+| **Radio**         | Single, grouped, disabled           | ✅ Full ARIA, keyboard  | ✅ Complete |
 | **Modal**         | Dialog with footer support          | ✅ Focus trap, keyboard | ✅ Complete |
 | **Card**          | With header, title, content, footer | ✅ Semantic HTML        | ✅ Complete |
+| **Tabs**          | Items array, icons, badges, scroll  | ✅ Keyboard navigation  | ✅ Complete |
 | **ThemeSwitcher** | Light/dark toggle                   | ✅ ARIA labels          | ✅ Complete |
 
 ### Component Examples
@@ -90,6 +102,54 @@ function App() {
 />
 ```
 
+#### Checkbox
+
+```tsx
+// Basic checkbox
+<Checkbox label="Accept terms and conditions" />
+
+// Controlled checkbox
+<Checkbox
+  label="Subscribe to newsletter"
+  checked={isSubscribed}
+  onChange={(e) => setIsSubscribed(e.target.checked)}
+/>
+
+// Indeterminate state (partial selection)
+<Checkbox
+  label="Select all"
+  checked={allSelected}
+  indeterminate={someSelected}
+  onChange={handleSelectAll}
+/>
+
+// Disabled state
+<Checkbox label="Unavailable option" disabled />
+```
+
+#### Radio
+
+```tsx
+// Radio group
+<div>
+  <Radio label="Option 1" name="choice" value="1" />
+  <Radio label="Option 2" name="choice" value="2" />
+  <Radio label="Option 3" name="choice" value="3" />
+</div>
+
+// Controlled radio
+<Radio
+  label="Selected option"
+  name="controlled"
+  value="option"
+  checked={selectedValue === 'option'}
+  onChange={(e) => setSelectedValue(e.target.value)}
+/>
+
+// Disabled radio
+<Radio label="Unavailable" name="choice" value="disabled" disabled />
+```
+
 #### Modal
 
 ```tsx
@@ -110,6 +170,50 @@ const [isOpen, setIsOpen] = useState(false);
 >
   <p>Are you sure you want to proceed?</p>
 </Modal>;
+```
+
+#### Tabs
+
+```tsx
+// Basic tabs with items array
+<Tabs
+  items={[
+    { label: 'Overview', value: 'overview' },
+    { label: 'Analytics', value: 'analytics' },
+    { label: 'Reports', value: 'reports' },
+    { label: 'Settings', value: 'settings', disabled: true },
+  ]}
+  defaultActiveKey="overview"
+  onChange={(key) => console.log('Active tab:', key)}
+/>
+
+// Tabs with icons and counters
+<Tabs
+  items={[
+    {
+      label: 'Inbox',
+      value: 'inbox',
+      icon: <MailIcon />,
+      counter: 12,
+    },
+    {
+      label: 'Notifications',
+      value: 'notifications',
+      icon: <BellIcon />,
+      counter: 3,
+    },
+  ]}
+/>
+
+// Scrollable tabs with navigation buttons
+<Tabs
+  scrollable
+  items={[
+    { label: 'Tab 1', value: '1' },
+    { label: 'Tab 2', value: '2' },
+    // ... many more tabs
+  ]}
+/>
 ```
 
 ## 🎨 Theme System
@@ -229,7 +333,10 @@ All components follow WCAG 2.1 AA guidelines:
 | ----------------- | ----------------------------------------------------------- |
 | **Modal**         | Focus trap, Escape key, focus restoration                   |
 | **Input**         | Associated labels, error announcements, required indicators |
+| **Checkbox**      | Native input, keyboard toggle (Space), indeterminate state  |
+| **Radio**         | Native input, keyboard navigation, grouped ARIA roles       |
 | **Button**        | Focus-visible states, disabled handling, ARIA labels        |
+| **Tabs**          | Keyboard navigation (arrows), focus management, ARIA roles  |
 | **ThemeSwitcher** | ARIA label for current theme state                          |
 
 ## 📖 Documentation
@@ -275,8 +382,11 @@ design-system/
 │   │   ├── src/
 │   │   │   ├── Button/
 │   │   │   ├── Input/
+│   │   │   ├── Checkbox/
+│   │   │   ├── Radio/
 │   │   │   ├── Modal/
-│   │   │   └── Card/
+│   │   │   ├── Card/
+│   │   │   └── Tab/
 │   │   └── package.json
 │   │
 │   └── react/               # React utilities
@@ -432,8 +542,11 @@ Requires ES6+ support. IE11 is not supported.
 - [x] Light/dark theme switching
 - [x] Button component (5 variants)
 - [x] Input component with validation
+- [x] Checkbox component with indeterminate state
+- [x] Radio component with grouping
 - [x] Modal component with accessibility
 - [x] Card component with sub-components
+- [x] Tabs component with scroll navigation
 - [x] ThemeProvider and ThemeSwitcher
 - [x] Storybook integration
 - [x] CSP compliance
@@ -444,17 +557,16 @@ Requires ES6+ support. IE11 is not supported.
 - [ ] Testing infrastructure (Jest + RTL)
 - [ ] CI/CD pipeline (GitHub Actions)
 - [ ] Additional components:
-  - [ ] Checkbox
-  - [ ] Radio
   - [ ] Switch/Toggle
   - [ ] Textarea
   - [ ] Badge
+  - [ ] Dropdown
+  - [ ] DatePicker
 
 ### 🔮 Future (v0.3+)
 
 - [ ] Toast/Alert component
 - [ ] Tooltip component
-- [ ] Tabs component
 - [ ] Accordion component
 - [ ] Vue adapter package
 - [ ] Web Components wrapper
