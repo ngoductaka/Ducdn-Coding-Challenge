@@ -1,0 +1,54 @@
+{
+  "name": "@company/core",
+  "version": "0.1.0",
+  "description": "Core React components with Vanilla Extract styling",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./dist/index.css": "./dist/index.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@company/tokens": "workspace:*",
+    "@company/utils": "workspace:*",
+    "@vanilla-extract/css": "^1.14.0",
+    "@vanilla-extract/recipes": "^0.5.1",
+    "clsx": "^2.1.1"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "devDependencies": {
+    "@company/eslint-config": "workspace:*",
+    "@company/tsconfig": "workspace:*",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@vanilla-extract/esbuild-plugin": "^2.3.5",
+    "@vanilla-extract/vite-plugin": "^4.0.6",
+    "eslint": "^8.56.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.11"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
