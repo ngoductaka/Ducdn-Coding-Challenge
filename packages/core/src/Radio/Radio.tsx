@@ -1,4 +1,4 @@
-import React, { forwardRef, InputHTMLAttributes } from 'react';
+import React, { forwardRef, InputHTMLAttributes, useState } from 'react';
 import * as styles from './Radio.css';
 import { clsx } from 'clsx';
 
@@ -48,7 +48,7 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
 /**
  * Radio component for single selection from mutually exclusive options
  */
-export const Radio = forwardRef<HTMLInputElement, RadioProps>(
+const RadioComponent = forwardRef<HTMLInputElement, RadioProps>(
   (
     {
       label,
@@ -130,4 +130,131 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
   }
 );
 
-Radio.displayName = 'Radio';
+RadioComponent.displayName = 'Radio';
+
+// RadioGroup Component Types
+export interface RadioGroupOption {
+  label: string;
+  value: string;
+  disabled?: boolean;
+}
+
+export interface RadioGroupProps {
+  /**
+   * Current selected value (controlled)
+   */
+  value?: string;
+
+  /**
+   * Default selected value (uncontrolled)
+   */
+  defaultValue?: string;
+
+  /**
+   * Callback when selection changes
+   */
+  onChange?: (value: string) => void;
+
+  /**
+   * Disable all radio buttons
+   * @default false
+   */
+  disabled?: boolean;
+
+  /**
+   * Options array for rendering radios
+   */
+  options?: Array<RadioGroupOption | string>;
+
+  /**
+   * Radio components as children
+   */
+  children?: React.ReactNode;
+
+  /**
+   * Additional class name
+   */
+  className?: string;
+
+  /**
+   * Name attribute for all radios in the group
+   */
+  name?: string;
+}
+
+/**
+ * RadioGroup component for managing a group of Radio components
+ */
+export const RadioGroup = ({
+  value,
+  defaultValue,
+  onChange,
+  disabled = false,
+  options = [],
+  children,
+  className = '',
+  name,
+}: RadioGroupProps) => {
+  const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
+  const currentValue = value !== undefined ? value : internalValue;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+
+    if (value === undefined) {
+      setInternalValue(newValue);
+    }
+
+    if (onChange) {
+      onChange(newValue);
+    }
+  };
+
+  // If options array is provided
+  if (options.length > 0) {
+    return (
+      <div className={clsx(styles.radioGroupContainer, className)} role="radiogroup">
+        {options.map(option => {
+          const opt: RadioGroupOption =
+            typeof option === 'string' ? { label: option, value: option } : option;
+          return (
+            <Radio
+              key={opt.value}
+              value={opt.value}
+              checked={currentValue === opt.value}
+              disabled={disabled || opt.disabled}
+              onChange={handleChange}
+              label={opt.label}
+              name={name}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
+  // If children are provided
+  return (
+    <div className={clsx(styles.radioGroupContainer, className)} role="radiogroup">
+      {React.Children.map(children, child => {
+        if (React.isValidElement<RadioProps>(child) && child.type === Radio) {
+          return React.cloneElement(child, {
+            checked: currentValue === child.props.value,
+            onChange: handleChange,
+            disabled: disabled || child.props.disabled,
+            name: name || child.props.name,
+          });
+        }
+        return child;
+      })}
+    </div>
+  );
+};
+
+RadioGroup.displayName = 'RadioGroup';
+
+export const Radio = RadioComponent as typeof RadioComponent & {
+  RadioGroup: typeof RadioGroup;
+};
+
+Radio.RadioGroup = RadioGroup;

@@ -211,3 +211,12 @@ export const helperText = style({
   color: vars.colors.text.secondary,
   marginLeft: '32px', // Align with label text (24px radio + 8px gap)
 });
+
+/**
+ * RadioGroup container styles
+ */
+export const radioGroupContainer = style({
+  display: 'inline-flex',
+  flexDirection: 'column',
+  gap: vars.spacing[2],
+});
