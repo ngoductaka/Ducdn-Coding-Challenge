@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Radio, RadioGroup } from '@company/core';
 import React from 'react';
 
-const meta = {
+const meta: Meta<typeof Radio> = {
   title: 'Components/Radio',
   component: Radio,
   parameters: {
@@ -21,10 +21,6 @@ const meta = {
     label: {
       control: 'text',
       description: 'Label text for the radio button',
-    },
-    caption: {
-      control: 'text',
-      description: 'Caption text shown below the label',
     },
     helperText: {
       control: 'text',
@@ -55,12 +51,12 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Default radio with label and caption
+ * Default radio with label
  */
 export const Default: Story = {
   args: {
     label: 'Label',
-    caption: 'Caption',
+    helperText: 'Helper text',
   },
 };
 
@@ -70,7 +66,6 @@ export const Default: Story = {
 export const WithCounter: Story = {
   args: {
     label: 'Label',
-    caption: 'Caption',
     counter: true,
     counterValue: 9999,
   },
@@ -82,7 +77,6 @@ export const WithCounter: Story = {
 export const Small: Story = {
   args: {
     label: 'Label',
-    caption: 'Caption',
     size: 'small',
   },
 };
@@ -93,7 +87,6 @@ export const Small: Story = {
 export const Large: Story = {
   args: {
     label: 'Label',
-    caption: 'Caption',
     size: 'large',
   },
 };
@@ -104,7 +97,6 @@ export const Large: Story = {
 export const Disabled: Story = {
   args: {
     label: 'Label',
-    caption: 'Caption',
     disabled: true,
   },
 };
@@ -115,7 +107,6 @@ export const Disabled: Story = {
 export const DisabledChecked: Story = {
   args: {
     label: 'Label',
-    caption: 'Caption',
     disabled: true,
     defaultChecked: true,
   },
@@ -136,9 +127,125 @@ export const LabelOnly: Story = {
 export const WithHelperText: Story = {
   args: {
     label: 'Label',
-    caption: 'Caption',
     helperText: 'Additional helper text below',
   },
+};
+
+/**
+ * Radio group example - Try me 👇
+ */
+export const TryMe: Story = {
+  render: () => {
+    const [selected, setSelected] = React.useState('option1');
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '500px' }}>
+        <h3 style={{ marginBottom: '8px', fontWeight: 600 }}>Try me 👇</h3>
+
+        <RadioGroup name="try-me-group" value={selected} onChange={setSelected}>
+          <Radio label="Label" value="option1" counter counterValue={9999} />
+          <Radio label="Another Option" value="option2" />
+          <Radio label="Third Option" value="option3" />
+        </RadioGroup>
+
+        <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
+          Selected: <strong>{selected}</strong>
+        </p>
+      </div>
+    );
+  },
+};
+
+/**
+ * Radio group example with all features
+ */
+export const RadioGroupExample: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '500px' }}>
+      <RadioGroup name="example-group" defaultValue="option1">
+        <Radio label="Option 1" value="option1" />
+        <Radio label="Option 2" value="option2" />
+        <Radio label="Option 3" value="option3" counter counterValue={42} />
+        <Radio label="Option 4 (Disabled)" value="option4" disabled />
+      </RadioGroup>
+    </div>
+  ),
+};
+
+/**
+ * RadioGroup with options array
+ */
+export const RadioGroupWithOptions: Story = {
+  render: () => {
+    const [selected, setSelected] = React.useState('apple');
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '500px' }}>
+        <h3 style={{ marginBottom: '8px', fontWeight: 600 }}>Select a fruit</h3>
+
+        <RadioGroup
+          name="fruit-group"
+          value={selected}
+          onChange={setSelected}
+          options={[
+            { label: 'Apple', value: 'apple' },
+            { label: 'Banana', value: 'banana' },
+            { label: 'Orange', value: 'orange' },
+            { label: 'Grape (Disabled)', value: 'grape', disabled: true },
+          ]}
+        />
+
+        <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
+          Selected: <strong>{selected}</strong>
+        </p>
+      </div>
+    );
+  },
+};
+
+/**
+ * RadioGroup with simple string options
+ */
+export const RadioGroupSimpleOptions: Story = {
+  render: () => {
+    const [selected, setSelected] = React.useState('Small');
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '500px' }}>
+        <h3 style={{ marginBottom: '8px', fontWeight: 600 }}>Select a size</h3>
+
+        <RadioGroup
+          name="size-group"
+          value={selected}
+          onChange={setSelected}
+          options={['Small', 'Medium', 'Large', 'Extra Large']}
+        />
+
+        <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
+          Selected: <strong>{selected}</strong>
+        </p>
+      </div>
+    );
+  },
+};
+
+/**
+ * Comparison of size variants
+ */
+export const SizeComparison: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '500px' }}>
+      <div>
+        <h4 style={{ marginBottom: '12px', fontWeight: 600 }}>Large (Default)</h4>
+        <Radio name="size-large" label="Large Size" size="large" defaultChecked />
+      </div>
+
+      <div>
+        <h4 style={{ marginBottom: '12px', fontWeight: 600 }}>Small</h4>
+        <Radio name="size-small" label="Small Size" size="small" defaultChecked />
+      </div>
+    </div>
+  ),
 };
 
 /**
@@ -228,146 +335,6 @@ export const AllStates: Story = {
             />
           </div>
         </div>
-      </div>
-    </div>
-  ),
-};
-
-/**
- * Radio group example - Try me 👇
- */
-export const TryMe: Story = {
-  render: () => {
-    const [selected, setSelected] = React.useState('option1');
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '500px' }}>
-        <h3 style={{ marginBottom: '8px', fontWeight: 600 }}>Try me 👇</h3>
-
-        <Radio.RadioGroup name="try-me-group" value={selected} onChange={setSelected}>
-          <Radio label="Label" caption="Caption" value="option1" counter counterValue={9999} />
-          <Radio label="Another Option" caption="Another description" value="option2" />
-          <Radio label="Third Option dnd" caption="Third description" value="option3" />
-        </Radio.RadioGroup>
-
-        <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
-          Selected: <strong>{selected}</strong>
-        </p>
-      </div>
-    );
-  },
-};
-
-/**
- * Radio group example with all features
- */
-export const RadioGroupExample: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '500px' }}>
-      <RadioGroup name="example-group" defaultValue="option1">
-        <Radio label="Option 1" caption="First option description" value="option1" />
-        <Radio label="Option 2" caption="Second option description" value="option2" />
-        <Radio
-          label="Option 3"
-          caption="Third option description"
-          value="option3"
-          counter
-          counterValue={42}
-        />
-        <Radio
-          label="Option 4 (Disabled)"
-          caption="This option is disabled"
-          value="option4"
-          disabled
-        />
-      </RadioGroup>
-    </div>
-  ),
-};
-
-/**
- * RadioGroup with options array
- */
-export const RadioGroupWithOptions: Story = {
-  render: () => {
-    const [selected, setSelected] = React.useState('apple');
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '500px' }}>
-        <h3 style={{ marginBottom: '8px', fontWeight: 600 }}>Select a fruit</h3>
-
-        <RadioGroup
-          name="fruit-group"
-          value={selected}
-          onChange={setSelected}
-          options={[
-            { label: 'Apple', value: 'apple' },
-            { label: 'Banana', value: 'banana' },
-            { label: 'Orange', value: 'orange' },
-            { label: 'Grape (Disabled)', value: 'grape', disabled: true },
-          ]}
-        />
-
-        <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
-          Selected: <strong>{selected}</strong>
-        </p>
-      </div>
-    );
-  },
-};
-
-/**
- * RadioGroup with simple string options
- */
-export const RadioGroupSimpleOptions: Story = {
-  render: () => {
-    const [selected, setSelected] = React.useState('Small');
-
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '500px' }}>
-        <h3 style={{ marginBottom: '8px', fontWeight: 600 }}>Select a size</h3>
-
-        <RadioGroup
-          name="size-group"
-          value={selected}
-          onChange={setSelected}
-          options={['Small', 'Medium', 'Large', 'Extra Large']}
-        />
-
-        <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
-          Selected: <strong>{selected}</strong>
-        </p>
-      </div>
-    );
-  },
-};
-
-/**
- * Comparison of size variants
- */
-export const SizeComparison: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '500px' }}>
-      <div>
-        <h4 style={{ marginBottom: '12px', fontWeight: 600 }}>Large (Default)</h4>
-        <Radio
-          name="size-large"
-          label="Large Size"
-          caption="This is a large radio button"
-          size="large"
-          defaultChecked
-        />
-      </div>
-
-      <div>
-        <h4 style={{ marginBottom: '12px', fontWeight: 600 }}>Small</h4>
-        <Radio
-          name="size-small"
-          label="Small Size"
-          caption="This is a small radio button"
-          size="small"
-          defaultChecked
-        />
       </div>
     </div>
   ),

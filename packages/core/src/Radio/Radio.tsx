@@ -9,11 +9,6 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   label?: string;
 
   /**
-   * Caption text shown below the label
-   */
-  caption?: string;
-
-  /**
    * Helper text shown to the right (counter position)
    */
   helperText?: string;
@@ -52,7 +47,6 @@ const RadioComponent = forwardRef<HTMLInputElement, RadioProps>(
   (
     {
       label,
-      caption,
       helperText,
       size = 'large',
       counter = false,
@@ -69,7 +63,6 @@ const RadioComponent = forwardRef<HTMLInputElement, RadioProps>(
     ref
   ) => {
     const radioId = id || `radio-${Math.random().toString(36).substr(2, 9)}`;
-    const captionId = caption ? `${radioId}-caption` : undefined;
 
     return (
       <div className={clsx(styles.radioWrapper, className)}>
@@ -85,7 +78,6 @@ const RadioComponent = forwardRef<HTMLInputElement, RadioProps>(
               checked={checked}
               value={value}
               onChange={onChange}
-              aria-describedby={captionId}
               {...props}
             />
             <span
@@ -94,37 +86,32 @@ const RadioComponent = forwardRef<HTMLInputElement, RadioProps>(
             />
           </div>
 
-          {(label || caption) && (
+          {label && (
             <div className={styles.labelContainer}>
-              {label && (
-                <span className={clsx(styles.label, styles.labelSize[size])}>
-                  {label}
-                  {required && (
-                    <span
-                      aria-label="required"
-                      style={{ color: 'var(--colors-feedback-error)', marginLeft: '0.25rem' }}
-                    >
-                      *
-                    </span>
-                  )}
-                </span>
-              )}
-              {caption && (
-                <span id={captionId} className={clsx(styles.caption, styles.captionSize[size])}>
-                  {caption}
-                </span>
-              )}
+              <span className={clsx(styles.label, styles.labelSize[size])}>
+                {label}
+                {required && (
+                  <span
+                    aria-label="required"
+                    style={{ color: 'var(--colors-feedback-error)', marginLeft: '0.25rem' }}
+                  >
+                    *
+                  </span>
+                )}
+              </span>
             </div>
           )}
 
           {counter && counterValue && (
-            <span className={styles.counter} aria-label={`Count: ${counterValue}`}>
+            <span className={clsx(styles.counter)} aria-label={`Count: ${counterValue}`}>
               {counterValue}
             </span>
           )}
         </label>
 
-        {helperText && <span className={styles.helperText}>{helperText}</span>}
+        {helperText && (
+          <span className={clsx(styles.helperText, styles.helperGap[size])}>{helperText}</span>
+        )}
       </div>
     );
   }

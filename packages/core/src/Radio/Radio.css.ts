@@ -66,7 +66,7 @@ export const radioControl = style({
   alignItems: 'center',
   justifyContent: 'center',
   borderRadius: '50%',
-  border: `3px solid ${vars.colors.action.primaryActive}`,
+  border: `3px solid ${vars.colors.action.primaryHover}`,
   backgroundColor: vars.colors.white,
   transition: `all ${durations.fast} ${easings.easeInOut}`,
   position: 'relative',
@@ -85,7 +85,7 @@ export const radioControl = style({
   selectors: {
     // Hover state
     [`${radioInput}:hover:not(:disabled):not(:checked) + &`]: {
-      borderColor: vars.colors.action.primaryHover,
+      borderColor: vars.colors.action.primaryActive,
       backgroundColor: vars.colors.white,
     },
 
@@ -105,7 +105,7 @@ export const radioControl = style({
     },
 
     [`${radioInput}:checked:hover:not(:disabled) + &::after`]: {
-      backgroundColor: vars.colors.action.primaryHover,
+      backgroundColor: vars.colors.action.primaryActive,
     },
 
     // Focus state
@@ -157,6 +157,14 @@ export const radioSize = styleVariants({
     },
   },
 });
+export const helperGap = styleVariants({
+  large: {
+    marginLeft: '36px',
+  },
+  small: {
+    marginLeft: '33px',
+  },
+});
 
 /**
  * Label container - holds label and caption text
@@ -167,6 +175,7 @@ export const labelContainer = style({
   gap: vars.spacing[1],
   flex: 1,
   minWidth: 0,
+  marginTop: '4px',
 });
 
 /**
@@ -177,6 +186,13 @@ export const label = style({
   fontWeight: vars.typography.fontWeight.medium,
   color: vars.colors.black,
   lineHeight: vars.typography.lineHeight.normal,
+  fontFamily: vars.typography.fontFamily.sans,
+  display: '-webkit-box',
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  wordBreak: 'break-word',
 });
 
 /**
@@ -192,31 +208,12 @@ export const labelSize = styleVariants({
 });
 
 /**
- * Caption text
- */
-export const caption = style({
-  color: vars.colors.text.secondary,
-  lineHeight: vars.typography.lineHeight.tight,
-});
-
-/**
- * Caption size variants
- */
-export const captionSize = styleVariants({
-  large: {
-    fontSize: vars.typography.fontSize.sm,
-  },
-  small: {
-    fontSize: vars.typography.fontSize.xs,
-  },
-});
-
-/**
  * Counter display
  */
 export const counter = style({
   fontSize: vars.typography.fontSize.sm,
-  color: vars.colors.text.secondary,
+  color: vars.colors.black,
+  fontFamily: vars.typography.fontFamily.sans,
   fontWeight: vars.typography.fontWeight.normal,
   marginLeft: 'auto',
   flexShrink: 0,
@@ -230,8 +227,8 @@ export const counter = style({
 export const helperText = style({
   display: 'block',
   fontSize: vars.typography.fontSize.sm,
-  color: vars.colors.text.secondary,
-  marginLeft: '32px', // Align with label text (24px radio + 8px gap)
+  color: vars.colors.black,
+  fontFamily: vars.typography.fontFamily.sans,
 });
 
 /**

@@ -3,16 +3,16 @@
  */
 export const colors = {
   // Base colors
-  black: '#000000',
+  black: '#161616',
   white: '#ffffff',
   transparent: 'transparent',
 
   // Brand colors
   brand: {
-    50: '#f0f9ff',
+    50: '#86B4D9',
     100: '#e0f2fe',
     200: '#bae6fd',
-    300: '#7dd3fc',
+    300: '#B0CEE6',
     400: '#38bdf8',
     500: '#0ea5e9',
     600: '#0284c7',
@@ -33,7 +33,7 @@ export const colors = {
     600: '#525252',
     700: '#404040',
     800: '#262626',
-    900: '#171717',
+    900: '#161616',
     950: '#0a0a0a',
   },
 
