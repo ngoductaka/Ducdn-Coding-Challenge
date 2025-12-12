@@ -152,8 +152,8 @@ export const radioSize = styleVariants({
     height: '20px',
 
     '::after': {
-      width: '10px',
-      height: '10px',
+      width: '9px',
+      height: '9px',
     },
   },
 });
