@@ -36,7 +36,7 @@ export const semanticLight = {
       primaryActive: primitiveColors.blue[700],
       primaryDefault: primitiveColors.blue[200],
       secondary: primitiveColors.brand[300],
-      secondaryHover: primitiveColors.neutral[200],
+      secondaryHover: primitiveColors.brand[100],
       secondaryActive: primitiveColors.neutral[300],
     },
     feedback: {
@@ -62,10 +62,10 @@ export const semanticDark = {
     transparent: primitiveColors.transparent,
 
     background: {
-      primary: primitiveColors.neutral[900],
-      secondary: primitiveColors.neutral[800],
-      tertiary: primitiveColors.neutral[700],
-      inverse: primitiveColors.neutral[50],
+      primary: primitiveColors.neutral[50],
+      secondary: primitiveColors.white,
+      tertiary: primitiveColors.neutral[100],
+      inverse: primitiveColors.neutral[900],
     },
     text: {
       primary: primitiveColors.neutral[50],
@@ -84,7 +84,7 @@ export const semanticDark = {
       primaryHover: primitiveColors.brand[400],
       primaryActive: primitiveColors.brand[700],
       secondary: primitiveColors.brand[300],
-      secondaryHover: primitiveColors.neutral[600],
+      secondaryHover: primitiveColors.brand[100],
       secondaryActive: primitiveColors.neutral[500],
     },
     feedback: {

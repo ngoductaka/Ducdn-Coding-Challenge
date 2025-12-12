@@ -10,7 +10,7 @@ export const colors = {
   // Brand colors
   brand: {
     50: '#86B4D9',
-    100: '#e0f2fe',
+    100: '#D0E2F0',
     200: '#bae6fd',
     300: '#B0CEE6',
     400: '#38bdf8',
@@ -24,7 +24,7 @@ export const colors = {
 
   // Neutral colors (gray scale)
   neutral: {
-    50: '#fafafa',
+    50: '#DDE1E2',
     100: '#f5f5f5',
     200: '#e5e5e5',
     300: '#d4d4d4',
