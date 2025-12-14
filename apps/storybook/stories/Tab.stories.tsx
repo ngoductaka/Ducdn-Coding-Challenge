@@ -25,6 +25,14 @@ const meta = {
         defaultValue: { summary: 'false' },
       },
     },
+    scrollLimit: {
+      control: 'select',
+      options: ['first', 'last', 'middle'],
+      description: 'Defines which part of the tab list is prioritized during scrolling',
+      table: {
+        defaultValue: { summary: 'first' },
+      },
+    },
     addTab: {
       control: 'boolean',
       description: 'Whether to show add tab button',
@@ -139,6 +147,132 @@ export const Scrollable: Story = {
     })),
     defaultActiveKey: 'tab1',
     scrollable: true,
+  },
+};
+
+/**
+ * Scrollable tabs with scrollLimit: first (default)
+ * Prioritizes showing the first tab
+ */
+export const ScrollLimitFirst: Story = {
+  args: {
+    items: Array.from({ length: 20 }, (_, i) => ({
+      label: `Tab ${i + 1}`,
+      value: `tab${i + 1}`,
+    })),
+    defaultActiveKey: 'tab10',
+    scrollable: true,
+    scrollLimit: 'first',
+  },
+};
+
+/**
+ * Scrollable tabs with scrollLimit: last
+ * Prioritizes showing the last tab
+ */
+export const ScrollLimitLast: Story = {
+  args: {
+    items: Array.from({ length: 20 }, (_, i) => ({
+      label: `Tab ${i + 1}`,
+      value: `tab${i + 1}`,
+    })),
+    defaultActiveKey: 'tab10',
+    scrollable: true,
+    scrollLimit: 'last',
+  },
+};
+
+/**
+ * Scrollable tabs with scrollLimit: middle
+ * Centers the active tab in view
+ */
+export const ScrollLimitMiddle: Story = {
+  args: {
+    items: Array.from({ length: 20 }, (_, i) => ({
+      label: `Tab ${i + 1}`,
+      value: `tab${i + 1}`,
+    })),
+    defaultActiveKey: 'tab10',
+    scrollable: true,
+    scrollLimit: 'middle',
+  },
+};
+
+/**
+ * Interactive ScrollLimit Comparison
+ */
+export const ScrollLimitComparison: Story = {
+  args: { items: [] },
+  render: () => {
+    const [activeKeyFirst, setActiveKeyFirst] = React.useState('tab10');
+    const [activeKeyLast, setActiveKeyLast] = React.useState('tab10');
+    const [activeKeyMiddle, setActiveKeyMiddle] = React.useState('tab10');
+
+    const items = Array.from({ length: 20 }, (_, i) => ({
+      label: `Tab ${i + 1}`,
+      value: `tab${i + 1}`,
+    }));
+
+    return (
+      <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+        <div>
+          <h3 style={{ fontWeight: 600, marginBottom: '8px', fontSize: '16px' }}>
+            scrollLimit: "first" (default)
+          </h3>
+          <p style={{ fontSize: '14px', color: '#666', marginBottom: '16px' }}>
+            Prioritizes showing the first tab. The list won't scroll unless necessary.
+          </p>
+          <Tabs
+            items={items}
+            activeKey={activeKeyFirst}
+            onChange={setActiveKeyFirst}
+            scrollable
+            scrollLimit="first"
+          />
+          <p style={{ fontSize: '12px', color: '#999', marginTop: '8px' }}>
+            Active: {activeKeyFirst}
+          </p>
+        </div>
+
+        <div>
+          <h3 style={{ fontWeight: 600, marginBottom: '8px', fontSize: '16px' }}>
+            scrollLimit: "last"
+          </h3>
+          <p style={{ fontSize: '14px', color: '#666', marginBottom: '16px' }}>
+            Prioritizes showing the last tab. Scrolls right to keep the end visible.
+          </p>
+          <Tabs
+            items={items}
+            activeKey={activeKeyLast}
+            onChange={setActiveKeyLast}
+            scrollable
+            scrollLimit="last"
+          />
+          <p style={{ fontSize: '12px', color: '#999', marginTop: '8px' }}>
+            Active: {activeKeyLast}
+          </p>
+        </div>
+
+        <div>
+          <h3 style={{ fontWeight: 600, marginBottom: '8px', fontSize: '16px' }}>
+            scrollLimit: "middle"
+          </h3>
+          <p style={{ fontSize: '14px', color: '#666', marginBottom: '16px' }}>
+            Centers the active tab in view. Best for highlighting the current selection.
+          </p>
+          <Tabs
+            items={items}
+            activeKey={activeKeyMiddle}
+            onChange={setActiveKeyMiddle}
+            scrollable
+            scrollLimit="middle"
+          />
+          <p style={{ fontSize: '12px', color: '#999', marginTop: '8px' }}>
+            Active: {activeKeyMiddle}
+          </p>
+        </div>
+      </div>
+    );
   },
 };
 

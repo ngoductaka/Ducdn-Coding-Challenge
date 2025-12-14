@@ -241,6 +241,15 @@ export interface TabsProps {
    * Callback when action button (close) is clicked on a tab
    */
   onActionClick?: (value: string, event: React.MouseEvent<HTMLButtonElement>) => void;
+
+  /**
+   * Defines which part of the tab list is prioritized during scrolling when tabs overflow
+   * - 'first': Prioritizes showing the first tab
+   * - 'last': Prioritizes showing the last tab
+   * - 'middle': Prioritizes showing the active tab in the middle
+   * @default 'first'
+   */
+  scrollLimit?: 'first' | 'last' | 'middle';
 }
 
 /**
@@ -257,11 +266,13 @@ export const Tabs = ({
   addTab = false,
   onAddTab,
   onActionClick,
+  scrollLimit = 'first',
 }: TabsProps) => {
   const [internalActiveKey, setInternalActiveKey] = useState<string | undefined>(defaultActiveKey);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const tabListRef = React.useRef<HTMLDivElement>(null);
+  const tabRefs = React.useRef<Map<string, HTMLButtonElement>>(new Map());
 
   const currentActiveKey = activeKey !== undefined ? activeKey : internalActiveKey;
 
@@ -286,6 +297,47 @@ export const Tabs = ({
       const { scrollLeft, scrollWidth, clientWidth } = tabListRef.current;
       setCanScrollLeft(scrollLeft > 0);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  const scrollToActiveTab = () => {
+    if (!tabListRef.current || !scrollable || !currentActiveKey) return;
+
+    const activeTabElement = tabRefs.current.get(currentActiveKey);
+    if (!activeTabElement) return;
+
+    const container = tabListRef.current;
+    const containerRect = container.getBoundingClientRect();
+    const tabRect = activeTabElement.getBoundingClientRect();
+
+    if (scrollLimit === 'middle') {
+      // Center the active tab
+      const scrollPosition =
+        activeTabElement.offsetLeft -
+        container.offsetLeft -
+        container.clientWidth / 2 +
+        activeTabElement.clientWidth / 2;
+
+      container.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+    } else if (scrollLimit === 'first') {
+      // Ensure first tab is visible (scroll left if needed)
+      if (tabRect.left < containerRect.left) {
+        container.scrollTo({
+          left: activeTabElement.offsetLeft - container.offsetLeft,
+          behavior: 'smooth',
+        });
+      }
+    } else if (scrollLimit === 'last') {
+      // Ensure last tab is visible (scroll right if needed)
+      if (tabRect.right > containerRect.right) {
+        const scrollPosition =
+          activeTabElement.offsetLeft -
+          container.offsetLeft -
+          container.clientWidth +
+          activeTabElement.clientWidth;
+
+        container.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+      }
     }
   };
 
@@ -317,6 +369,10 @@ export const Tabs = ({
     }
   }, [scrollable]);
 
+  React.useEffect(() => {
+    scrollToActiveTab();
+  }, [currentActiveKey, scrollLimit, scrollable]);
+
   const tabsClasses = clsx(styles.tabsContainer, scrollable && styles.tabsScrollable, className);
   const tabListClasses = clsx(styles.tabList, scrollable && styles.tabListScrollable);
 
@@ -339,6 +395,13 @@ export const Tabs = ({
           {items.map(item => (
             <Tab
               key={item.value}
+              ref={el => {
+                if (el) {
+                  tabRefs.current.set(item.value, el);
+                } else {
+                  tabRefs.current.delete(item.value);
+                }
+              }}
               value={item.value}
               label={item.label}
               icon={item.icon}
