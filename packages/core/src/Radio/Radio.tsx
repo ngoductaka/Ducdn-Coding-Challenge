@@ -119,6 +119,7 @@ export const RadioGroup = ({
 }: RadioGroupProps) => {
   const [internalValue, setInternalValue] = useState<string | undefined>(defaultValue);
   const currentValue = value !== undefined ? value : internalValue;
+  const radioRefs = React.useRef<Map<string, HTMLInputElement>>(new Map());
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -132,15 +133,72 @@ export const RadioGroup = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const radioValues = Array.from(radioRefs.current.keys()).filter(val => {
+      const radio = radioRefs.current.get(val);
+      return radio && !radio.disabled;
+    });
+
+    if (radioValues.length === 0) return;
+
+    const currentIndex = radioValues.indexOf(currentValue || '');
+
+    let nextIndex = -1;
+
+    switch (e.key) {
+      case 'ArrowDown':
+      case 'ArrowRight':
+        e.preventDefault();
+        nextIndex = currentIndex < radioValues.length - 1 ? currentIndex + 1 : 0;
+        break;
+      case 'ArrowUp':
+      case 'ArrowLeft':
+        e.preventDefault();
+        nextIndex = currentIndex > 0 ? currentIndex - 1 : radioValues.length - 1;
+        break;
+      case 'Home':
+        e.preventDefault();
+        nextIndex = 0;
+        break;
+      case 'End':
+        e.preventDefault();
+        nextIndex = radioValues.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    if (nextIndex !== -1 && nextIndex !== currentIndex) {
+      const nextValue = radioValues[nextIndex];
+      const nextRadio = radioRefs.current.get(nextValue);
+
+      if (nextRadio) {
+        nextRadio.click();
+        nextRadio.focus();
+      }
+    }
+  };
+
   if (options.length > 0) {
     return (
-      <div className={clsx(styles.radioGroupContainer, className)} role="radiogroup">
+      <div
+        className={clsx(styles.radioGroupContainer, className)}
+        role="radiogroup"
+        onKeyDown={handleKeyDown}
+      >
         {options.map(option => {
           const opt: RadioGroupOption =
             typeof option === 'string' ? { label: option, value: option } : option;
           return (
             <Radio
               key={opt.value}
+              ref={(el: HTMLInputElement | null) => {
+                if (el) {
+                  radioRefs.current.set(opt.value, el);
+                } else {
+                  radioRefs.current.delete(opt.value);
+                }
+              }}
               value={opt.value}
               checked={currentValue === opt.value}
               disabled={disabled || opt.disabled}
@@ -155,15 +213,27 @@ export const RadioGroup = ({
   }
 
   return (
-    <div className={clsx(styles.radioGroupContainer, className)} role="radiogroup">
+    <div
+      className={clsx(styles.radioGroupContainer, className)}
+      role="radiogroup"
+      onKeyDown={handleKeyDown}
+    >
       {React.Children.map(children, child => {
         if (React.isValidElement<RadioProps>(child) && child.type === Radio) {
+          const childValue = String(child.props.value || '');
           return React.cloneElement(child, {
             checked: currentValue === child.props.value,
             onChange: handleChange,
             disabled: disabled || child.props.disabled,
             name: name || child.props.name,
-          });
+            ref: (el: HTMLInputElement | null) => {
+              if (el) {
+                radioRefs.current.set(childValue, el);
+              } else {
+                radioRefs.current.delete(childValue);
+              }
+            },
+          } as any);
         }
         return child;
       })}

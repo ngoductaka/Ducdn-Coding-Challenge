@@ -1,6 +1,15 @@
 import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, XIcon } from '@company/icons';
 import { clsx } from 'clsx';
-import React, { ButtonHTMLAttributes, forwardRef, ReactNode, useState } from 'react';
+import React, {
+  ButtonHTMLAttributes,
+  forwardRef,
+  ReactNode,
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  HTMLAttributes,
+} from 'react';
 import * as styles from './Tab.css';
 
 export interface TabProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
@@ -54,6 +63,7 @@ const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
         onClick={onClick}
         role="tab"
         aria-selected={active}
+        tabIndex={active ? 0 : -1}
         {...props}
       >
         <div className={styles.tabContent}>
@@ -72,6 +82,7 @@ const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
                   onClick={handleActionClick}
                   aria-label="Close tab"
                   disabled={disabled}
+                  tabIndex={-1}
                 >
                   <XIcon className={styles.tabActionIcon} size={12} />
                 </button>
@@ -101,7 +112,55 @@ export interface TabItem {
   disabled?: boolean;
   counter?: number;
   actionButton?: boolean;
+  children?: ReactNode;
 }
+
+export interface TabPanelProps extends HTMLAttributes<HTMLDivElement> {
+  value: string;
+  activeValue?: string;
+  lazy?: boolean;
+  forceRender?: boolean;
+  children?: ReactNode;
+  className?: string;
+}
+
+export const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
+  (
+    { value, activeValue, lazy = false, forceRender = false, children, className, ...props },
+    ref
+  ) => {
+    const isActive = value === activeValue;
+    const [hasBeenActive, setHasBeenActive] = useState(!lazy || isActive);
+
+    useEffect(() => {
+      if (isActive && !hasBeenActive) {
+        setHasBeenActive(true);
+      }
+    }, [isActive, hasBeenActive]);
+
+    const shouldRender = forceRender || !lazy || hasBeenActive;
+
+    if (!shouldRender) {
+      return null;
+    }
+
+    return (
+      <div
+        ref={ref}
+        role="tabpanel"
+        id={`tabpanel-${value}`}
+        aria-labelledby={`tab-${value}`}
+        hidden={!isActive}
+        className={clsx(styles.tabPanel, className)}
+        {...props}
+      >
+        {children}
+      </div>
+    );
+  }
+);
+
+TabPanel.displayName = 'TabPanel';
 
 export interface TabsProps {
   activeKey?: string;
@@ -113,7 +172,11 @@ export interface TabsProps {
   addTab?: boolean;
   onAddTab?: () => void;
   onActionClick?: (value: string, event: React.MouseEvent<HTMLButtonElement>) => void;
-  scrollLimit?: 'first' | 'last' | 'middle';
+  scrollLimit?: 'first' | 'last' | 'middle' | 'none';
+  keyboardNavigation?: 'auto' | 'manual';
+  orientation?: 'horizontal' | 'vertical';
+  lazy?: boolean;
+  children?: ReactNode;
 }
 
 export const Tabs = ({
@@ -127,12 +190,19 @@ export const Tabs = ({
   onAddTab,
   onActionClick,
   scrollLimit = 'first',
+  keyboardNavigation = 'auto',
+  orientation = 'horizontal',
+  lazy = false,
+  children,
 }: TabsProps) => {
-  const [internalActiveKey, setInternalActiveKey] = useState<string | undefined>(defaultActiveKey);
+  const [internalActiveKey, setInternalActiveKey] = useState<string | undefined>(
+    defaultActiveKey || (items.length > 0 ? items[0].value : undefined)
+  );
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const tabListRef = React.useRef<HTMLDivElement>(null);
-  const tabRefs = React.useRef<Map<string, HTMLButtonElement>>(new Map());
+  const tabListRef = useRef<HTMLDivElement>(null);
+  const tabRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+  const panelRefs = useRef<Map<string, HTMLDivElement>>(new Map());
 
   const currentActiveKey = activeKey !== undefined ? activeKey : internalActiveKey;
 
@@ -152,8 +222,86 @@ export const Tabs = ({
     }
   };
 
+  const getEnabledTabs = useCallback(() => {
+    return items.filter(item => !item.disabled);
+  }, [items]);
+
+  const focusTab = useCallback((value: string) => {
+    const tabElement = tabRefs.current.get(value);
+    if (tabElement) {
+      tabElement.focus();
+    }
+  }, []);
+
+  const activateTab = useCallback(
+    (value: string) => {
+      if (activeKey === undefined) {
+        setInternalActiveKey(value);
+      }
+      if (onChange) {
+        onChange(value);
+      }
+    },
+    [activeKey, onChange]
+  );
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      const enabledTabs = getEnabledTabs();
+      if (enabledTabs.length === 0) return;
+
+      const currentIndex = enabledTabs.findIndex(item => item.value === currentActiveKey);
+      if (currentIndex === -1) return;
+
+      let nextIndex = currentIndex;
+      let shouldPreventDefault = false;
+
+      const isHorizontal = orientation === 'horizontal';
+      const nextKey = isHorizontal ? 'ArrowRight' : 'ArrowDown';
+      const prevKey = isHorizontal ? 'ArrowLeft' : 'ArrowUp';
+
+      if (event.key === nextKey) {
+        nextIndex = (currentIndex + 1) % enabledTabs.length;
+        shouldPreventDefault = true;
+      } else if (event.key === prevKey) {
+        nextIndex = currentIndex === 0 ? enabledTabs.length - 1 : currentIndex - 1;
+        shouldPreventDefault = true;
+      } else if (event.key === 'Home') {
+        nextIndex = 0;
+        shouldPreventDefault = true;
+      } else if (event.key === 'End') {
+        nextIndex = enabledTabs.length - 1;
+        shouldPreventDefault = true;
+      }
+
+      if (shouldPreventDefault) {
+        event.preventDefault();
+        const nextTab = enabledTabs[nextIndex];
+
+        if (keyboardNavigation === 'auto') {
+          // Auto mode: arrow keys change selection immediately
+          activateTab(nextTab.value);
+          focusTab(nextTab.value);
+        } else {
+          // Manual mode: arrow keys only move focus, Enter/Space activates
+          focusTab(nextTab.value);
+        }
+      }
+
+      // In manual mode, Enter or Space activates the focused tab
+      if (keyboardNavigation === 'manual' && (event.key === 'Enter' || event.key === ' ')) {
+        const focusedValue = (event.target as HTMLElement).getAttribute('data-value');
+        if (focusedValue && focusedValue !== currentActiveKey) {
+          event.preventDefault();
+          activateTab(focusedValue);
+        }
+      }
+    },
+    [currentActiveKey, getEnabledTabs, keyboardNavigation, orientation, activateTab, focusTab]
+  );
+
   const checkScrollability = () => {
-    if (tabListRef.current && scrollable) {
+    if (tabListRef.current && scrollable && orientation === 'horizontal') {
       const { scrollLeft, scrollWidth, clientWidth } = tabListRef.current;
       setCanScrollLeft(scrollLeft > 0);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
@@ -161,7 +309,8 @@ export const Tabs = ({
   };
 
   const scrollToActiveTab = () => {
-    if (!tabListRef.current || !scrollable || !currentActiveKey) return;
+    if (!tabListRef.current || !scrollable || !currentActiveKey || scrollLimit === 'none') return;
+    if (orientation !== 'horizontal') return;
 
     const activeTabElement = tabRefs.current.get(currentActiveKey);
     if (!activeTabElement) return;
@@ -171,7 +320,6 @@ export const Tabs = ({
     const tabRect = activeTabElement.getBoundingClientRect();
 
     if (scrollLimit === 'middle') {
-      // Center the active tab
       const scrollPosition =
         activeTabElement.offsetLeft -
         container.offsetLeft -
@@ -180,7 +328,6 @@ export const Tabs = ({
 
       container.scrollTo({ left: scrollPosition, behavior: 'smooth' });
     } else if (scrollLimit === 'first') {
-      // Ensure first tab is visible (scroll left if needed)
       if (tabRect.left < containerRect.left) {
         container.scrollTo({
           left: activeTabElement.offsetLeft - container.offsetLeft,
@@ -188,7 +335,6 @@ export const Tabs = ({
         });
       }
     } else if (scrollLimit === 'last') {
-      // Ensure last tab is visible (scroll right if needed)
       if (tabRect.right > containerRect.right) {
         const scrollPosition =
           activeTabElement.offsetLeft -
@@ -224,91 +370,144 @@ export const Tabs = ({
     }
   };
 
-  React.useEffect(() => {
-    if (scrollable) {
+  useEffect(() => {
+    if (scrollable && orientation === 'horizontal') {
       checkScrollability();
       window.addEventListener('resize', checkScrollability);
       return () => window.removeEventListener('resize', checkScrollability);
     }
-  }, [scrollable, items]);
+  }, [scrollable, items, orientation]);
 
-  React.useEffect(() => {
-    if (scrollable && tabListRef.current) {
+  useEffect(() => {
+    if (scrollable && tabListRef.current && orientation === 'horizontal') {
       const element = tabListRef.current;
       element.addEventListener('scroll', checkScrollability);
       return () => element.removeEventListener('scroll', checkScrollability);
     }
-  }, [scrollable]);
+  }, [scrollable, orientation]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     scrollToActiveTab();
   }, [currentActiveKey, scrollLimit, scrollable]);
 
-  const tabsClasses = clsx(styles.tabsContainer, scrollable && styles.tabsScrollable, className);
-  const tabListClasses = clsx(styles.tabList, scrollable && styles.tabListScrollable);
+  const isVertical = orientation === 'vertical';
+  const tabsClasses = clsx(
+    styles.tabsContainer,
+    scrollable && !isVertical && styles.tabsScrollable,
+    isVertical && styles.tabsVertical,
+    className
+  );
+  const tabListClasses = clsx(
+    styles.tabList,
+    scrollable && !isVertical && styles.tabListScrollable,
+    isVertical && styles.tabListVertical
+  );
+
+  // Render panels from children or items
+  const renderPanels = () => {
+    if (children) {
+      return children;
+    }
+
+    return items.map(item => (
+      <TabPanel
+        key={item.value}
+        value={item.value}
+        activeValue={currentActiveKey}
+        lazy={lazy}
+        ref={el => {
+          if (el) {
+            panelRefs.current.set(item.value, el);
+          } else {
+            panelRefs.current.delete(item.value);
+          }
+        }}
+      >
+        {item.children}
+      </TabPanel>
+    ));
+  };
 
   return (
-    <div className={tabsClasses} role="tablist">
-      <div className={styles.tabsWrapper}>
-        {scrollable && (
-          <button
-            type="button"
-            className={clsx(styles.scrollButton)}
-            onClick={scrollLeft}
-            disabled={!canScrollLeft}
-            aria-label="Scroll left"
-          >
-            <ChevronLeftIcon className={styles.iconScrollButton} />
-          </button>
-        )}
-
-        <div ref={tabListRef} className={tabListClasses}>
-          {items.map(item => (
-            <Tab
-              key={item.value}
-              ref={el => {
-                if (el) {
-                  tabRefs.current.set(item.value, el);
-                } else {
-                  tabRefs.current.delete(item.value);
-                }
-              }}
-              value={item.value}
-              label={item.label}
-              icon={item.icon}
-              subLabel={item.subLabel}
-              counter={item.counter}
-              active={currentActiveKey === item.value}
-              disabled={item.disabled}
-              actionButton={item.actionButton}
-              onClick={() => handleTabClick(item.value)}
-              onActionClick={e => handleActionClick(item.value, e)}
-            />
-          ))}
-          {addTab && (
+    <div className={clsx(styles.tabsRoot, isVertical && styles.tabsRootVertical)}>
+      <div className={tabsClasses}>
+        <div className={styles.tabsWrapper}>
+          {scrollable && !isVertical && (
             <button
               type="button"
-              className={styles.addTabButton}
-              onClick={handleAddTab}
-              aria-label="Add tab"
+              className={clsx(styles.scrollButton)}
+              onClick={scrollLeft}
+              disabled={!canScrollLeft}
+              aria-label="Scroll left"
+              tabIndex={-1}
             >
-              <PlusIcon size={17} className={styles.iconScrollButton} />
+              <ChevronLeftIcon className={styles.iconScrollButton} />
+            </button>
+          )}
+
+          <div
+            ref={tabListRef}
+            className={tabListClasses}
+            role="tablist"
+            aria-orientation={orientation}
+            onKeyDown={handleKeyDown}
+          >
+            {items.map(item => (
+              <Tab
+                key={item.value}
+                ref={el => {
+                  if (el) {
+                    tabRefs.current.set(item.value, el);
+                  } else {
+                    tabRefs.current.delete(item.value);
+                  }
+                }}
+                value={item.value}
+                data-value={item.value}
+                label={item.label}
+                icon={item.icon}
+                subLabel={item.subLabel}
+                counter={item.counter}
+                active={currentActiveKey === item.value}
+                disabled={item.disabled}
+                actionButton={item.actionButton}
+                onClick={() => handleTabClick(item.value)}
+                onActionClick={e => handleActionClick(item.value, e)}
+                id={`tab-${item.value}`}
+                aria-controls={`tabpanel-${item.value}`}
+              />
+            ))}
+            {addTab && (
+              <button
+                type="button"
+                className={styles.addTabButton}
+                onClick={handleAddTab}
+                aria-label="Add tab"
+                tabIndex={-1}
+              >
+                <PlusIcon size={17} className={styles.iconScrollButton} />
+              </button>
+            )}
+          </div>
+
+          {scrollable && !isVertical && (
+            <button
+              type="button"
+              className={clsx(styles.scrollButton, styles.scrollButtonRight)}
+              onClick={scrollRight}
+              disabled={!canScrollRight}
+              aria-label="Scroll right"
+              tabIndex={-1}
+            >
+              <ChevronRightIcon className={styles.iconScrollButton} />
             </button>
           )}
         </div>
-
-        {scrollable && (
-          <button
-            type="button"
-            className={clsx(styles.scrollButton, styles.scrollButtonRight)}
-            onClick={scrollRight}
-            disabled={!canScrollRight}
-            aria-label="Scroll right"
-          >
-            <ChevronRightIcon className={styles.iconScrollButton} />
-          </button>
-        )}
       </div>
+
+      {(children || items.some(item => item.children)) && (
+        <div className={styles.tabPanelsContainer}>{renderPanels()}</div>
+      )}
     </div>
   );
 };

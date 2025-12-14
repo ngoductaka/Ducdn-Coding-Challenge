@@ -10,6 +10,7 @@ export const tabButton = style({
   justifyContent: 'center',
   padding: '12px 16px',
   border: 'none',
+  marginLeft: '8px',
   backgroundColor: 'transparent',
   cursor: 'pointer',
   transition: `all ${durations.fast} ${easings.easeInOut}`,
@@ -75,7 +76,7 @@ export const tabLabels = style({
 
 export const tabLabel = style({
   fontSize: vars.typography.fontSize.base,
-  fontWeight: vars.typography.fontWeight.medium,
+  fontWeight: vars.typography.fontWeight.normal,
   color: vars.colors.black,
   lineHeight: vars.typography.lineHeight.tight,
   whiteSpace: 'nowrap',
@@ -186,12 +187,31 @@ export const tabIndicator = style({
   transition: `all ${durations.fast} ${easings.easeInOut}`,
 });
 
+export const tabsRoot = style({
+  display: 'flex',
+  flexDirection: 'column',
+  width: '100%',
+});
+
+export const tabsRootVertical = style({
+  flexDirection: 'row',
+  height: '100%',
+});
+
 export const tabsContainer = style({
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
   borderBottom: `1px solid ${vars.colors.border.default}`,
   position: 'relative',
+});
+
+export const tabsVertical = style({
+  flexDirection: 'column',
+  width: 'auto',
+  borderBottom: 'none',
+  borderRight: `1px solid ${vars.colors.border.default}`,
+  minWidth: '200px',
 });
 
 export const tabsWrapper = style({
@@ -207,6 +227,11 @@ export const tabList = style({
   gap: 0,
 });
 
+export const tabListVertical = style({
+  flexDirection: 'column',
+  width: '100%',
+});
+
 export const tabListScrollable = style({
   overflowX: 'auto',
   scrollbarWidth: 'none',
@@ -219,6 +244,21 @@ export const tabListScrollable = style({
 });
 
 export const tabsScrollable = style({});
+
+export const tabPanel = style({
+  padding: vars.spacing[4],
+  outline: 'none',
+
+  ':focus-visible': {
+    outline: `2px solid ${vars.colors.action.primary}`,
+    outlineOffset: '2px',
+  },
+});
+
+export const tabPanelsContainer = style({
+  width: '100%',
+  flex: 1,
+});
 
 export const iconScrollButton = style({
   color: vars.colors.black,

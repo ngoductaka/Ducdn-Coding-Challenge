@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { Checkbox } from './Checkbox';
+import { Checkbox, CheckboxGroup } from './Checkbox';
 import { ThemeProvider } from '@company/react';
 
 // Mock the theme classes
@@ -416,6 +416,135 @@ describe('Checkbox Component', () => {
       );
       checkbox = screen.getByRole('checkbox') as HTMLInputElement;
       expect(checkbox.indeterminate).toBe(true);
+    });
+  });
+
+  describe('CheckboxGroup', () => {
+    describe('Basic Rendering', () => {
+      it('should render checkbox group with children', () => {
+        render(
+          <CheckboxGroup name="test-group">
+            <Checkbox label="Option 1" value="1" />
+            <Checkbox label="Option 2" value="2" />
+            <Checkbox label="Option 3" value="3" />
+          </CheckboxGroup>
+        );
+        expect(screen.getByText('Option 1')).toBeInTheDocument();
+        expect(screen.getByText('Option 2')).toBeInTheDocument();
+        expect(screen.getByText('Option 3')).toBeInTheDocument();
+      });
+
+      it('should render checkbox group with options array', () => {
+        render(
+          <CheckboxGroup
+            name="test-group"
+            options={[
+              { label: 'Option 1', value: '1' },
+              { label: 'Option 2', value: '2' },
+              { label: 'Option 3', value: '3' },
+            ]}
+          />
+        );
+        expect(screen.getByText('Option 1')).toBeInTheDocument();
+        expect(screen.getByText('Option 2')).toBeInTheDocument();
+        expect(screen.getByText('Option 3')).toBeInTheDocument();
+      });
+
+      it('should render checkbox group with simple string options', () => {
+        render(<CheckboxGroup name="test-group" options={['Option 1', 'Option 2', 'Option 3']} />);
+        expect(screen.getByText('Option 1')).toBeInTheDocument();
+        expect(screen.getByText('Option 2')).toBeInTheDocument();
+        expect(screen.getByText('Option 3')).toBeInTheDocument();
+      });
+    });
+
+    describe('Value Management', () => {
+      it('should handle controlled value', () => {
+        const { rerender } = render(
+          <CheckboxGroup name="test-group" value={['1']}>
+            <Checkbox label="Option 1" value="1" />
+            <Checkbox label="Option 2" value="2" />
+          </CheckboxGroup>
+        );
+        const checkboxes = screen.getAllByRole('checkbox') as HTMLInputElement[];
+        expect(checkboxes[0].checked).toBe(true);
+        expect(checkboxes[1].checked).toBe(false);
+
+        rerender(
+          <CheckboxGroup name="test-group" value={['1', '2']}>
+            <Checkbox label="Option 1" value="1" />
+            <Checkbox label="Option 2" value="2" />
+          </CheckboxGroup>
+        );
+        expect(checkboxes[0].checked).toBe(true);
+        expect(checkboxes[1].checked).toBe(true);
+      });
+
+      it('should handle uncontrolled value with defaultValue', () => {
+        render(
+          <CheckboxGroup name="test-group" defaultValue={['2']}>
+            <Checkbox label="Option 1" value="1" />
+            <Checkbox label="Option 2" value="2" />
+            <Checkbox label="Option 3" value="3" />
+          </CheckboxGroup>
+        );
+        const checkboxes = screen.getAllByRole('checkbox') as HTMLInputElement[];
+        expect(checkboxes[0].checked).toBe(false);
+        expect(checkboxes[1].checked).toBe(true);
+        expect(checkboxes[2].checked).toBe(false);
+      });
+
+      it('should call onChange with updated values when checkbox is toggled', () => {
+        const handleChange = jest.fn();
+        render(
+          <CheckboxGroup name="test-group" value={['1']} onChange={handleChange}>
+            <Checkbox label="Option 1" value="1" />
+            <Checkbox label="Option 2" value="2" />
+          </CheckboxGroup>
+        );
+        const checkbox2 = screen.getByLabelText('Option 2');
+        fireEvent.click(checkbox2);
+        expect(handleChange).toHaveBeenCalledWith(['1', '2']);
+      });
+
+      it('should remove value from array when unchecking', () => {
+        const handleChange = jest.fn();
+        render(
+          <CheckboxGroup name="test-group" value={['1', '2']} onChange={handleChange}>
+            <Checkbox label="Option 1" value="1" />
+            <Checkbox label="Option 2" value="2" />
+          </CheckboxGroup>
+        );
+        const checkbox1 = screen.getByLabelText('Option 1');
+        fireEvent.click(checkbox1);
+        expect(handleChange).toHaveBeenCalledWith(['2']);
+      });
+    });
+
+    describe('Disabled State', () => {
+      it('should disable all checkboxes when group is disabled', () => {
+        render(
+          <CheckboxGroup name="test-group" disabled>
+            <Checkbox label="Option 1" value="1" />
+            <Checkbox label="Option 2" value="2" />
+          </CheckboxGroup>
+        );
+        const checkboxes = screen.getAllByRole('checkbox') as HTMLInputElement[];
+        expect(checkboxes[0].disabled).toBe(true);
+        expect(checkboxes[1].disabled).toBe(true);
+      });
+
+      it('should disable individual checkboxes with disabled prop', () => {
+        render(
+          <CheckboxGroup name="test-group">
+            <Checkbox label="Option 1" value="1" />
+            <Checkbox label="Option 2" value="2" disabled />
+          </CheckboxGroup>
+        );
+        const checkboxes = screen.getAllByRole('checkbox') as HTMLInputElement[];
+        expect(checkboxes[0].disabled).toBe(false);
+        expect(checkboxes[1].disabled).toBe(true);
+      });
     });
   });
 });

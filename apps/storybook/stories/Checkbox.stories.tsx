@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Checkbox } from '@company/core';
+import { Checkbox, CheckboxGroup } from '@company/core';
 import React from 'react';
 
 const meta = {
@@ -313,43 +313,31 @@ export const AllStates: Story = {
 export const ProjectsExample: Story = {
   render: () => {
     const [allChecked, setAllChecked] = React.useState(false);
-    const [projects, setProjects] = React.useState({
-      project1: true,
-      project2: true,
-      project3: false,
-    });
+    const [projects, setProjects] = React.useState<string[]>(['project1', 'project2']);
 
-    const allProjectsCount = Object.keys(projects).length;
-    const checkedCount = Object.values(projects).filter(Boolean).length;
-    const isIndeterminate = checkedCount > 0 && checkedCount < allProjectsCount;
+    const allProjects = ['project1', 'project2', 'project3'];
+    const isIndeterminate = projects.length > 0 && projects.length < allProjects.length;
 
     const handleAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const checked = e.target.checked;
       setAllChecked(checked);
-      setProjects({
-        project1: checked,
-        project2: checked,
-        project3: checked,
-      });
+      setProjects(checked ? allProjects : []);
     };
 
-    const handleProjectChange =
-      (project: keyof typeof projects) => (e: React.ChangeEvent<HTMLInputElement>) => {
-        const newProjects = { ...projects, [project]: e.target.checked };
-        setProjects(newProjects);
-        const newCheckedCount = Object.values(newProjects).filter(Boolean).length;
-        setAllChecked(newCheckedCount === allProjectsCount);
-      };
+    const handleProjectsChange = (values: string[]) => {
+      setProjects(values);
+      setAllChecked(values.length === allProjects.length);
+    };
 
     return (
       <div style={{ padding: '24px', display: 'flex', gap: '48px', flexWrap: 'wrap' }}>
-        {/* Indeterminate State */}
+        {/* Indeterminate State with Keyboard Navigation */}
         <div
           style={{
             border: '1px solid #e5e5e5',
             borderRadius: '8px',
             padding: '16px',
-            minWidth: '200px',
+            minWidth: '280px',
           }}
         >
           <Checkbox
@@ -359,31 +347,101 @@ export const ProjectsExample: Story = {
             onChange={handleAllChange}
           />
           <div style={{ marginLeft: '28px', marginTop: '12px' }}>
-            <div style={{ marginTop: 20 }}>
-              <Checkbox
-                label="Project 1"
-                checked={projects.project1}
-                onChange={handleProjectChange('project1')}
-                style={{ marginBottom: '8px' }}
-              />
-            </div>
-            <div style={{ marginTop: 20 }}>
-              <Checkbox
-                label="Project 2"
-                checked={projects.project2}
-                onChange={handleProjectChange('project2')}
-                style={{ marginBottom: '8px' }}
-              />
-            </div>
-            <div style={{ marginTop: 20 }}>
-              <Checkbox
-                label="Project 3"
-                checked={projects.project3}
-                onChange={handleProjectChange('project3')}
-              />
-            </div>
+            <CheckboxGroup
+              name="projects-group"
+              value={projects}
+              onChange={handleProjectsChange}
+              options={['project1', 'project2', 'project3']}
+            />
           </div>
+          <p
+            style={{
+              marginTop: '12px',
+              fontSize: '12px',
+              color: '#666',
+              fontStyle: 'italic',
+            }}
+          >
+            Use Tab to navigate between checkboxes, Space to toggle
+          </p>
         </div>
+      </div>
+    );
+  },
+};
+
+export const TryKeyboardNavigation: Story = {
+  render: () => {
+    const [selected, setSelected] = React.useState<string[]>(['option1', 'option3']);
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '600px' }}>
+        <h3 style={{ marginBottom: '8px', fontWeight: 600 }}>Keyboard Navigation</h3>
+
+        <div
+          style={{
+            padding: '12px',
+            backgroundColor: '#f0f0f0',
+            borderRadius: '8px',
+            fontSize: '14px',
+            lineHeight: '1.6',
+          }}
+        >
+          <strong>Keyboard controls:</strong>
+          <ul style={{ marginTop: '8px', marginBottom: '0', paddingLeft: '20px' }}>
+            <li>
+              <kbd>Tab</kbd> - Move focus forward
+            </li>
+            <li>
+              <kbd>Shift</kbd> + <kbd>Tab</kbd> - Move focus backward
+            </li>
+            <li>
+              <kbd>Space</kbd> - Toggle focused checkbox
+            </li>
+          </ul>
+        </div>
+
+        <CheckboxGroup name="keyboard-test" value={selected} onChange={setSelected}>
+          <Checkbox label="First Option" value="option1" counter counterValue={42} />
+          <Checkbox label="Second Option" value="option2" helperText="This has helper text" />
+          <Checkbox label="Third Option" value="option3" />
+          <Checkbox label="Fourth Option" value="option4" />
+          <Checkbox label="Fifth Option (Disabled)" value="option5" disabled />
+          <Checkbox label="Sixth Option" value="option6" />
+        </CheckboxGroup>
+
+        <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
+          Selected: <strong>{selected.length > 0 ? selected.join(', ') : 'none'}</strong>
+        </p>
+      </div>
+    );
+  },
+};
+
+export const CheckboxGroupWithOptions: Story = {
+  render: () => {
+    const [selected, setSelected] = React.useState<string[]>(['apple', 'orange']);
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '500px' }}>
+        <h3 style={{ marginBottom: '8px', fontWeight: 600 }}>Select fruits</h3>
+
+        <CheckboxGroup
+          name="fruit-group"
+          value={selected}
+          onChange={setSelected}
+          options={[
+            { label: 'Apple', value: 'apple' },
+            { label: 'Banana', value: 'banana' },
+            { label: 'Orange', value: 'orange' },
+            { label: 'Grape', value: 'grape' },
+            { label: 'Mango (Disabled)', value: 'mango', disabled: true },
+          ]}
+        />
+
+        <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
+          Selected: <strong>{selected.length > 0 ? selected.join(', ') : 'none'}</strong>
+        </p>
       </div>
     );
   },

@@ -1,4 +1,4 @@
-import { TabItem, Tabs } from '@company/core';
+import { Checkbox, TabItem, Tabs } from '@company/core';
 import { HomeIcon, InfoIcon, SearchIcon, SettingsIcon, UserIcon } from '@company/icons';
 import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
@@ -530,6 +530,135 @@ export const InteractiveWithContent: Story = {
             </h3>
             <p style={{ color: '#666', margin: 0 }}>{tabContent[activeKey]?.content}</p>
           </div>
+        </div>
+      </div>
+    );
+  },
+};
+
+export const KeyboardNavigation: Story = {
+  args: { items: [] },
+  render: () => {
+    const [activeKey, setActiveKey] = React.useState('tab1');
+
+    const items = [
+      {
+        label: 'Tab 1',
+        value: 'tab1',
+        children: (
+          <button
+            style={{
+              padding: '8px 16px',
+              backgroundColor: '#3b82f6',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '14px',
+            }}
+            onClick={() => alert('Tab 1 button clicked!')}
+          >
+            Tab 1 button
+          </button>
+        ),
+      },
+      {
+        label: 'Tab 2',
+        value: 'tab2',
+        children: (
+          <div>
+            <p style={{ margin: '0 0 8px 0' }}>Content in Tab 2:</p>
+            <Checkbox label="I agree to the terms and conditions" />
+          </div>
+        ),
+      },
+      {
+        label: 'Tab 3',
+        value: 'tab3',
+        children: (
+          <div>
+            <a
+              href="#"
+              style={{
+                color: '#3b82f6',
+                textDecoration: 'none',
+                fontSize: '14px',
+              }}
+              onClick={e => {
+                e.preventDefault();
+                alert('Link in Tab 3 clicked!');
+              }}
+            >
+              Link in Tab 3
+            </a>
+          </div>
+        ),
+      },
+      {
+        label: 'Tab 4',
+        value: 'tab4',
+        children: (
+          <div>
+            <input
+              type="text"
+              placeholder="Input in Tab 4"
+              style={{
+                padding: '8px',
+                border: '1px solid #ccc',
+                borderRadius: '4px',
+                fontSize: '14px',
+                width: '200px',
+              }}
+            />
+          </div>
+        ),
+      },
+    ];
+
+    return (
+      <div style={{ padding: '24px' }}>
+        <div
+          style={{
+            marginBottom: '24px',
+            padding: '16px',
+            backgroundColor: '#f0f7ff',
+            border: '1px solid #3b82f6',
+            borderRadius: '8px',
+          }}
+        >
+          <h3 style={{ margin: '0 0 12px 0', fontSize: '16px', fontWeight: 600 }}>
+            Keyboard Interactions
+          </h3>
+          <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', lineHeight: '1.8' }}>
+            <li>
+              <strong>Tab:</strong> Takes at least two tab stops - one for the TabGroup and one for
+              the tab panel
+            </li>
+            <li>
+              <strong>Arrow Left/Right:</strong> Navigate between tabs (when focused on a tab)
+            </li>
+            <li>
+              <strong>Home/End:</strong> Move to first/last tab (when focused on a tab)
+            </li>
+            <li>
+              When tabbing away from the TabGroup, focus will go to the first operable element in
+              the tab panel
+            </li>
+            <li>
+              If there are no operable elements, the entire tab panel will take focus to support
+              scrolling of its content
+            </li>
+          </ul>
+        </div>
+
+        <div
+          style={{
+            border: '1px solid #e5e5e5',
+            borderRadius: '8px',
+            overflow: 'hidden',
+          }}
+        >
+          <Tabs items={items} activeKey={activeKey} onChange={setActiveKey} />
         </div>
       </div>
     );

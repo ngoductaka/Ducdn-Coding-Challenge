@@ -4,6 +4,7 @@ import { vars, radii, durations, easings } from '@company/tokens';
 export const checkboxWrapper = style({
   display: 'flex',
   flexDirection: 'column',
+  marginTop: '8px',
 });
 
 export const checkboxLabel = style({

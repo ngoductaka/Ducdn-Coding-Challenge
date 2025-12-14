@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { Tab, Tabs } from './Tab';
+import { Tab, Tabs, TabPanel } from './Tab';
 import { HomeIcon, UserIcon } from '@company/icons';
 import { ThemeProvider } from '@company/react';
 
@@ -209,6 +209,224 @@ describe('Tabs Component', () => {
       expect(tabs[0]).toHaveAttribute('aria-selected', 'false');
       expect(tabs[1]).toHaveAttribute('aria-selected', 'true');
       expect(tabs[2]).toHaveAttribute('aria-selected', 'false');
+    });
+
+    it('should set tabindex=0 only on active tab', () => {
+      render(<Tabs items={mockItems} defaultActiveKey="tab2" />);
+      const tabs = screen.getAllByRole('tab');
+      expect(tabs[0]).toHaveAttribute('tabindex', '-1');
+      expect(tabs[1]).toHaveAttribute('tabindex', '0');
+      expect(tabs[2]).toHaveAttribute('tabindex', '-1');
+    });
+
+    it('should have proper ARIA ids and controls', () => {
+      render(<Tabs items={mockItems} defaultActiveKey="tab1" />);
+      const tabs = screen.getAllByRole('tab');
+      expect(tabs[0]).toHaveAttribute('id', 'tab-tab1');
+      expect(tabs[0]).toHaveAttribute('aria-controls', 'tabpanel-tab1');
+    });
+
+    it('should navigate tabs with arrow keys in auto mode', () => {
+      const handleChange = jest.fn();
+      render(
+        <Tabs
+          items={mockItems}
+          defaultActiveKey="tab1"
+          onChange={handleChange}
+          keyboardNavigation="auto"
+        />
+      );
+      const tablist = screen.getByRole('tablist');
+
+      fireEvent.keyDown(tablist, { key: 'ArrowRight' });
+      expect(handleChange).toHaveBeenCalledWith('tab2');
+
+      fireEvent.keyDown(tablist, { key: 'ArrowLeft' });
+      expect(handleChange).toHaveBeenCalledWith('tab1');
+    });
+
+    it('should navigate tabs with arrow keys but not activate in manual mode', () => {
+      const handleChange = jest.fn();
+      render(
+        <Tabs
+          items={mockItems}
+          defaultActiveKey="tab1"
+          onChange={handleChange}
+          keyboardNavigation="manual"
+        />
+      );
+      const tablist = screen.getByRole('tablist');
+
+      fireEvent.keyDown(tablist, { key: 'ArrowRight' });
+      // In manual mode, arrow keys don't trigger onChange
+      expect(handleChange).not.toHaveBeenCalled();
+    });
+
+    it('should navigate to first tab with Home key', () => {
+      const handleChange = jest.fn();
+      render(
+        <Tabs
+          items={mockItems}
+          defaultActiveKey="tab3"
+          onChange={handleChange}
+          keyboardNavigation="auto"
+        />
+      );
+      const tablist = screen.getByRole('tablist');
+
+      fireEvent.keyDown(tablist, { key: 'Home' });
+      expect(handleChange).toHaveBeenCalledWith('tab1');
+    });
+
+    it('should navigate to last tab with End key', () => {
+      const handleChange = jest.fn();
+      render(
+        <Tabs
+          items={mockItems}
+          defaultActiveKey="tab1"
+          onChange={handleChange}
+          keyboardNavigation="auto"
+        />
+      );
+      const tablist = screen.getByRole('tablist');
+
+      fireEvent.keyDown(tablist, { key: 'End' });
+      expect(handleChange).toHaveBeenCalledWith('tab3');
+    });
+
+    it('should skip disabled tabs when navigating', () => {
+      const itemsWithDisabled = [
+        { label: 'Tab 1', value: 'tab1' },
+        { label: 'Tab 2', value: 'tab2', disabled: true },
+        { label: 'Tab 3', value: 'tab3' },
+      ];
+      const handleChange = jest.fn();
+      render(
+        <Tabs
+          items={itemsWithDisabled}
+          defaultActiveKey="tab1"
+          onChange={handleChange}
+          keyboardNavigation="auto"
+        />
+      );
+      const tablist = screen.getByRole('tablist');
+
+      fireEvent.keyDown(tablist, { key: 'ArrowRight' });
+      expect(handleChange).toHaveBeenCalledWith('tab3');
+    });
+
+    it('should support vertical orientation with up/down arrow keys', () => {
+      const handleChange = jest.fn();
+      render(
+        <Tabs
+          items={mockItems}
+          defaultActiveKey="tab1"
+          onChange={handleChange}
+          orientation="vertical"
+          keyboardNavigation="auto"
+        />
+      );
+      const tablist = screen.getByRole('tablist');
+
+      expect(tablist).toHaveAttribute('aria-orientation', 'vertical');
+
+      fireEvent.keyDown(tablist, { key: 'ArrowDown' });
+      expect(handleChange).toHaveBeenCalledWith('tab2');
+
+      fireEvent.keyDown(tablist, { key: 'ArrowUp' });
+      expect(handleChange).toHaveBeenCalledWith('tab1');
+    });
+
+    it('should wrap around when navigating past first/last tab', () => {
+      const handleChange = jest.fn();
+      render(
+        <Tabs
+          items={mockItems}
+          defaultActiveKey="tab1"
+          onChange={handleChange}
+          keyboardNavigation="auto"
+        />
+      );
+      const tablist = screen.getByRole('tablist');
+
+      fireEvent.keyDown(tablist, { key: 'ArrowLeft' });
+      expect(handleChange).toHaveBeenCalledWith('tab3');
+    });
+  });
+
+  describe('TabPanel Component', () => {
+    it('should render tab panels with proper ARIA attributes', () => {
+      const itemsWithContent = [
+        { label: 'Tab 1', value: 'tab1', children: <div>Content 1</div> },
+        { label: 'Tab 2', value: 'tab2', children: <div>Content 2</div> },
+      ];
+      render(<Tabs items={itemsWithContent} defaultActiveKey="tab1" />);
+
+      const panels = screen.getAllByRole('tabpanel', { hidden: true });
+      expect(panels[0]).toHaveAttribute('id', 'tabpanel-tab1');
+      expect(panels[0]).toHaveAttribute('aria-labelledby', 'tab-tab1');
+      expect(panels[0]).not.toHaveAttribute('hidden');
+    });
+
+    it('should only show active panel content', () => {
+      const itemsWithContent = [
+        { label: 'Tab 1', value: 'tab1', children: <div>Content 1</div> },
+        { label: 'Tab 2', value: 'tab2', children: <div>Content 2</div> },
+      ];
+      render(<Tabs items={itemsWithContent} defaultActiveKey="tab1" />);
+
+      expect(screen.getByText('Content 1')).toBeVisible();
+      expect(screen.getByText('Content 2')).not.toBeVisible();
+    });
+
+    it('should support lazy rendering of panels', () => {
+      const itemsWithContent = [
+        { label: 'Tab 1', value: 'tab1', children: <div>Content 1</div> },
+        { label: 'Tab 2', value: 'tab2', children: <div>Content 2</div> },
+      ];
+      render(<Tabs items={itemsWithContent} defaultActiveKey="tab1" lazy />);
+
+      expect(screen.getByText('Content 1')).toBeInTheDocument();
+      expect(screen.queryByText('Content 2')).not.toBeInTheDocument();
+
+      fireEvent.click(screen.getByText('Tab 2'));
+
+      expect(screen.getByText('Content 2')).toBeInTheDocument();
+    });
+
+    it('should keep lazy panels after first activation', () => {
+      const itemsWithContent = [
+        { label: 'Tab 1', value: 'tab1', children: <div>Content 1</div> },
+        { label: 'Tab 2', value: 'tab2', children: <div>Content 2</div> },
+      ];
+      render(<Tabs items={itemsWithContent} defaultActiveKey="tab1" lazy />);
+
+      fireEvent.click(screen.getByText('Tab 2'));
+      expect(screen.getByText('Content 2')).toBeInTheDocument();
+
+      fireEvent.click(screen.getByText('Tab 1'));
+      expect(screen.getByText('Content 2')).toBeInTheDocument();
+      expect(screen.getByText('Content 1')).toBeInTheDocument();
+    });
+  });
+
+  describe('Orientation', () => {
+    it('should render horizontal orientation by default', () => {
+      render(<Tabs items={mockItems} />);
+      const tablist = screen.getByRole('tablist');
+      expect(tablist).toHaveAttribute('aria-orientation', 'horizontal');
+    });
+
+    it('should render vertical orientation when specified', () => {
+      render(<Tabs items={mockItems} orientation="vertical" />);
+      const tablist = screen.getByRole('tablist');
+      expect(tablist).toHaveAttribute('aria-orientation', 'vertical');
+    });
+
+    it('should not show scroll buttons in vertical orientation', () => {
+      render(<Tabs items={mockItems} orientation="vertical" scrollable />);
+      expect(screen.queryByLabelText('Scroll left')).not.toBeInTheDocument();
+      expect(screen.queryByLabelText('Scroll right')).not.toBeInTheDocument();
     });
   });
 

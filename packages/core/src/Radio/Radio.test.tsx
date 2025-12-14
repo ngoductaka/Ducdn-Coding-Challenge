@@ -439,4 +439,144 @@ describe('RadioGroup Component', () => {
       expect(radios[1].checked).toBe(true);
     });
   });
+
+  describe('Keyboard Navigation', () => {
+    it('should navigate to next radio with ArrowDown', () => {
+      const handleChange = jest.fn();
+      render(<RadioGroup options={mockOptions} onChange={handleChange} defaultValue="option1" />);
+
+      const radioGroup = screen.getByRole('radiogroup');
+      const radios = screen.getAllByRole('radio') as HTMLInputElement[];
+
+      expect(radios[0].checked).toBe(true);
+
+      fireEvent.keyDown(radioGroup, { key: 'ArrowDown' });
+
+      expect(handleChange).toHaveBeenCalledWith('option2');
+    });
+
+    it('should navigate to next radio with ArrowRight', () => {
+      const handleChange = jest.fn();
+      render(<RadioGroup options={mockOptions} onChange={handleChange} defaultValue="option1" />);
+
+      const radioGroup = screen.getByRole('radiogroup');
+
+      fireEvent.keyDown(radioGroup, { key: 'ArrowRight' });
+
+      expect(handleChange).toHaveBeenCalledWith('option2');
+    });
+
+    it('should navigate to previous radio with ArrowUp', () => {
+      const handleChange = jest.fn();
+      render(<RadioGroup options={mockOptions} onChange={handleChange} defaultValue="option2" />);
+
+      const radioGroup = screen.getByRole('radiogroup');
+
+      fireEvent.keyDown(radioGroup, { key: 'ArrowUp' });
+
+      expect(handleChange).toHaveBeenCalledWith('option1');
+    });
+
+    it('should navigate to previous radio with ArrowLeft', () => {
+      const handleChange = jest.fn();
+      render(<RadioGroup options={mockOptions} onChange={handleChange} defaultValue="option2" />);
+
+      const radioGroup = screen.getByRole('radiogroup');
+
+      fireEvent.keyDown(radioGroup, { key: 'ArrowLeft' });
+
+      expect(handleChange).toHaveBeenCalledWith('option1');
+    });
+
+    it('should wrap around to first option when at last option with ArrowDown', () => {
+      const handleChange = jest.fn();
+      render(<RadioGroup options={mockOptions} onChange={handleChange} defaultValue="option3" />);
+
+      const radioGroup = screen.getByRole('radiogroup');
+
+      fireEvent.keyDown(radioGroup, { key: 'ArrowDown' });
+
+      expect(handleChange).toHaveBeenCalledWith('option1');
+    });
+
+    it('should wrap around to last option when at first option with ArrowUp', () => {
+      const handleChange = jest.fn();
+      render(<RadioGroup options={mockOptions} onChange={handleChange} defaultValue="option1" />);
+
+      const radioGroup = screen.getByRole('radiogroup');
+
+      fireEvent.keyDown(radioGroup, { key: 'ArrowUp' });
+
+      expect(handleChange).toHaveBeenCalledWith('option3');
+    });
+
+    it('should navigate to first radio with Home key', () => {
+      const handleChange = jest.fn();
+      render(<RadioGroup options={mockOptions} onChange={handleChange} defaultValue="option3" />);
+
+      const radioGroup = screen.getByRole('radiogroup');
+
+      fireEvent.keyDown(radioGroup, { key: 'Home' });
+
+      expect(handleChange).toHaveBeenCalledWith('option1');
+    });
+
+    it('should navigate to last radio with End key', () => {
+      const handleChange = jest.fn();
+      render(<RadioGroup options={mockOptions} onChange={handleChange} defaultValue="option1" />);
+
+      const radioGroup = screen.getByRole('radiogroup');
+
+      fireEvent.keyDown(radioGroup, { key: 'End' });
+
+      expect(handleChange).toHaveBeenCalledWith('option3');
+    });
+
+    it('should skip disabled radios during keyboard navigation', () => {
+      const handleChange = jest.fn();
+      const optionsWithDisabled = [
+        { label: 'Option 1', value: 'option1' },
+        { label: 'Option 2', value: 'option2', disabled: true },
+        { label: 'Option 3', value: 'option3' },
+      ];
+
+      render(
+        <RadioGroup options={optionsWithDisabled} onChange={handleChange} defaultValue="option1" />
+      );
+
+      const radioGroup = screen.getByRole('radiogroup');
+
+      fireEvent.keyDown(radioGroup, { key: 'ArrowDown' });
+
+      expect(handleChange).toHaveBeenCalledWith('option3');
+    });
+
+    it('should not navigate when all radios are disabled', () => {
+      const handleChange = jest.fn();
+      render(<RadioGroup options={mockOptions} onChange={handleChange} disabled />);
+
+      const radioGroup = screen.getByRole('radiogroup');
+
+      fireEvent.keyDown(radioGroup, { key: 'ArrowDown' });
+
+      expect(handleChange).not.toHaveBeenCalled();
+    });
+
+    it('should work with children syntax', () => {
+      const handleChange = jest.fn();
+      render(
+        <RadioGroup onChange={handleChange} defaultValue="opt1">
+          <Radio value="opt1" label="First" />
+          <Radio value="opt2" label="Second" />
+          <Radio value="opt3" label="Third" />
+        </RadioGroup>
+      );
+
+      const radioGroup = screen.getByRole('radiogroup');
+
+      fireEvent.keyDown(radioGroup, { key: 'ArrowDown' });
+
+      expect(handleChange).toHaveBeenCalledWith('opt2');
+    });
+  });
 });

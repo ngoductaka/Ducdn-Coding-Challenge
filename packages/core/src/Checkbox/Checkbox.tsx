@@ -1,4 +1,4 @@
-import React, { forwardRef, InputHTMLAttributes } from 'react';
+import React, { forwardRef, InputHTMLAttributes, useState } from 'react';
 import * as styles from './Checkbox.css';
 import { clsx } from 'clsx';
 
@@ -16,7 +16,7 @@ export interface CheckboxProps extends Omit<
   className?: string;
 }
 
-export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
+const CheckboxComponent = forwardRef<HTMLInputElement, CheckboxProps>(
   (
     {
       label,
@@ -103,4 +103,98 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   }
 );
 
-Checkbox.displayName = 'Checkbox';
+CheckboxComponent.displayName = 'Checkbox';
+
+export interface CheckboxGroupOption {
+  label: string;
+  value: string;
+  disabled?: boolean;
+  helperText?: string;
+}
+
+export interface CheckboxGroupProps {
+  value?: string[];
+  defaultValue?: string[];
+  onChange?: (values: string[]) => void;
+  disabled?: boolean;
+  options?: Array<CheckboxGroupOption | string>;
+  children?: React.ReactNode;
+  className?: string;
+  name?: string;
+}
+
+export const CheckboxGroup = ({
+  value,
+  defaultValue,
+  onChange,
+  disabled = false,
+  options = [],
+  children,
+  className = '',
+  name,
+}: CheckboxGroupProps) => {
+  const [internalValue, setInternalValue] = useState<string[]>(defaultValue || []);
+  const currentValue = value !== undefined ? value : internalValue;
+
+  const handleChange = (checkboxValue: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.checked
+      ? [...currentValue, checkboxValue]
+      : currentValue.filter(v => v !== checkboxValue);
+
+    if (value === undefined) {
+      setInternalValue(newValue);
+    }
+
+    if (onChange) {
+      onChange(newValue);
+    }
+  };
+
+  if (options.length > 0) {
+    return (
+      <div className={clsx(styles.checkboxWrapper, className)} role="group">
+        {options.map(option => {
+          const opt: CheckboxGroupOption =
+            typeof option === 'string' ? { label: option, value: option } : option;
+          return (
+            <Checkbox
+              key={opt.value}
+              value={opt.value}
+              checked={currentValue.includes(opt.value)}
+              disabled={disabled || opt.disabled}
+              onChange={handleChange(opt.value)}
+              label={opt.label}
+              helperText={opt.helperText}
+              name={name}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
+  return (
+    <div className={clsx(styles.checkboxWrapper, className)} role="group">
+      {React.Children.map(children, child => {
+        if (React.isValidElement<CheckboxProps>(child) && child.type === Checkbox) {
+          const childValue = child.props.value?.toString() || '';
+          return React.cloneElement(child as React.ReactElement<any>, {
+            checked: currentValue.includes(childValue),
+            onChange: handleChange(childValue),
+            disabled: disabled || child.props.disabled,
+            name: name || child.props.name,
+          });
+        }
+        return child;
+      })}
+    </div>
+  );
+};
+
+CheckboxGroup.displayName = 'CheckboxGroup';
+
+export const Checkbox = CheckboxComponent as typeof CheckboxComponent & {
+  CheckboxGroup: typeof CheckboxGroup;
+};
+
+Checkbox.CheckboxGroup = CheckboxGroup;

@@ -107,13 +107,41 @@ export const TryMe: Story = {
     const [selected, setSelected] = React.useState('option1');
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '500px' }}>
-        <h3 style={{ marginBottom: '8px', fontWeight: 600 }}>Try me</h3>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '600px' }}>
+        <h3 style={{ marginBottom: '8px', fontWeight: 600 }}>Try Keyboard Navigation</h3>
+
+        <div
+          style={{
+            padding: '12px',
+            backgroundColor: '#f0f0f0',
+            borderRadius: '8px',
+            fontSize: '14px',
+            lineHeight: '1.6',
+          }}
+        >
+          <strong>Keyboard controls:</strong>
+          <ul style={{ marginTop: '8px', marginBottom: '0', paddingLeft: '20px' }}>
+            <li>
+              <kbd>↑</kbd> / <kbd>↓</kbd> or <kbd>←</kbd> / <kbd>→</kbd> - Navigate between options
+            </li>
+            <li>
+              <kbd>Home</kbd> - Jump to first option
+            </li>
+            <li>
+              <kbd>End</kbd> - Jump to last option
+            </li>
+            <li>
+              <kbd>Tab</kbd> - Move focus in/out of radio group
+            </li>
+          </ul>
+        </div>
 
         <RadioGroup name="try-me-group" value={selected} onChange={setSelected}>
-          <Radio label="Label" value="option1" counter={9999} />
-          <Radio label="Another Option" value="option2" />
+          <Radio label="First Option" value="option1" counter={9999} />
+          <Radio label="Second Option" value="option2" />
           <Radio label="Third Option" value="option3" />
+          <Radio label="Fourth Option" value="option4" />
+          <Radio label="Fifth Option (Disabled)" value="option5" disabled />
         </RadioGroup>
 
         <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
@@ -287,134 +315,6 @@ export const AllStates: Story = {
           </div>
         </div>
       </div>
-    </div>
-  ),
-};
-
-export const WhenToUse: Story = {
-  render: () => (
-    <div style={{ maxWidth: '700px', padding: '24px', fontFamily: 'system-ui, sans-serif' }}>
-      <h2 style={{ marginBottom: '16px', fontSize: '24px', fontWeight: 600 }}>When to use</h2>
-
-      <ul style={{ lineHeight: '1.8', paddingLeft: '24px', marginBottom: '32px' }}>
-        <li>
-          Use radio items when users <strong>must select</strong> a <strong>single</strong> option
-          from a list of mutually exclusive options.
-        </li>
-        <li>
-          Examples of usage include: forms, filter groups, data tables, modals, and side panels.
-        </li>
-      </ul>
-
-      <h3 style={{ marginTop: '32px', marginBottom: '16px', fontSize: '20px', fontWeight: 600 }}>
-        Configuration options
-      </h3>
-
-      <table
-        style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          border: '1px solid #e5e5e5',
-        }}
-      >
-        <thead>
-          <tr
-            style={{
-              backgroundColor: '#f5f5f5',
-              borderBottom: '2px solid #e5e5e5',
-            }}
-          >
-            <th
-              style={{
-                textAlign: 'left',
-                padding: '12px 16px',
-                fontWeight: 600,
-                borderRight: '1px solid #e5e5e5',
-              }}
-            >
-              Property
-            </th>
-            <th
-              style={{
-                textAlign: 'left',
-                padding: '12px 16px',
-                fontWeight: 600,
-                borderRight: '1px solid #e5e5e5',
-              }}
-            >
-              Values
-            </th>
-            <th
-              style={{
-                textAlign: 'left',
-                padding: '12px 16px',
-                fontWeight: 600,
-              }}
-            >
-              Default Value
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
-            <td
-              style={{
-                padding: '12px 16px',
-                borderRight: '1px solid #e5e5e5',
-              }}
-            >
-              Size
-            </td>
-            <td
-              style={{
-                padding: '12px 16px',
-                borderRight: '1px solid #e5e5e5',
-              }}
-            >
-              Large / Small
-            </td>
-            <td style={{ padding: '12px 16px' }}>Large</td>
-          </tr>
-          <tr style={{ borderBottom: '1px solid #e5e5e5' }}>
-            <td
-              style={{
-                padding: '12px 16px',
-                borderRight: '1px solid #e5e5e5',
-              }}
-            >
-              HelperText
-            </td>
-            <td
-              style={{
-                padding: '12px 16px',
-                borderRight: '1px solid #e5e5e5',
-              }}
-            >
-              yes / no
-            </td>
-            <td style={{ padding: '12px 16px' }}>no</td>
-          </tr>
-          <tr>
-            <td
-              style={{
-                padding: '12px 16px',
-                borderRight: '1px solid #e5e5e5',
-              }}
-            >
-              Counter
-            </td>
-            <td
-              style={{
-                padding: '12px 16px',
-                borderRight: '1px solid #e5e5e5',
-              }}
-            >
-              yes / no
-            </td>
-            <td style={{ padding: '12px 16px' }}>no</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   ),
 };
