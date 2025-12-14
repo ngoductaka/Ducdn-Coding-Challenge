@@ -30,13 +30,12 @@ npm run storybook
 ### Basic Usage
 
 ```tsx
-import { ThemeProvider, Button, Input, Modal, Tabs, Checkbox, Radio } from '@company/react';
+import { ThemeProvider, Button, Tabs, Checkbox, Radio } from '@company/react';
 
 function App() {
   return (
     <ThemeProvider defaultTheme="light">
       <Button variant="primary">Click me</Button>
-      <Input label="Email" type="email" />
       <Checkbox label="Accept terms" />
       <Radio label="Option 1" name="options" value="1" />
       <Tabs
@@ -66,16 +65,12 @@ function App() {
 
 ### Available Components
 
-| Component         | Variants                            | Accessibility        | Stories  |
-| ----------------- | ----------------------------------- | -------------------- | -------- |
-| **Button**        | 5 variants, 3 sizes                 | Full ARIA            | Complete |
-| **Input**         | Text, email, password, etc.         | Labels, errors       | Complete |
-| **Checkbox**      | Default, indeterminate, disabled    | Full ARIA, keyboard  | Complete |
-| **Radio**         | Single, grouped, disabled           | Full ARIA, keyboard  | Complete |
-| **Modal**         | Dialog with footer support          | Focus trap, keyboard | Complete |
-| **Card**          | With header, title, content, footer | Semantic HTML        | Complete |
-| **Tabs**          | Items array, icons, badges, scroll  | Keyboard navigation  | Complete |
-| **ThemeSwitcher** | Light/dark toggle                   | ARIA labels          | Complete |
+| Component         | Variants                                         | Accessibility       | Stories  |
+| ----------------- | ------------------------------------------------ | ------------------- | -------- |
+| **Checkbox**      | Default, indeterminate, disabled, sizes, grouped | Full ARIA, keyboard | Complete |
+| **Radio**         | Single, grouped, disabled, sizes, keyboard nav   | Full ARIA, keyboard | Complete |
+| **Tabs**          | Items array, icons, badges, scroll               | Keyboard navigation | Complete |
+| **ThemeSwitcher** | Light/dark toggle                                | ARIA labels         | Complete |
 
 ### Component Examples
 
@@ -87,19 +82,6 @@ function App() {
 <Button variant="outline">Outline</Button>
 <Button variant="ghost">Ghost</Button>
 <Button variant="danger">Danger</Button>
-```
-
-#### Input
-
-```tsx
-<Input
-  label="Email"
-  type="email"
-  placeholder="Enter your email"
-  helperText="We'll never share your email"
-  error="Please enter a valid email"
-  required
-/>
 ```
 
 #### Checkbox
@@ -115,16 +97,31 @@ function App() {
   onChange={(e) => setIsSubscribed(e.target.checked)}
 />
 
-// Indeterminate state (partial selection)
-<Checkbox
-  label="Select all"
-  checked={allSelected}
-  indeterminate={someSelected}
-  onChange={handleSelectAll}
-/>
-
 // Disabled state
 <Checkbox label="Unavailable option" disabled />
+
+// CheckboxGroup with options array
+<Checkbox.CheckboxGroup
+  name="preferences"
+  options={[
+    { label: 'Email notifications', value: 'email' },
+    { label: 'SMS notifications', value: 'sms' },
+    { label: 'Push notifications', value: 'push' },
+  ]}
+  value={selectedPreferences}
+  onChange={(values) => setSelectedPreferences(values)}
+/>
+
+// CheckboxGroup with children
+<Checkbox.CheckboxGroup name="features" onChange={handleChange}>
+  <Checkbox label="Feature A" value="a" />
+  <Checkbox label="Feature B" value="b" />
+  <Checkbox label="Feature C" value="c" disabled />
+</Checkbox.CheckboxGroup>
+
+// Size variants
+<Checkbox label="Default size" size="default" />
+<Checkbox label="Small size" size="small" />
 ```
 
 #### Radio
@@ -148,28 +145,29 @@ function App() {
 
 // Disabled radio
 <Radio label="Unavailable" name="choice" value="disabled" disabled />
-```
 
-#### Modal
+// RadioGroup with options array
+<Radio.RadioGroup
+  name="plan"
+  options={[
+    { label: 'Free Plan', value: 'free', helperText: '$0/month' },
+    { label: 'Pro Plan', value: 'pro', helperText: '$10/month' },
+    { label: 'Enterprise', value: 'enterprise', helperText: 'Custom pricing' },
+  ]}
+  value={selectedPlan}
+  onChange={(value) => setSelectedPlan(value)}
+/>
 
-```tsx
-const [isOpen, setIsOpen] = useState(false);
+// RadioGroup with children (supports arrow key navigation)
+<Radio.RadioGroup name="theme" onChange={handleThemeChange}>
+  <Radio label="Light" value="light" />
+  <Radio label="Dark" value="dark" />
+  <Radio label="System" value="system" />
+</Radio.RadioGroup>
 
-<Modal
-  isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
-  title="Confirmation"
-  footer={
-    <>
-      <Button variant="secondary" onClick={() => setIsOpen(false)}>
-        Cancel
-      </Button>
-      <Button onClick={handleConfirm}>Confirm</Button>
-    </>
-  }
->
-  <p>Are you sure you want to proceed?</p>
-</Modal>;
+// Size variants
+<Radio label="Large (default)" size="large" value="lg" />
+<Radio label="Small" size="small" value="sm" />
 ```
 
 #### Tabs
@@ -329,15 +327,13 @@ All components follow WCAG 2.1 AA guidelines:
 
 ### Accessibility Features by Component
 
-| Component         | Features                                                    |
-| ----------------- | ----------------------------------------------------------- |
-| **Modal**         | Focus trap, Escape key, focus restoration                   |
-| **Input**         | Associated labels, error announcements, required indicators |
-| **Checkbox**      | Native input, keyboard toggle (Space), indeterminate state  |
-| **Radio**         | Native input, keyboard navigation, grouped ARIA roles       |
-| **Button**        | Focus-visible states, disabled handling, ARIA labels        |
-| **Tabs**          | Keyboard navigation (arrows), focus management, ARIA roles  |
-| **ThemeSwitcher** | ARIA label for current theme state                          |
+| Component         | Features                                                                                    |
+| ----------------- | ------------------------------------------------------------------------------------------- |
+| **Checkbox**      | Native input, keyboard toggle (Space), indeterminate state, CheckboxGroup with multi-select |
+| **Radio**         | Native input, arrow key navigation in RadioGroup, grouped ARIA roles, Home/End keys         |
+| **Button**        | Focus-visible states, disabled handling, ARIA labels                                        |
+| **Tabs**          | Keyboard navigation (arrows), focus management, ARIA roles                                  |
+| **ThemeSwitcher** | ARIA label for current theme state                                                          |
 
 ## Documentation
 
@@ -381,10 +377,8 @@ design-system/
 │   ├── core/                # Core React components
 │   │   ├── src/
 │   │   │   ├── Button/
-│   │   │   ├── Input/
 │   │   │   ├── Checkbox/
 │   │   │   ├── Radio/
-│   │   │   ├── Modal/
 │   │   │   ├── Card/
 │   │   │   └── Tab/
 │   │   └── package.json
@@ -412,6 +406,11 @@ npm run build            # Build all packages
 npm run lint             # Lint all code
 npm run type-check       # TypeScript validation
 npm run clean            # Remove build artifacts
+
+# Testing
+npm run test             # Run all tests
+npm run test:watch       # Run tests in watch mode
+pnpm test -- --coverage  # Run tests with coverage report
 
 # Documentation
 npm run storybook        # Start Storybook dev server
@@ -500,30 +499,104 @@ npm run release          # Build and publish packages
    npm run storybook
    ```
 
-## Testing (Planned)
+## Testing
 
-Testing setup is planned but not yet implemented. Proposed stack:
+Comprehensive testing infrastructure using Jest and React Testing Library.
 
-- **Jest** - Test runner
-- **React Testing Library** - Component testing
-- **jest-axe** - Accessibility testing
-- **Chromatic** - Visual regression testing
+### Test Stack
 
-Example test structure:
+- **Jest** - Test runner with jsdom environment
+- **React Testing Library** - Component testing with user-centric queries
+- **@testing-library/jest-dom** - Custom matchers for DOM assertions
+- **@testing-library/user-event** - Advanced user interaction simulation
+- **ts-jest** - TypeScript support for Jest
+
+### Running Tests
+
+```bash
+# Run all tests
+npm run test
+# or
+pnpm test
+
+# Run tests in watch mode
+npm run test:watch
+# or
+pnpm test --watch
+
+# Run tests with coverage
+pnpm test -- --coverage
+```
+
+### Test Coverage
+
+Current test coverage for core components:
+
+| Component    | Tests | Coverage Areas                                                     |
+| ------------ | ----- | ------------------------------------------------------------------ |
+| **Checkbox** | 20+   | Rendering, states, sizes, events, groups, accessibility, themes    |
+| **Radio**    | 20+   | Rendering, states, sizes, events, groups, keyboard nav, themes     |
+| **Tab**      | 15+   | Rendering, active/disabled states, events, icons, counters, themes |
+
+### Test Examples
 
 ```tsx
+// Basic rendering test
 import { render, screen } from '@testing-library/react';
-import { axe, toHaveNoViolations } from 'jest-axe';
-import { Button } from './Button';
+import { Checkbox } from './Checkbox';
 
-expect.extend(toHaveNoViolations);
+test('renders checkbox with label', () => {
+  render(<Checkbox label="Accept terms" />);
+  expect(screen.getByRole('checkbox')).toBeInTheDocument();
+  expect(screen.getByText('Accept terms')).toBeInTheDocument();
+});
 
-test('Button has no accessibility violations', async () => {
-  const { container } = render(<Button>Click me</Button>);
-  const results = await axe(container);
-  expect(results).toHaveNoViolations();
+// User interaction test
+import { fireEvent } from '@testing-library/react';
+
+test('calls onChange when clicked', () => {
+  const handleChange = jest.fn();
+  render(<Checkbox label="Accept" onChange={handleChange} />);
+
+  const checkbox = screen.getByRole('checkbox');
+  fireEvent.click(checkbox);
+
+  expect(handleChange).toHaveBeenCalledTimes(1);
+});
+
+// Accessibility test
+test('has proper ARIA attributes', () => {
+  render(<Radio label="Option" value="opt" />);
+  const radio = screen.getByRole('radio');
+
+  expect(radio).toHaveAttribute('type', 'radio');
+  expect(radio).toHaveAttribute('value', 'opt');
+});
+
+// Theme integration test
+import { ThemeProvider } from '@company/react';
+
+test('renders correctly in dark theme', () => {
+  render(
+    <ThemeProvider defaultTheme="dark">
+      <Checkbox label="Dark mode checkbox" />
+    </ThemeProvider>
+  );
+  expect(screen.getByRole('checkbox')).toBeInTheDocument();
 });
 ```
+
+### Test Configuration
+
+Tests are configured to:
+
+- Mock Vanilla Extract CSS imports
+- Support TypeScript with JSX
+- Handle CSS modules with identity-obj-proxy
+- Mock theme classes for consistent testing
+- Collect coverage from all component files (excluding stories and styles)
+
+See [jest.config.js](packages/core/jest.config.js) and [jest.setup.js](packages/core/jest.setup.js) for full configuration.
 
 ## Browser Support
 
@@ -541,21 +614,21 @@ Requires ES6+ support. IE11 is not supported.
 - [x] Theme system with CSS variables
 - [x] Light/dark theme switching
 - [x] Button component (5 variants)
-- [x] Input component with validation
-- [x] Checkbox component with indeterminate state
-- [x] Radio component with grouping
-- [x] Modal component with accessibility
+- [x] Checkbox component with indeterminate state, sizes, and CheckboxGroup
+- [x] Radio component with RadioGroup and keyboard navigation
 - [x] Card component with sub-components
 - [x] Tabs component with scroll navigation
 - [x] ThemeProvider and ThemeSwitcher
 - [x] Storybook integration
 - [x] CSP compliance
+- [x] Testing infrastructure (Jest + React Testing Library)
+- [x] Comprehensive test coverage for core components
 
 ### In Progress (v0.2)
 
 - [ ] Select component with keyboard nav
-- [ ] Testing infrastructure (Jest + RTL)
 - [ ] CI/CD pipeline (GitHub Actions)
+- [ ] Expanded test coverage (Button, Card)
 - [ ] Additional components:
   - [ ] Switch/Toggle
   - [ ] Textarea
@@ -570,10 +643,11 @@ Requires ES6+ support. IE11 is not supported.
 - [ ] Accordion component
 - [ ] Vue adapter package
 - [ ] Web Components wrapper
-- [ ] Visual regression testing (Chromatic)
+- [ ] Visual regression testing (Chromatic/Playwright)
 - [ ] Bundle size monitoring
 - [ ] Figma token sync
 - [ ] Component generator CLI
+- [ ] Accessibility testing with jest-axe
 
 ## Contributing
 

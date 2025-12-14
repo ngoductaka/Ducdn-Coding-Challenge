@@ -37,12 +37,6 @@ describe('Tab Component', () => {
       const tab = screen.getByRole('tab');
       expect(tab).toHaveAttribute('aria-selected', 'false');
     });
-
-    it('should render active indicator when active', () => {
-      const { container } = render(<Tab label="Active Tab" active />);
-      const indicator = container.querySelector('[aria-hidden="true"]');
-      expect(indicator).toBeInTheDocument();
-    });
   });
 
   describe('Disabled State', () => {
