@@ -95,8 +95,6 @@ const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
             )}
           </div>
         </div>
-
-        {active && <span className={styles.tabIndicator} aria-hidden="true" />}
       </button>
     );
   }

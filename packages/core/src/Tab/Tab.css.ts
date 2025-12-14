@@ -15,13 +15,14 @@ export const tabButton = style({
   cursor: 'pointer',
   transition: `all ${durations.fast} ${easings.easeInOut}`,
   minHeight: '48px',
-  borderBottom: '2px solid transparent',
+  borderBottom: '4px solid transparent',
   fontFamily: vars.typography.fontFamily.sans,
   userSelect: 'none',
   outline: 'none',
 
   ':hover': {
     backgroundColor: vars.colors.background.primary,
+    borderBottomColor: vars.colors.border.strong,
   },
 
   ':focus-visible': {
@@ -33,10 +34,12 @@ export const tabButton = style({
 
 export const tabActive = style({
   color: vars.colors.action.primary,
+  borderBottomColor: vars.colors.action.primary,
 
   selectors: {
     '&:hover': {
       backgroundColor: vars.colors.action.secondaryHover,
+      borderBottomColor: vars.colors.action.primary,
     },
   },
 });
@@ -182,7 +185,8 @@ export const tabIndicator = style({
   bottom: '-2px',
   left: 0,
   right: 0,
-  height: '2px',
+  height: '5px',
+  borderRadius: '4px',
   backgroundColor: vars.colors.action.primary,
   transition: `all ${durations.fast} ${easings.easeInOut}`,
 });
