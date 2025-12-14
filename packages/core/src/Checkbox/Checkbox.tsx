@@ -6,51 +6,16 @@ export interface CheckboxProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'size' | 'type'
 > {
-  /**
-   * Label for the checkbox
-   */
   label?: string;
-
-  /**
-   * Helper text shown below the checkbox
-   */
   helperText?: string;
-
-  /**
-   * Size variant
-   * @default 'default'
-   */
   size?: 'default' | 'small';
-
-  /**
-   * Whether to show a counter
-   */
   counter?: boolean;
-
-  /**
-   * Counter value to display
-   */
   counterValue?: number;
-
-  /**
-   * Whether the checkbox is required
-   */
   required?: boolean;
-
-  /**
-   * Whether the checkbox is in indeterminate state
-   */
   indeterminate?: boolean;
-
-  /**
-   * Additional class name
-   */
   className?: string;
 }
 
-/**
- * Checkbox component for multiple selections
- */
 export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
     {

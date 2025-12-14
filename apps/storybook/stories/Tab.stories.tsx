@@ -1,7 +1,7 @@
+import { TabItem, Tabs } from '@company/core';
+import { HomeIcon, InfoIcon, SearchIcon, SettingsIcon, UserIcon } from '@company/icons';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Tabs, Tab } from '@company/core';
 import React from 'react';
-import { HomeIcon, SearchIcon, SettingsIcon, UserIcon, InfoIcon } from '@company/icons';
 
 const meta = {
   title: 'Components/Tabs',
@@ -47,9 +47,6 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * Basic Tabs with items array - Ant Design style
- */
 export const Basic: Story = {
   args: {
     items: [
@@ -61,9 +58,6 @@ export const Basic: Story = {
   },
 };
 
-/**
- * Tabs with icons
- */
 export const WithIcons: Story = {
   args: {
     items: [
@@ -76,9 +70,6 @@ export const WithIcons: Story = {
   },
 };
 
-/**
- * Tabs with counters/badges
- */
 export const WithCounters: Story = {
   args: {
     items: [
@@ -91,9 +82,6 @@ export const WithCounters: Story = {
   },
 };
 
-/**
- * Tabs with sub-labels
- */
 export const WithSubLabels: Story = {
   args: {
     items: [
@@ -105,9 +93,6 @@ export const WithSubLabels: Story = {
   },
 };
 
-/**
- * Tabs with action buttons (closeable tabs)
- */
 export const WithActionButtons: Story = {
   args: {
     items: [
@@ -123,9 +108,6 @@ export const WithActionButtons: Story = {
   },
 };
 
-/**
- * Tabs with disabled tab
- */
 export const WithDisabled: Story = {
   args: {
     items: [
@@ -137,9 +119,6 @@ export const WithDisabled: Story = {
   },
 };
 
-/**
- * Scrollable tabs
- */
 export const Scrollable: Story = {
   args: {
     items: Array.from({ length: 15 }, (_, i) => ({
@@ -150,58 +129,6 @@ export const Scrollable: Story = {
     scrollable: true,
   },
 };
-
-/**
- * Scrollable tabs with scrollLimit: first (default)
- * Prioritizes showing the first tab
- */
-export const ScrollLimitFirst: Story = {
-  args: {
-    items: Array.from({ length: 20 }, (_, i) => ({
-      label: `Tab ${i + 1}`,
-      value: `tab${i + 1}`,
-    })),
-    defaultActiveKey: 'tab10',
-    scrollable: true,
-    scrollLimit: 'first',
-  },
-};
-
-/**
- * Scrollable tabs with scrollLimit: last
- * Prioritizes showing the last tab
- */
-export const ScrollLimitLast: Story = {
-  args: {
-    items: Array.from({ length: 20 }, (_, i) => ({
-      label: `Tab ${i + 1}`,
-      value: `tab${i + 1}`,
-    })),
-    defaultActiveKey: 'tab10',
-    scrollable: true,
-    scrollLimit: 'last',
-  },
-};
-
-/**
- * Scrollable tabs with scrollLimit: middle
- * Centers the active tab in view
- */
-export const ScrollLimitMiddle: Story = {
-  args: {
-    items: Array.from({ length: 20 }, (_, i) => ({
-      label: `Tab ${i + 1}`,
-      value: `tab${i + 1}`,
-    })),
-    defaultActiveKey: 'tab10',
-    scrollable: true,
-    scrollLimit: 'middle',
-  },
-};
-
-/**
- * Interactive ScrollLimit Comparison
- */
 export const ScrollLimitComparison: Story = {
   args: { items: [] },
   render: () => {
@@ -277,9 +204,6 @@ export const ScrollLimitComparison: Story = {
   },
 };
 
-/**
- * Tabs with add button
- */
 export const WithAddButton: Story = {
   args: {
     items: [
@@ -296,9 +220,6 @@ export const WithAddButton: Story = {
   },
 };
 
-/**
- * Controlled tabs with state management
- */
 export const Controlled: Story = {
   args: { items: [] },
   render: () => {
@@ -328,13 +249,10 @@ export const Controlled: Story = {
   },
 };
 
-/**
- * Full-featured example with dynamic tabs
- */
 export const FullFeatured: Story = {
   args: { items: [] },
   render: () => {
-    const [tabs, setTabs] = React.useState([
+    const [tabs, setTabs] = React.useState<TabItem[]>([
       { label: 'Home', value: 'home', icon: <HomeIcon /> },
       { label: 'Profile', value: 'profile', icon: <UserIcon />, counter: 3 },
       {
@@ -394,14 +312,10 @@ export const FullFeatured: Story = {
   },
 };
 
-/**
- * All variants showcase
- */
 export const AllVariants: Story = {
   args: { items: [] },
   render: () => (
     <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
-      {/* Basic */}
       <div>
         <h3 style={{ fontWeight: 600, marginBottom: '16px', fontSize: '16px' }}>Basic Tabs</h3>
         <Tabs
@@ -414,7 +328,6 @@ export const AllVariants: Story = {
         />
       </div>
 
-      {/* With Icons */}
       <div>
         <h3 style={{ fontWeight: 600, marginBottom: '16px', fontSize: '16px' }}>With Icons</h3>
         <Tabs
@@ -427,7 +340,6 @@ export const AllVariants: Story = {
         />
       </div>
 
-      {/* With Sub Labels */}
       <div>
         <h3 style={{ fontWeight: 600, marginBottom: '16px', fontSize: '16px' }}>With Sub Labels</h3>
         <Tabs
@@ -440,7 +352,6 @@ export const AllVariants: Story = {
         />
       </div>
 
-      {/* With Counters */}
       <div>
         <h3 style={{ fontWeight: 600, marginBottom: '16px', fontSize: '16px' }}>With Counters</h3>
         <Tabs
@@ -453,7 +364,6 @@ export const AllVariants: Story = {
         />
       </div>
 
-      {/* With Action Buttons */}
       <div>
         <h3 style={{ fontWeight: 600, marginBottom: '16px', fontSize: '16px' }}>
           With Action Buttons
@@ -472,9 +382,6 @@ export const AllVariants: Story = {
   ),
 };
 
-/**
- * States demonstration
- */
 export const States: Story = {
   args: { items: [] },
   render: () => (
@@ -520,9 +427,6 @@ export const States: Story = {
   ),
 };
 
-/**
- * Anatomy documentation
- */
 export const Anatomy: Story = {
   args: { items: [] },
   render: () => (
@@ -536,7 +440,7 @@ export const Anatomy: Story = {
               label: 'Tab',
               value: 'tab1',
               subLabel: 'Sub label',
-              icon: '📄',
+              icon: <InfoIcon />,
               counter: 5,
               actionButton: true,
             },
@@ -580,9 +484,6 @@ export const Anatomy: Story = {
   ),
 };
 
-/**
- * Interactive with content panels
- */
 export const InteractiveWithContent: Story = {
   args: { items: [] },
   render: () => {

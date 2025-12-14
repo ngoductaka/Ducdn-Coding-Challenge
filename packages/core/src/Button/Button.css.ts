@@ -3,9 +3,6 @@ import { recipe } from '@vanilla-extract/recipes';
 import { vars } from '@company/tokens';
 import { radii, durations, easings } from '@company/tokens';
 
-/**
- * Button base styles
- */
 export const buttonBase = style({
   display: 'inline-flex',
   alignItems: 'center',
@@ -31,9 +28,6 @@ export const buttonBase = style({
   },
 });
 
-/**
- * Button variants using recipes
- */
 export const button = recipe({
   base: buttonBase,
 

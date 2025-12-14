@@ -61,6 +61,21 @@ const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
             <div className={styles.tabContent}>
               {icon && <span className={styles.tabIcon}>{icon}</span>}
               <span className={styles.tabLabel}>{label}</span>
+
+              {counter !== undefined && counter > 0 && (
+                <span className={styles.tabCounter}>{counter}</span>
+              )}
+              {actionButton && (
+                <button
+                  type="button"
+                  className={styles.tabActionButton}
+                  onClick={handleActionClick}
+                  aria-label="Close tab"
+                  disabled={disabled}
+                >
+                  <XIcon className={styles.tabActionIcon} size={12} />
+                </button>
+              )}
             </div>
             {subLabel && (
               <span className={clsx(styles.tabSubLabel, icon && styles.tabSubLabelWithIcon)}>
@@ -68,22 +83,6 @@ const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
               </span>
             )}
           </div>
-
-          {counter !== undefined && counter > 0 && (
-            <span className={styles.tabCounter}>{counter}</span>
-          )}
-
-          {actionButton && (
-            <button
-              type="button"
-              className={styles.tabActionButton}
-              onClick={handleActionClick}
-              aria-label="Close tab"
-              disabled={disabled}
-            >
-              <XIcon size={12} />
-            </button>
-          )}
         </div>
 
         {active && <span className={styles.tabIndicator} aria-hidden="true" />}
@@ -94,106 +93,29 @@ const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
 
 TabComponent.displayName = 'Tab';
 
-// Tabs Component Types (similar to Ant Design)
 export interface TabItem {
-  /**
-   * Tab label text
-   */
   label: string;
-
-  /**
-   * Unique key for the tab
-   */
   value: string;
-
-  /**
-   * Icon to display
-   */
   icon?: ReactNode;
-
-  /**
-   * Sub label text
-   */
   subLabel?: string;
-
-  /**
-   * Whether tab is disabled
-   */
   disabled?: boolean;
-
-  /**
-   * Counter badge value
-   */
   counter?: number;
-
-  /**
-   * Whether to show action button
-   */
   actionButton?: boolean;
 }
 
 export interface TabsProps {
-  /**
-   * Current active tab key (controlled)
-   */
   activeKey?: string;
-
-  /**
-   * Default active tab key (uncontrolled)
-   */
   defaultActiveKey?: string;
-
-  /**
-   * Callback when tab changes
-   */
   onChange?: (activeKey: string) => void;
-
-  /**
-   * Array of tab items
-   */
   items: TabItem[];
-
-  /**
-   * Additional class name
-   */
   className?: string;
-
-  /**
-   * Whether tabs are scrollable
-   * @default false
-   */
   scrollable?: boolean;
-
-  /**
-   * Whether to show add tab button
-   * @default false
-   */
   addTab?: boolean;
-
-  /**
-   * Callback when add tab button is clicked
-   */
   onAddTab?: () => void;
-
-  /**
-   * Callback when action button (close) is clicked on a tab
-   */
   onActionClick?: (value: string, event: React.MouseEvent<HTMLButtonElement>) => void;
-
-  /**
-   * Defines which part of the tab list is prioritized during scrolling when tabs overflow
-   * - 'first': Prioritizes showing the first tab
-   * - 'last': Prioritizes showing the last tab
-   * - 'middle': Prioritizes showing the active tab in the middle
-   * @default 'first'
-   */
   scrollLimit?: 'first' | 'last' | 'middle';
 }
 
-/**
- * Tabs component for managing a group of Tab components
- * Similar to Ant Design Tabs with items array API
- */
 export const Tabs = ({
   activeKey,
   defaultActiveKey,
@@ -291,6 +213,17 @@ export const Tabs = ({
     }
   };
 
+  const handleAddTab = () => {
+    if (onAddTab) {
+      onAddTab();
+      setTimeout(() => {
+        if (tabListRef.current) {
+          tabListRef.current.scrollBy({ left: 200, behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  };
+
   React.useEffect(() => {
     if (scrollable) {
       checkScrollability();
@@ -356,7 +289,7 @@ export const Tabs = ({
             <button
               type="button"
               className={styles.addTabButton}
-              onClick={onAddTab}
+              onClick={handleAddTab}
               aria-label="Add tab"
             >
               <PlusIcon size={17} className={styles.iconScrollButton} />

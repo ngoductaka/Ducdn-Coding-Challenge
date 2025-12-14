@@ -1,5 +1,5 @@
+import { colors, radii } from '@company/tokens';
 import type { Meta, StoryObj } from '@storybook/react';
-import { colors, typography, spacing, radii, shadows } from '@company/tokens';
 
 const meta = {
   title: 'Design Tokens/Colors',
@@ -29,7 +29,13 @@ const ColorSwatch = ({ color, name }: { color: string; name: string }) => (
 
 export const Brand: StoryObj = {
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '24px' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
+        gap: '24px',
+      }}
+    >
       {Object.entries(colors.brand).map(([shade, color]) => (
         <ColorSwatch key={shade} color={color} name={shade} />
       ))}
@@ -39,7 +45,13 @@ export const Brand: StoryObj = {
 
 export const Neutral: StoryObj = {
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '24px' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
+        gap: '24px',
+      }}
+    >
       {Object.entries(colors.neutral).map(([shade, color]) => (
         <ColorSwatch key={shade} color={color} name={shade} />
       ))}
@@ -56,21 +68,21 @@ export const Semantic: StoryObj = {
           <ColorSwatch key={shade} color={color} name={shade} />
         ))}
       </div>
-      
+
       <h3 style={{ marginBottom: '16px' }}>Warning</h3>
       <div style={{ display: 'flex', gap: '24px', marginBottom: '32px' }}>
         {Object.entries(colors.warning).map(([shade, color]) => (
           <ColorSwatch key={shade} color={color} name={shade} />
         ))}
       </div>
-      
+
       <h3 style={{ marginBottom: '16px' }}>Error</h3>
       <div style={{ display: 'flex', gap: '24px', marginBottom: '32px' }}>
         {Object.entries(colors.error).map(([shade, color]) => (
           <ColorSwatch key={shade} color={color} name={shade} />
         ))}
       </div>
-      
+
       <h3 style={{ marginBottom: '16px' }}>Info</h3>
       <div style={{ display: 'flex', gap: '24px' }}>
         {Object.entries(colors.info).map(([shade, color]) => (

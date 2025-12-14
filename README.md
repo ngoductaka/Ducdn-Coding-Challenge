@@ -1,20 +1,20 @@
-# 🎨 Enterprise Design System
+# Enterprise Design System
 
 A comprehensive, CSP-compliant design system built with React, TypeScript, and Vanilla Extract. Features runtime theme switching, full accessibility support (WCAG 2.1 AA), and a framework-agnostic architecture.
 
-> **Status**: 🚧 In Active Development | **Version**: 0.1.0
+> **Status**: In Active Development | **Version**: 0.1.0
 
-## ✨ Key Features
+## Key Features
 
-- 🎨 **Runtime Theme Switching** - Light/dark mode with system preference detection
-- 🔒 **CSP Compliant** - Zero-runtime CSS-in-JS with build-time extraction
-- ♿ **Fully Accessible** - WCAG 2.1 AA compliant with keyboard navigation
-- 🎯 **Type-Safe** - Full TypeScript support from tokens to components
-- 📦 **Monorepo Architecture** - Turborepo for efficient builds
-- 🎭 **Storybook** - Interactive component documentation
-- 🌐 **Framework-Agnostic Core** - Ready for React, Vue, Angular adapters
+- **Runtime Theme Switching** - Light/dark mode with system preference detection
+- **CSP Compliant** - Zero-runtime CSS-in-JS with build-time extraction
+- **Fully Accessible** - WCAG 2.1 AA compliant with keyboard navigation
+- **Type-Safe** - Full TypeScript support from tokens to components
+- **Monorepo Architecture** - Turborepo for efficient builds
+- **Storybook** - Interactive component documentation
+- **Framework-Agnostic Core** - Ready for React, Vue, Angular adapters
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Install dependencies
@@ -51,31 +51,31 @@ function App() {
 }
 ```
 
-## 📦 Packages
+## Packages
 
-| Package            | Description                                 | Status         |
-| ------------------ | ------------------------------------------- | -------------- |
-| `@company/tokens`  | Design tokens (colors, spacing, typography) | ✅ Complete    |
-| `@company/core`    | Core React components with Vanilla Extract  | ✅ Active      |
-| `@company/react`   | React-specific wrappers & ThemeProvider     | ✅ Active      |
-| `@company/icons`   | SVG icon library (14 icons)                 | ✅ Complete    |
-| `@company/utils`   | Shared utility functions                    | ✅ Complete    |
-| `@company/vanilla` | Framework-agnostic JS/CSS                   | 🚧 In Progress |
+| Package            | Description                                 | Status      |
+| ------------------ | ------------------------------------------- | ----------- |
+| `@company/tokens`  | Design tokens (colors, spacing, typography) | Complete    |
+| `@company/core`    | Core React components with Vanilla Extract  | Active      |
+| `@company/react`   | React-specific wrappers & ThemeProvider     | Active      |
+| `@company/icons`   | SVG icon library (14 icons)                 | Complete    |
+| `@company/utils`   | Shared utility functions                    | Complete    |
+| `@company/vanilla` | Framework-agnostic JS/CSS                   | In Progress |
 
-## 🎨 Components
+## Components
 
 ### Available Components
 
-| Component         | Variants                            | Accessibility           | Stories     |
-| ----------------- | ----------------------------------- | ----------------------- | ----------- |
-| **Button**        | 5 variants, 3 sizes                 | ✅ Full ARIA            | ✅ Complete |
-| **Input**         | Text, email, password, etc.         | ✅ Labels, errors       | ✅ Complete |
-| **Checkbox**      | Default, indeterminate, disabled    | ✅ Full ARIA, keyboard  | ✅ Complete |
-| **Radio**         | Single, grouped, disabled           | ✅ Full ARIA, keyboard  | ✅ Complete |
-| **Modal**         | Dialog with footer support          | ✅ Focus trap, keyboard | ✅ Complete |
-| **Card**          | With header, title, content, footer | ✅ Semantic HTML        | ✅ Complete |
-| **Tabs**          | Items array, icons, badges, scroll  | ✅ Keyboard navigation  | ✅ Complete |
-| **ThemeSwitcher** | Light/dark toggle                   | ✅ ARIA labels          | ✅ Complete |
+| Component         | Variants                            | Accessibility        | Stories  |
+| ----------------- | ----------------------------------- | -------------------- | -------- |
+| **Button**        | 5 variants, 3 sizes                 | Full ARIA            | Complete |
+| **Input**         | Text, email, password, etc.         | Labels, errors       | Complete |
+| **Checkbox**      | Default, indeterminate, disabled    | Full ARIA, keyboard  | Complete |
+| **Radio**         | Single, grouped, disabled           | Full ARIA, keyboard  | Complete |
+| **Modal**         | Dialog with footer support          | Focus trap, keyboard | Complete |
+| **Card**          | With header, title, content, footer | Semantic HTML        | Complete |
+| **Tabs**          | Items array, icons, badges, scroll  | Keyboard navigation  | Complete |
+| **ThemeSwitcher** | Light/dark toggle                   | ARIA labels          | Complete |
 
 ### Component Examples
 
@@ -216,7 +216,7 @@ const [isOpen, setIsOpen] = useState(false);
 />
 ```
 
-## 🎨 Theme System
+## Theme System
 
 ### Using ThemeProvider
 
@@ -286,15 +286,15 @@ export const myComponent = style({
 });
 ```
 
-## 🔒 Security & CSP Compliance
+## Security & CSP Compliance
 
 This design system is built with **strict Content Security Policy** compliance:
 
-✅ **Zero Runtime** - All CSS extracted at build time  
-✅ **No Style Injection** - Theme switching via CSS class names  
-✅ **CSS Custom Properties** - For dynamic values (CSP-safe)  
-✅ **No `unsafe-inline`** - Works with strict CSP headers  
-✅ **No `eval()`** - No code generation at runtime
+- **Zero Runtime** - All CSS extracted at build time
+- **No Style Injection** - Theme switching via CSS class names
+- **CSS Custom Properties** - For dynamic values (CSP-safe)
+- **No `unsafe-inline`** - Works with strict CSP headers
+- **No `eval()`** - No code generation at runtime
 
 ### Recommended CSP Header
 
@@ -314,18 +314,18 @@ Content-Security-Policy:
 3. Theme switching changes CSS class on `<html>` element
 4. CSS variables update automatically (no inline styles)
 
-## ♿ Accessibility (WCAG 2.1 AA)
+## Accessibility (WCAG 2.1 AA)
 
 All components follow WCAG 2.1 AA guidelines:
 
-- ✅ **Semantic HTML** - Proper element usage
-- ✅ **ARIA Attributes** - Roles, labels, states
-- ✅ **Keyboard Navigation** - Tab, Enter, Escape, Arrows
-- ✅ **Focus Management** - Visible indicators, logical order
-- ✅ **Screen Reader Support** - Descriptive labels and announcements
-- ✅ **Touch Targets** - Minimum 44x44px
-- ✅ **Color Contrast** - 4.5:1 ratio for normal text
-- ✅ **Motion Preferences** - Respects `prefers-reduced-motion`
+- **Semantic HTML** - Proper element usage
+- **ARIA Attributes** - Roles, labels, states
+- **Keyboard Navigation** - Tab, Enter, Escape, Arrows
+- **Focus Management** - Visible indicators, logical order
+- **Screen Reader Support** - Descriptive labels and announcements
+- **Touch Targets** - Minimum 44x44px
+- **Color Contrast** - 4.5:1 ratio for normal text
+- **Motion Preferences** - Respects `prefers-reduced-motion`
 
 ### Accessibility Features by Component
 
@@ -339,7 +339,7 @@ All components follow WCAG 2.1 AA guidelines:
 | **Tabs**          | Keyboard navigation (arrows), focus management, ARIA roles  |
 | **ThemeSwitcher** | ARIA label for current theme state                          |
 
-## 📖 Documentation
+## Documentation
 
 ### Storybook
 
@@ -364,7 +364,7 @@ npm run storybook
 - **[IMPLEMENTATION.md](./IMPLEMENTATION.md)** - Current implementation status
 - **Storybook** - Component API documentation
 
-## 🛠️ Development
+## Development
 
 ### Project Structure
 
@@ -500,7 +500,7 @@ npm run release          # Build and publish packages
    npm run storybook
    ```
 
-## 🧪 Testing (Planned)
+## Testing (Planned)
 
 Testing setup is planned but not yet implemented. Proposed stack:
 
@@ -525,7 +525,7 @@ test('Button has no accessibility violations', async () => {
 });
 ```
 
-## 📊 Browser Support
+## Browser Support
 
 - **Chrome** - Latest 2 versions
 - **Firefox** - Latest 2 versions
@@ -534,9 +534,9 @@ test('Button has no accessibility violations', async () => {
 
 Requires ES6+ support. IE11 is not supported.
 
-## 🗺️ Roadmap
+## Roadmap
 
-### ✅ Completed (v0.1)
+### Completed (v0.1)
 
 - [x] Theme system with CSS variables
 - [x] Light/dark theme switching
@@ -551,7 +551,7 @@ Requires ES6+ support. IE11 is not supported.
 - [x] Storybook integration
 - [x] CSP compliance
 
-### 🚧 In Progress (v0.2)
+### In Progress (v0.2)
 
 - [ ] Select component with keyboard nav
 - [ ] Testing infrastructure (Jest + RTL)
@@ -563,7 +563,7 @@ Requires ES6+ support. IE11 is not supported.
   - [ ] Dropdown
   - [ ] DatePicker
 
-### 🔮 Future (v0.3+)
+### Future (v0.3+)
 
 - [ ] Toast/Alert component
 - [ ] Tooltip component
@@ -575,7 +575,7 @@ Requires ES6+ support. IE11 is not supported.
 - [ ] Figma token sync
 - [ ] Component generator CLI
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch: `git checkout -b feature/my-feature`
@@ -595,11 +595,11 @@ Requires ES6+ support. IE11 is not supported.
 - Update documentation
 - Create changesets for versioned packages
 
-## 📄 License
+## License
 
 MIT © 2025
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **[Vanilla Extract](https://vanilla-extract.style/)** - Zero-runtime CSS-in-JS
 - **[Turborepo](https://turbo.build/)** - High-performance monorepo
@@ -609,6 +609,6 @@ MIT © 2025
 
 ---
 
-**Built with ❤️ using TypeScript, React, and Vanilla Extract**
+**Built with TypeScript, React, and Vanilla Extract**
 
 For detailed architecture information, see [solution.md](./solution.md).

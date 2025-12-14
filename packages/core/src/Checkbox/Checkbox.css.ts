@@ -1,19 +1,11 @@
 import { style, styleVariants } from '@vanilla-extract/css';
-import { vars } from '@company/tokens';
-import { radii, durations, easings } from '@company/tokens';
+import { vars, radii, durations, easings } from '@company/tokens';
 
-/**
- * Checkbox wrapper - container for the entire checkbox component
- */
 export const checkboxWrapper = style({
   display: 'flex',
   flexDirection: 'column',
-  gap: vars.spacing[1],
 });
 
-/**
- * Checkbox label - clickable label containing checkbox and text
- */
 export const checkboxLabel = style({
   display: 'inline-flex',
   alignItems: 'flex-start',
@@ -31,20 +23,14 @@ export const checkboxLabel = style({
   },
 });
 
-/**
- * Checkbox container - holds the input and custom control
- */
 export const checkboxContainer = style({
   position: 'relative',
   display: 'inline-flex',
   alignItems: 'center',
   flexShrink: 0,
-  marginTop: '2px', // Align with text baseline
+  marginTop: '2px',
 });
 
-/**
- * Hidden checkbox input
- */
 export const checkboxInput = style({
   position: 'absolute',
   opacity: 0,
@@ -58,9 +44,6 @@ export const checkboxInput = style({
   },
 });
 
-/**
- * Custom checkbox control (visible square)
- */
 export const checkboxControl = style({
   display: 'inline-flex',
   alignItems: 'center',
@@ -86,13 +69,11 @@ export const checkboxControl = style({
   },
 
   selectors: {
-    // Hover state
     [`${checkboxInput}:hover:not(:disabled):not(:checked):not(:indeterminate) + &`]: {
       borderColor: vars.colors.action.primaryActive,
       backgroundColor: vars.colors.white,
     },
 
-    // Checked state
     [`${checkboxInput}:checked + &`]: {
       borderColor: vars.colors.action.primaryActive,
       backgroundColor: vars.colors.action.primaryActive,
@@ -102,7 +83,6 @@ export const checkboxControl = style({
       display: 'block',
     },
 
-    // Indeterminate state
     [`${checkboxInput}:indeterminate + &`]: {
       borderColor: vars.colors.action.primaryActive,
       backgroundColor: vars.colors.action.primaryActive,
@@ -121,26 +101,22 @@ export const checkboxControl = style({
       marginTop: '-1px',
     },
 
-    // Checked hover state
     [`${checkboxInput}:checked:hover:not(:disabled) + &`]: {
       borderColor: vars.colors.action.primaryActive,
       backgroundColor: vars.colors.action.primaryActive,
     },
 
-    // Focus state
     [`${checkboxInput}:focus-visible + &`]: {
       outline: `2px solid ${vars.colors.action.primaryActive}`,
       outlineOffset: '2px',
     },
 
-    // Disabled state
     [`${checkboxInput}:disabled + &`]: {
       cursor: 'not-allowed',
       borderColor: vars.colors.border.subtle,
       backgroundColor: vars.colors.background.tertiary,
     },
 
-    // Disabled checked state
     [`${checkboxInput}:disabled:checked + &`]: {
       borderColor: vars.colors.action.primaryActive,
       backgroundColor: vars.colors.action.primaryActive,
@@ -150,7 +126,6 @@ export const checkboxControl = style({
       borderColor: vars.colors.white,
     },
 
-    // Disabled indeterminate state
     [`${checkboxInput}:disabled:indeterminate + &`]: {
       borderColor: vars.colors.action.primaryActive,
       backgroundColor: vars.colors.action.primaryActive,
@@ -162,14 +137,8 @@ export const checkboxControl = style({
   },
 });
 
-/**
- * Indeterminate state class
- */
 export const indeterminateState = style({});
 
-/**
- * Checkbox size variants
- */
 export const checkboxSize = styleVariants({
   default: {
     width: '20px',
@@ -187,9 +156,6 @@ export const checkboxSize = styleVariants({
   },
 });
 
-/**
- * Label container - holds label text
- */
 export const labelContainer = style({
   display: 'flex',
   flexDirection: 'column',
@@ -198,9 +164,6 @@ export const labelContainer = style({
   minWidth: 0,
 });
 
-/**
- * Label text
- */
 export const label = style({
   fontSize: vars.typography.fontSize.base,
   fontWeight: vars.typography.fontWeight.medium,
@@ -215,9 +178,6 @@ export const label = style({
   wordBreak: 'break-word',
 });
 
-/**
- * Label size variants
- */
 export const labelSize = styleVariants({
   default: {
     fontSize: vars.typography.fontSize.base,
@@ -229,9 +189,6 @@ export const labelSize = styleVariants({
   },
 });
 
-/**
- * Counter display
- */
 export const counter = style({
   fontSize: vars.typography.fontSize.sm,
   color: vars.colors.black,
@@ -240,27 +197,23 @@ export const counter = style({
   marginLeft: 'auto',
   flexShrink: 0,
   alignSelf: 'flex-start',
-  marginTop: '2px', // Align with label
+  marginTop: '2px',
 });
 
-/**
- * Helper text styles
- */
 export const helperText = style({
   display: 'block',
   fontSize: vars.typography.fontSize.sm,
-  color: vars.colors.black,
+  color: vars.colors.text.secondary,
   fontFamily: vars.typography.fontFamily.sans,
 });
 
-/**
- * Helper text gap variants
- */
 export const helperGap = styleVariants({
   default: {
-    marginLeft: '33px', // Align with label text (20px checkbox + 8px gap)
+    fontSize: vars.typography.fontSize.base,
+    marginLeft: '33px',
   },
   small: {
-    marginLeft: '28px', // Align with label text (16px checkbox + 8px gap)
+    fontSize: vars.typography.fontSize.sm,
+    marginLeft: '28px',
   },
 });

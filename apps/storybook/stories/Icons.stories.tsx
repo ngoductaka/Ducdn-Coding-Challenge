@@ -1,20 +1,20 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import {
+  AlertCircleIcon,
   CheckIcon,
-  XIcon,
-  PlusIcon,
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ChevronUpIcon,
+  HomeIcon,
+  InfoIcon,
   MinusIcon,
+  PlusIcon,
   SearchIcon,
   SettingsIcon,
-  HomeIcon,
   UserIcon,
-  ChevronRightIcon,
-  ChevronLeftIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  AlertCircleIcon,
-  InfoIcon,
+  XIcon,
 } from '@company/icons';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
   title: 'Components/Icons',
@@ -37,7 +37,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const AllIcons: Story = {
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
       <div style={{ textAlign: 'center' }}>
         <CheckIcon {...args} />

@@ -54,18 +54,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * Default checkbox with label
- */
 export const Default: Story = {
   args: {
     label: 'Label',
   },
 };
 
-/**
- * Checkbox with counter displayed
- */
 export const WithCounter: Story = {
   args: {
     label: 'Label',
@@ -75,9 +69,6 @@ export const WithCounter: Story = {
   },
 };
 
-/**
- * Small size variant
- */
 export const Small: Story = {
   args: {
     label: 'Label',
@@ -85,9 +76,6 @@ export const Small: Story = {
   },
 };
 
-/**
- * Default size variant
- */
 export const DefaultSize: Story = {
   args: {
     label: 'Label',
@@ -95,9 +83,6 @@ export const DefaultSize: Story = {
   },
 };
 
-/**
- * Indeterminate state
- */
 export const Indeterminate: Story = {
   args: {
     label: 'Label',
@@ -105,9 +90,6 @@ export const Indeterminate: Story = {
   },
 };
 
-/**
- * Disabled state
- */
 export const Disabled: Story = {
   args: {
     label: 'Label',
@@ -115,9 +97,6 @@ export const Disabled: Story = {
   },
 };
 
-/**
- * Disabled and checked state
- */
 export const DisabledChecked: Story = {
   args: {
     label: 'Label',
@@ -126,9 +105,6 @@ export const DisabledChecked: Story = {
   },
 };
 
-/**
- * Disabled and indeterminate state
- */
 export const DisabledIndeterminate: Story = {
   args: {
     label: 'Label',
@@ -137,18 +113,12 @@ export const DisabledIndeterminate: Story = {
   },
 };
 
-/**
- * Checkbox with only label (no caption)
- */
 export const LabelOnly: Story = {
   args: {
     label: 'Label only',
   },
 };
 
-/**
- * Checkbox with helper text
- */
 export const WithHelperText: Story = {
   args: {
     label: 'Label',
@@ -156,9 +126,6 @@ export const WithHelperText: Story = {
   },
 };
 
-/**
- * All States Overview - matching design system
- */
 export const AllStates: Story = {
   render: () => (
     <div style={{ padding: '24px', display: 'flex', gap: '48px', flexWrap: 'wrap' }}>
@@ -251,8 +218,6 @@ export const AllStates: Story = {
           </div>
         </div>
       </div>
-      {/*  */}
-
       <div
         style={{
           display: 'flex',
@@ -345,9 +310,6 @@ export const AllStates: Story = {
   ),
 };
 
-/**
- * Interactive example with projects
- */
 export const ProjectsExample: Story = {
   render: () => {
     const [allChecked, setAllChecked] = React.useState(false);

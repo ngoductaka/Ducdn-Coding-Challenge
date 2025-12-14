@@ -69,7 +69,7 @@ export const semanticDark = {
     },
     text: {
       primary: primitiveColors.neutral[50],
-      secondary: primitiveColors.neutral[300],
+      secondary: primitiveColors.neutral[600],
       tertiary: primitiveColors.neutral[400],
       disabled: primitiveColors.neutral[500],
       inverse: primitiveColors.neutral[900],

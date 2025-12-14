@@ -2,9 +2,6 @@ import { style } from '@vanilla-extract/css';
 import { vars } from '@company/tokens';
 import { durations, easings } from '@company/tokens';
 
-/**
- * Tab button - main container for each tab
- */
 export const tabButton = style({
   position: 'relative',
   display: 'inline-flex',
@@ -33,9 +30,6 @@ export const tabButton = style({
   },
 });
 
-/**
- * Active tab state
- */
 export const tabActive = style({
   color: vars.colors.action.primary,
 
@@ -46,18 +40,12 @@ export const tabActive = style({
   },
 });
 
-/**
- * Disabled tab state
- */
 export const tabDisabled = style({
   opacity: 0.5,
   cursor: 'not-allowed',
   pointerEvents: 'none',
 });
 
-/**
- * Tab content - holds icon, labels, counter, and action button
- */
 export const tabContent = style({
   display: 'flex',
   alignItems: 'center',
@@ -67,9 +55,6 @@ export const tabContent = style({
   zIndex: 1,
 });
 
-/**
- * Tab icon
- */
 export const tabIcon = style({
   display: 'flex',
   alignItems: 'center',
@@ -79,9 +64,6 @@ export const tabIcon = style({
   flexShrink: 0,
 });
 
-/**
- * Tab labels container - holds label and sub-label
- */
 export const tabLabels = style({
   display: 'flex',
   flexDirection: 'column',
@@ -91,9 +73,6 @@ export const tabLabels = style({
   textAlign: 'left',
 });
 
-/**
- * Tab label (main text)
- */
 export const tabLabel = style({
   fontSize: vars.typography.fontSize.base,
   fontWeight: vars.typography.fontWeight.medium,
@@ -114,9 +93,6 @@ export const tabLabel = style({
   },
 });
 
-/**
- * Tab sub-label
- */
 export const tabSubLabelWithIcon = style({
   marginLeft: '33px',
 });
@@ -130,18 +106,12 @@ export const tabSubLabel = style({
   textOverflow: 'ellipsis',
 
   selectors: {
-    [`${tabActive} &`]: {
-      color: vars.colors.action.primary,
-    },
     [`${tabDisabled} &`]: {
       color: vars.colors.text.disabled,
     },
   },
 });
 
-/**
- * Tab counter badge
- */
 export const tabCounter = style({
   display: 'inline-flex',
   alignItems: 'center',
@@ -158,18 +128,15 @@ export const tabCounter = style({
   flexShrink: 0,
 
   selectors: {
-    // [`${tabActive} &`]: {
-    //   backgroundColor: vars.colors.action.primary,
-    // },
     [`${tabDisabled} &`]: {
       backgroundColor: vars.colors.text.disabled,
     },
   },
 });
 
-/**
- * Tab action button (close button)
- */
+export const tabActionIcon = style({
+  color: vars.colors.black,
+});
 export const tabActionButton = style({
   display: 'inline-flex',
   alignItems: 'center',
@@ -209,9 +176,6 @@ export const tabActionButton = style({
   },
 });
 
-/**
- * Tab active indicator (bottom border)
- */
 export const tabIndicator = style({
   position: 'absolute',
   bottom: '-2px',
@@ -222,9 +186,6 @@ export const tabIndicator = style({
   transition: `all ${durations.fast} ${easings.easeInOut}`,
 });
 
-/**
- * Tabs container
- */
 export const tabsContainer = style({
   display: 'flex',
   flexDirection: 'column',
@@ -233,9 +194,6 @@ export const tabsContainer = style({
   position: 'relative',
 });
 
-/**
- * Tabs wrapper (for scrollable with buttons)
- */
 export const tabsWrapper = style({
   display: 'flex',
   alignItems: 'center',
@@ -243,18 +201,12 @@ export const tabsWrapper = style({
   width: '100%',
 });
 
-/**
- * Tab list container
- */
 export const tabList = style({
   display: 'flex',
   alignItems: 'stretch',
   gap: 0,
 });
 
-/**
- * Tab list scrollable variant
- */
 export const tabListScrollable = style({
   overflowX: 'auto',
   scrollbarWidth: 'none',
@@ -266,18 +218,12 @@ export const tabListScrollable = style({
   },
 });
 
-/**
- * Tabs scrollable variant
- */
 export const tabsScrollable = style({});
 
 export const iconScrollButton = style({
   color: vars.colors.black,
 });
 
-/**
- * Scroll button (left/right navigation)
- */
 export const scrollButton = style({
   display: 'inline-flex',
   alignItems: 'center',
@@ -311,23 +257,10 @@ export const scrollButton = style({
   },
 });
 
-/**
- * Left scroll button
- */
-export const scrollButtonLeft = style({
-  //   borderRight: `1px solid ${vars.colors.border.default}`,
-});
+export const scrollButtonLeft = style({});
 
-/**
- * Right scroll button
- */
-export const scrollButtonRight = style({
-  //   borderLeft: `1px solid ${vars.colors.border.default}`,
-});
+export const scrollButtonRight = style({});
 
-/**
- * Add tab button
- */
 export const addTabButton = style({
   display: 'inline-flex',
   alignItems: 'center',

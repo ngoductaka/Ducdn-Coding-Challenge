@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
 import { Radio, RadioGroup } from '@company/core';
+import type { Meta, StoryObj } from '@storybook/react';
 import React from 'react';
 
 const meta: Meta<typeof Radio> = {
@@ -27,18 +27,8 @@ const meta: Meta<typeof Radio> = {
       description: 'Helper text shown below the radio',
     },
     counter: {
-      control: 'boolean',
-      description: 'Whether to show a counter',
-      table: {
-        defaultValue: { summary: 'false' },
-      },
-    },
-    counterValue: {
       control: 'number',
-      description: 'Counter value to display',
-      table: {
-        defaultValue: { summary: '9999' },
-      },
+      description: 'Counter value to display (optional)',
     },
     disabled: {
       control: 'boolean',
@@ -50,9 +40,6 @@ const meta: Meta<typeof Radio> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/**
- * Default radio with label
- */
 export const Default: Story = {
   args: {
     label: 'Label',
@@ -60,20 +47,13 @@ export const Default: Story = {
   },
 };
 
-/**
- * Radio with counter displayed
- */
 export const WithCounter: Story = {
   args: {
     label: 'Label',
-    counter: true,
-    counterValue: 9999,
+    counter: 9999,
   },
 };
 
-/**
- * Small size variant
- */
 export const Small: Story = {
   args: {
     label: 'Label',
@@ -91,9 +71,6 @@ export const Large: Story = {
   },
 };
 
-/**
- * Disabled state
- */
 export const Disabled: Story = {
   args: {
     label: 'Label',
@@ -101,9 +78,6 @@ export const Disabled: Story = {
   },
 };
 
-/**
- * Disabled and checked state
- */
 export const DisabledChecked: Story = {
   args: {
     label: 'Label',
@@ -121,9 +95,6 @@ export const LabelOnly: Story = {
   },
 };
 
-/**
- * Radio with helper text
- */
 export const WithHelperText: Story = {
   args: {
     label: 'Label',
@@ -131,19 +102,16 @@ export const WithHelperText: Story = {
   },
 };
 
-/**
- * Radio group example - Try me 👇
- */
 export const TryMe: Story = {
   render: () => {
     const [selected, setSelected] = React.useState('option1');
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '500px' }}>
-        <h3 style={{ marginBottom: '8px', fontWeight: 600 }}>Try me 👇</h3>
+        <h3 style={{ marginBottom: '8px', fontWeight: 600 }}>Try me</h3>
 
         <RadioGroup name="try-me-group" value={selected} onChange={setSelected}>
-          <Radio label="Label" value="option1" counter counterValue={9999} />
+          <Radio label="Label" value="option1" counter={9999} />
           <Radio label="Another Option" value="option2" />
           <Radio label="Third Option" value="option3" />
         </RadioGroup>
@@ -156,25 +124,19 @@ export const TryMe: Story = {
   },
 };
 
-/**
- * Radio group example with all features
- */
 export const RadioGroupExample: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '500px' }}>
       <RadioGroup name="example-group" defaultValue="option1">
         <Radio label="Option 1" value="option1" />
         <Radio label="Option 2" value="option2" />
-        <Radio label="Option 3" value="option3" counter counterValue={42} />
+        <Radio label="Option 3" value="option3" counter={42} />
         <Radio label="Option 4 (Disabled)" value="option4" disabled />
       </RadioGroup>
     </div>
   ),
 };
 
-/**
- * RadioGroup with options array
- */
 export const RadioGroupWithOptions: Story = {
   render: () => {
     const [selected, setSelected] = React.useState('apple');
@@ -203,9 +165,6 @@ export const RadioGroupWithOptions: Story = {
   },
 };
 
-/**
- * RadioGroup with simple string options
- */
 export const RadioGroupSimpleOptions: Story = {
   render: () => {
     const [selected, setSelected] = React.useState('Small');
@@ -229,9 +188,6 @@ export const RadioGroupSimpleOptions: Story = {
   },
 };
 
-/**
- * Comparison of size variants
- */
 export const SizeComparison: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '500px' }}>
@@ -248,13 +204,9 @@ export const SizeComparison: Story = {
   ),
 };
 
-/**
- * All States Overview - matching design system
- */
 export const AllStates: Story = {
   render: () => (
     <div style={{ padding: '24px', display: 'flex', gap: '48px', flexWrap: 'wrap' }}>
-      {/* Default Size Column */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         <h3 style={{ fontWeight: 600, marginBottom: '8px' }}>Default</h3>
 
@@ -295,7 +247,6 @@ export const AllStates: Story = {
         </div>
       </div>
 
-      {/* Small Size Column */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         <h3 style={{ fontWeight: 600, marginBottom: '8px' }}>Small</h3>
 
@@ -340,9 +291,6 @@ export const AllStates: Story = {
   ),
 };
 
-/**
- * When to use documentation
- */
 export const WhenToUse: Story = {
   render: () => (
     <div style={{ maxWidth: '700px', padding: '24px', fontFamily: 'system-ui, sans-serif' }}>

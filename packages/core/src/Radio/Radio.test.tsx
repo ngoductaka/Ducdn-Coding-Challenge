@@ -35,9 +35,9 @@ jest.mock('./Radio.css', () => ({
     large: 'radioSize_large',
     small: 'radioSize_small',
   },
-  helperGap: {
-    large: 'helperGap_large',
-    small: 'helperGap_small',
+  helperSize: {
+    large: 'helperSize_large',
+    small: 'helperSize_small',
   },
   labelSize: {
     large: 'labelSize_large',
@@ -60,8 +60,7 @@ describe('Radio Component', () => {
           label="Option 1"
           value="option1"
           helperText="Additional info"
-          counter
-          counterValue={42}
+          counter={42}
         />
       );
       expect(screen.getByText('Option 1')).toBeInTheDocument();
@@ -179,12 +178,12 @@ describe('Radio Component', () => {
     });
 
     it('should show counter when counter prop is true', () => {
-      render(<Radio label="Option 1" value="option1" counter counterValue={10} />);
+      render(<Radio label="Option 1" value="option1" counter={10} />);
       expect(screen.getByLabelText('Count: 10')).toBeInTheDocument();
     });
 
     it('should use default counterValue of 9999', () => {
-      render(<Radio label="Option 1" value="option1" counter />);
+      render(<Radio label="Option 1" value="option1" counter={9999} />);
       expect(screen.getByLabelText('Count: 9999')).toBeInTheDocument();
     });
   });

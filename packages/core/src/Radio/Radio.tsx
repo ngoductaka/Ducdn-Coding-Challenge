@@ -6,8 +6,7 @@ export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
   label?: string;
   helperText?: string;
   size?: 'large' | 'small';
-  counter?: boolean;
-  counterValue?: number;
+  counter?: number;
   required?: boolean;
   className?: string;
 }
@@ -18,8 +17,7 @@ const RadioComponent = forwardRef<HTMLInputElement, RadioProps>(
       label,
       helperText,
       size = 'large',
-      counter = false,
-      counterValue = 9999,
+      counter,
       required,
       className,
       id,
@@ -75,15 +73,15 @@ const RadioComponent = forwardRef<HTMLInputElement, RadioProps>(
             </div>
           )}
 
-          {counter && counterValue && (
-            <span className={clsx(styles.counter)} aria-label={`Count: ${counterValue}`}>
-              {counterValue}
+          {counter !== undefined && (
+            <span className={clsx(styles.counter)} aria-label={`Count: ${counter}`}>
+              {counter}
             </span>
           )}
         </label>
 
         {helperText && (
-          <span className={clsx(styles.helperText, styles.helperGap[size])}>{helperText}</span>
+          <span className={clsx(styles.helperText, styles.helperSize[size])}>{helperText}</span>
         )}
       </div>
     );

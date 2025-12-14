@@ -1,19 +1,11 @@
+import { durations, easings, vars } from '@company/tokens';
 import { style, styleVariants } from '@vanilla-extract/css';
-import { vars } from '@company/tokens';
-import { radii, durations, easings } from '@company/tokens';
 
-/**
- * Radio wrapper - container for the entire radio component
- */
 export const radioWrapper = style({
   display: 'flex',
   flexDirection: 'column',
-  gap: vars.spacing[1],
 });
 
-/**
- * Radio label - clickable label containing radio and text
- */
 export const radioLabel = style({
   display: 'inline-flex',
   alignItems: 'flex-start',
@@ -31,20 +23,14 @@ export const radioLabel = style({
   },
 });
 
-/**
- * Radio container - holds the input and custom control
- */
 export const radioContainer = style({
   position: 'relative',
   display: 'inline-flex',
   alignItems: 'center',
   flexShrink: 0,
-  marginTop: '2px', // Align with text baseline
+  marginTop: '2px',
 });
 
-/**
- * Hidden radio input
- */
 export const radioInput = style({
   position: 'absolute',
   opacity: 0,
@@ -58,9 +44,6 @@ export const radioInput = style({
   },
 });
 
-/**
- * Custom radio control (visible circle)
- */
 export const radioControl = style({
   display: 'inline-flex',
   alignItems: 'center',
@@ -83,13 +66,11 @@ export const radioControl = style({
   },
 
   selectors: {
-    // Hover state
     [`${radioInput}:hover:not(:disabled):not(:checked) + &`]: {
       borderColor: vars.colors.action.primaryActive,
       backgroundColor: vars.colors.white,
     },
 
-    // Checked state
     [`${radioInput}:checked + &`]: {
       borderColor: vars.colors.action.primary,
       backgroundColor: vars.colors.white,
@@ -99,7 +80,6 @@ export const radioControl = style({
       transform: 'scale(1)',
     },
 
-    // Checked hover state
     [`${radioInput}:checked:hover:not(:disabled) + &`]: {
       borderColor: vars.colors.action.primaryActive,
     },
@@ -108,20 +88,17 @@ export const radioControl = style({
       backgroundColor: vars.colors.action.primaryActive,
     },
 
-    // Focus state
     [`${radioInput}:focus-visible + &`]: {
       outline: `3px solid ${vars.colors.action.primary}`,
       outlineOffset: '3px',
     },
 
-    // Disabled state
     [`${radioInput}:disabled + &`]: {
       cursor: 'not-allowed',
       borderColor: vars.colors.border.subtle,
       backgroundColor: vars.colors.white,
     },
 
-    // Disabled checked state
     [`${radioInput}:disabled:checked + &`]: {
       borderColor: vars.colors.border.subtle,
       backgroundColor: vars.colors.white,
@@ -134,9 +111,6 @@ export const radioControl = style({
   },
 });
 
-/**
- * Radio size variants
- */
 export const radioSize = styleVariants({
   large: {
     width: '24px',
@@ -157,18 +131,7 @@ export const radioSize = styleVariants({
     },
   },
 });
-export const helperGap = styleVariants({
-  large: {
-    marginLeft: '36px',
-  },
-  small: {
-    marginLeft: '33px',
-  },
-});
 
-/**
- * Label container - holds label and caption text
- */
 export const labelContainer = style({
   display: 'flex',
   flexDirection: 'column',
@@ -178,9 +141,6 @@ export const labelContainer = style({
   marginTop: '4px',
 });
 
-/**
- * Label text.
- */
 export const label = style({
   fontSize: vars.typography.fontSize.base,
   fontWeight: vars.typography.fontWeight.medium,
@@ -195,9 +155,6 @@ export const label = style({
   wordBreak: 'break-word',
 });
 
-/**
- * Label size variants
- */
 export const labelSize = styleVariants({
   large: {
     fontSize: vars.typography.fontSize.base,
@@ -207,9 +164,6 @@ export const labelSize = styleVariants({
   },
 });
 
-/**
- * Counter display
- */
 export const counter = style({
   fontSize: vars.typography.fontSize.sm,
   color: vars.colors.black,
@@ -218,22 +172,26 @@ export const counter = style({
   marginLeft: 'auto',
   flexShrink: 0,
   alignSelf: 'flex-start',
-  marginTop: '2px', // Align with label
+  marginTop: '2px',
 });
 
-/**
- * Helper text styles
- */
 export const helperText = style({
   display: 'block',
   fontSize: vars.typography.fontSize.sm,
   color: vars.colors.black,
   fontFamily: vars.typography.fontFamily.sans,
 });
+export const helperSize = styleVariants({
+  large: {
+    marginLeft: '36px',
+    fontSize: vars.typography.fontSize.base,
+  },
+  small: {
+    marginLeft: '33px',
+    fontSize: vars.typography.fontSize.sm,
+  },
+});
 
-/**
- * RadioGroup container styles
- */
 export const radioGroupContainer = style({
   display: 'inline-flex',
   flexDirection: 'column',
