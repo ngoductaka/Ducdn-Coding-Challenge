@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tabs, Tab } from '@company/core';
 import React from 'react';
+import { HomeIcon, SearchIcon, SettingsIcon, UserIcon, InfoIcon } from '@company/icons';
 
 const meta = {
   title: 'Components/Tabs',
@@ -66,10 +67,10 @@ export const Basic: Story = {
 export const WithIcons: Story = {
   args: {
     items: [
-      { label: 'Home', value: 'home', icon: '🏠' },
-      { label: 'Profile', value: 'profile', icon: '👤' },
-      { label: 'Settings', value: 'settings', icon: '⚙️' },
-      { label: 'Messages', value: 'messages', icon: '💬' },
+      { label: 'Home', value: 'home', icon: <HomeIcon /> },
+      { label: 'Profile', value: 'profile', icon: <UserIcon /> },
+      { label: 'Settings', value: 'settings', icon: <SettingsIcon /> },
+      { label: 'Messages', value: 'messages', icon: <InfoIcon /> },
     ],
     defaultActiveKey: 'home',
   },
@@ -334,10 +335,15 @@ export const FullFeatured: Story = {
   args: { items: [] },
   render: () => {
     const [tabs, setTabs] = React.useState([
-      { label: 'Home', value: 'home', icon: '🏠', subLabel: 'Dashboard' },
-      { label: 'Profile', value: 'profile', icon: '👤', counter: 3 },
-      { label: 'Settings', value: 'settings', icon: '⚙️', actionButton: true },
-      { label: 'Messages', value: 'messages', icon: '💬', counter: 99, actionButton: true },
+      { label: 'Home', value: 'home', icon: <HomeIcon /> },
+      { label: 'Profile', value: 'profile', icon: <UserIcon />, counter: 3 },
+      {
+        label: 'Settings',
+        value: 'settings',
+        icon: <SettingsIcon />,
+        actionButton: true,
+        counter: 3,
+      },
     ]);
     const [activeKey, setActiveKey] = React.useState('home');
 
@@ -346,7 +352,7 @@ export const FullFeatured: Story = {
       const newTab = {
         label: `Tab ${newTabNumber}`,
         value: `tab${newTabNumber}`,
-        icon: '📄',
+        icon: <InfoIcon />,
         actionButton: true,
       };
       setTabs([...tabs, newTab]);
@@ -373,6 +379,7 @@ export const FullFeatured: Story = {
           addTab
           onAddTab={handleAddTab}
           onActionClick={handleCloseTab}
+          scrollable
         />
         <div style={{ marginTop: '24px', padding: '16px', backgroundColor: '#f5f5f5' }}>
           <h3 style={{ margin: '0 0 8px 0' }}>
@@ -412,9 +419,9 @@ export const AllVariants: Story = {
         <h3 style={{ fontWeight: 600, marginBottom: '16px', fontSize: '16px' }}>With Icons</h3>
         <Tabs
           items={[
-            { label: 'Home', value: 'home', icon: '🏠' },
-            { label: 'Search', value: 'search', icon: '🔍' },
-            { label: 'Settings', value: 'settings', icon: '⚙️' },
+            { label: 'Home', value: 'home', icon: <HomeIcon /> },
+            { label: 'Search', value: 'search', icon: <SearchIcon /> },
+            { label: 'Settings', value: 'settings', icon: <SettingsIcon /> },
           ]}
           defaultActiveKey="search"
         />
@@ -601,10 +608,9 @@ export const InteractiveWithContent: Story = {
     };
 
     const items = [
-      { label: 'Home', value: 'home', icon: '🏠' },
-      { label: 'Profile', value: 'profile', icon: '👤' },
-      { label: 'Settings', value: 'settings', icon: '⚙️' },
-      { label: 'Messages', value: 'messages', icon: '💬', counter: 5 },
+      { label: 'Home', value: 'home', icon: <HomeIcon /> },
+      { label: 'Profile', value: 'profile', icon: <UserIcon /> },
+      { label: 'Settings', value: 'settings', icon: <SettingsIcon />, counter: 5 },
     ];
 
     return (

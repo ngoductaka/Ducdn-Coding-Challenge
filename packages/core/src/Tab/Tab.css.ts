@@ -117,6 +117,9 @@ export const tabLabel = style({
 /**
  * Tab sub-label
  */
+export const tabSubLabelWithIcon = style({
+  marginLeft: '33px',
+});
 export const tabSubLabel = style({
   fontSize: vars.typography.fontSize.xs,
   fontWeight: vars.typography.fontWeight.normal,
@@ -155,9 +158,9 @@ export const tabCounter = style({
   flexShrink: 0,
 
   selectors: {
-    [`${tabActive} &`]: {
-      backgroundColor: vars.colors.action.primary,
-    },
+    // [`${tabActive} &`]: {
+    //   backgroundColor: vars.colors.action.primary,
+    // },
     [`${tabDisabled} &`]: {
       backgroundColor: vars.colors.text.disabled,
     },
@@ -269,7 +272,7 @@ export const tabListScrollable = style({
 export const tabsScrollable = style({});
 
 export const iconScrollButton = style({
-  color: vars.colors.text.tertiary,
+  color: vars.colors.black,
 });
 
 /**

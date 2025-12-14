@@ -1,73 +1,20 @@
-import React, { forwardRef, ButtonHTMLAttributes, ReactNode, useState } from 'react';
-import * as styles from './Tab.css';
+import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, XIcon } from '@company/icons';
 import { clsx } from 'clsx';
-import {
-  CheckIcon,
-  XIcon,
-  PlusIcon,
-  MinusIcon,
-  SearchIcon,
-  SettingsIcon,
-  HomeIcon,
-  UserIcon,
-  ChevronRightIcon,
-  ChevronLeftIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
-  AlertCircleIcon,
-  InfoIcon,
-} from '@company/icons';
+import React, { ButtonHTMLAttributes, forwardRef, ReactNode, useState } from 'react';
+import * as styles from './Tab.css';
 
 export interface TabProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
-  /**
-   * Label for the tab
-   */
   label: string;
-
-  /**
-   * Sub-label shown below the main label
-   */
   subLabel?: string;
-
-  /**
-   * Icon to display before the label (can be string emoji or React node)
-   */
   icon?: ReactNode;
-
-  /**
-   * Whether to show an action button (close button)
-   */
   actionButton?: boolean;
-
-  /**
-   * Callback when action button is clicked
-   */
   onActionClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-
-  /**
-   * Whether the tab is active/selected
-   */
   active?: boolean;
-
-  /**
-   * Additional class name
-   */
   className?: string;
-
-  /**
-   * Counter badge value to display
-   */
   counter?: number;
-
-  /**
-   * Value for the tab (used in Tabs component)
-   */
   value?: string;
 }
 
-/**
- * Tab component for navigation
- */
 const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
   (
     {
@@ -110,11 +57,16 @@ const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
         {...props}
       >
         <div className={styles.tabContent}>
-          {icon && <span className={styles.tabIcon}>{icon}</span>}
-
           <div className={styles.tabLabels}>
-            <span className={styles.tabLabel}>{label}</span>
-            {subLabel && <span className={styles.tabSubLabel}>{subLabel}</span>}
+            <div className={styles.tabContent}>
+              {icon && <span className={styles.tabIcon}>{icon}</span>}
+              <span className={styles.tabLabel}>{label}</span>
+            </div>
+            {subLabel && (
+              <span className={clsx(styles.tabSubLabel, icon && styles.tabSubLabelWithIcon)}>
+                {subLabel}
+              </span>
+            )}
           </div>
 
           {counter !== undefined && counter > 0 && (
@@ -129,21 +81,7 @@ const TabComponent = forwardRef<HTMLButtonElement, TabProps>(
               aria-label="Close tab"
               disabled={disabled}
             >
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 12 12"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M9 3L3 9M3 3L9 9"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+              <XIcon size={12} />
             </button>
           )}
         </div>
@@ -421,7 +359,7 @@ export const Tabs = ({
               onClick={onAddTab}
               aria-label="Add tab"
             >
-              <PlusIcon className={styles.iconScrollButton} />
+              <PlusIcon size={17} className={styles.iconScrollButton} />
             </button>
           )}
         </div>
