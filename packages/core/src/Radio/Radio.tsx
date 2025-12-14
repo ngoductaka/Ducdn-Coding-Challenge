@@ -3,46 +3,15 @@ import * as styles from './Radio.css';
 import { clsx } from 'clsx';
 
 export interface RadioProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
-  /**
-   * Label for the radio
-   */
   label?: string;
-
-  /**
-   * Helper text shown to the right (counter position)
-   */
   helperText?: string;
-
-  /**
-   * Size variant
-   * @default 'large'
-   */
   size?: 'large' | 'small';
-
-  /**
-   * Whether to show a counter
-   */
   counter?: boolean;
-
-  /**
-   * Counter value to display
-   */
   counterValue?: number;
-
-  /**
-   * Whether the radio is required
-   */
   required?: boolean;
-
-  /**
-   * Additional class name
-   */
   className?: string;
 }
 
-/**
- * Radio component for single selection from mutually exclusive options
- */
 const RadioComponent = forwardRef<HTMLInputElement, RadioProps>(
   (
     {
@@ -77,7 +46,11 @@ const RadioComponent = forwardRef<HTMLInputElement, RadioProps>(
               required={required}
               checked={checked}
               value={value}
-              onChange={onChange}
+              onChange={e => {
+                if (!disabled && onChange) {
+                  onChange(e);
+                }
+              }}
               {...props}
             />
             <span
@@ -119,7 +92,6 @@ const RadioComponent = forwardRef<HTMLInputElement, RadioProps>(
 
 RadioComponent.displayName = 'Radio';
 
-// RadioGroup Component Types
 export interface RadioGroupOption {
   label: string;
   value: string;
@@ -127,51 +99,16 @@ export interface RadioGroupOption {
 }
 
 export interface RadioGroupProps {
-  /**
-   * Current selected value (controlled)
-   */
   value?: string;
-
-  /**
-   * Default selected value (uncontrolled)
-   */
   defaultValue?: string;
-
-  /**
-   * Callback when selection changes
-   */
   onChange?: (value: string) => void;
-
-  /**
-   * Disable all radio buttons
-   * @default false
-   */
   disabled?: boolean;
-
-  /**
-   * Options array for rendering radios
-   */
   options?: Array<RadioGroupOption | string>;
-
-  /**
-   * Radio components as children
-   */
   children?: React.ReactNode;
-
-  /**
-   * Additional class name
-   */
   className?: string;
-
-  /**
-   * Name attribute for all radios in the group
-   */
   name?: string;
 }
 
-/**
- * RadioGroup component for managing a group of Radio components
- */
 export const RadioGroup = ({
   value,
   defaultValue,
@@ -197,7 +134,6 @@ export const RadioGroup = ({
     }
   };
 
-  // If options array is provided
   if (options.length > 0) {
     return (
       <div className={clsx(styles.radioGroupContainer, className)} role="radiogroup">
@@ -220,7 +156,6 @@ export const RadioGroup = ({
     );
   }
 
-  // If children are provided
   return (
     <div className={clsx(styles.radioGroupContainer, className)} role="radiogroup">
       {React.Children.map(children, child => {
