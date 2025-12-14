@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ThemeProvider, ThemeSwitcher } from '@company/react';
 import { Button } from '@company/core';
-import { Card, CardHeader, CardTitle, CardContent } from '@company/core';
 
 const meta = {
   title: 'Theme/ThemeProvider',
@@ -19,6 +18,10 @@ type Story = StoryObj<typeof meta>;
  * Theme switcher demonstration
  */
 export const WithThemeSwitcher: Story = {
+  args: {
+    defaultTheme: 'light',
+    children: null,
+  },
   render: () => {
     return (
       <ThemeProvider defaultTheme="light">
@@ -34,40 +37,6 @@ export const WithThemeSwitcher: Story = {
             <h2 style={{ margin: 0 }}>Theme Demo</h2>
             <ThemeSwitcher showLabel />
           </div>
-
-          <Card style={{ marginBottom: '1rem' }}>
-            <CardHeader>
-              <CardTitle>Sample Card</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>This card will update its colors when you switch themes.</p>
-              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
-                <Button variant="primary" size="sm">
-                  Primary
-                </Button>
-                <Button variant="secondary" size="sm">
-                  Secondary
-                </Button>
-                <Button variant="outline" size="sm">
-                  Outline
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent>
-              <p>
-                <strong>Features:</strong>
-              </p>
-              <ul style={{ margin: '0.5rem 0', paddingLeft: '1.5rem' }}>
-                <li>Automatic system theme detection</li>
-                <li>LocalStorage persistence</li>
-                <li>Smooth theme transitions</li>
-                <li>CSP-compliant (no inline styles)</li>
-              </ul>
-            </CardContent>
-          </Card>
         </div>
       </ThemeProvider>
     );
@@ -78,6 +47,10 @@ export const WithThemeSwitcher: Story = {
  * Dark theme by default
  */
 export const DarkThemeDefault: Story = {
+  args: {
+    defaultTheme: 'dark',
+    children: null,
+  },
   render: () => {
     return (
       <ThemeProvider defaultTheme="dark">
@@ -93,16 +66,6 @@ export const DarkThemeDefault: Story = {
             <h2 style={{ margin: 0 }}>Dark Theme</h2>
             <ThemeSwitcher showLabel />
           </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Dark Mode Active</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p>This example starts with dark theme enabled.</p>
-              <p>All components automatically adapt to the active theme.</p>
-            </CardContent>
-          </Card>
         </div>
       </ThemeProvider>
     );
@@ -113,6 +76,10 @@ export const DarkThemeDefault: Story = {
  * Multiple components showcasing theme
  */
 export const ComponentShowcase: Story = {
+  args: {
+    defaultTheme: 'light',
+    children: null,
+  },
   render: () => {
     return (
       <ThemeProvider defaultTheme="light">
@@ -147,25 +114,6 @@ export const ComponentShowcase: Story = {
                 <Button size="sm">Small</Button>
                 <Button size="md">Medium</Button>
                 <Button size="lg">Large</Button>
-              </div>
-            </section>
-
-            <section>
-              <h3>Cards</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem' }}>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Card 1</CardTitle>
-                  </CardHeader>
-                  <CardContent>Content adapts to theme</CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Card 2</CardTitle>
-                  </CardHeader>
-                  <CardContent>Seamless transitions</CardContent>
-                </Card>
               </div>
             </section>
           </div>
