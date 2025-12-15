@@ -16,123 +16,54 @@ This proposal outlines a comprehensive architecture for an enterprise-grade desi
 
 ## Technology Selection & Framework Analysis
 
-### UI Framework Comparison: Why React?
+### UI Framework: React
 
-This section analyzes the selection of React as the primary UI framework for the design system, comparing it against other popular frameworks and justifying the architectural decision.
-
-#### **Evaluation Criteria**
-
-| Criteria | Weight | Description |
-|----------|--------|-------------|
-| Ecosystem Maturity |  Critical | Community size, library availability, enterprise adoption |
-| Developer Pool |  Critical | Availability of skilled developers in the market |
-| Component Model |  High | Suitability for building reusable component libraries |
-| TypeScript Support |  High | Type safety, IDE tooling, developer experience |
-| Performance |  High | Runtime performance, bundle size, optimization capabilities |
-| Stability |  Critical | Breaking changes frequency, long-term support |
-| Framework Agnostic Path |  High | Ability to create framework-agnostic layers |
-| Tooling & DevEx |  High | Build tools, debugging, testing infrastructure |
+**Why React:** Component library focus + largest ecosystem (25M NPM downloads/week) + 65% job market share + framework-agnostic via vanilla layer.
 
 ---
 
-#### **1. React**  **SELECTED**
+#### **1. React** ✓ **SELECTED**
 
-**Overview:**
-Meta's declarative UI library focused on component composition, with massive ecosystem and industry adoption.
+**Key Strengths:**
+- **Ecosystem Leader**: 25M weekly downloads, 65% job market share, 95% Fortune 500 adoption
+- **Component-First Architecture**: Perfect for design system libraries
+- **Developer Availability**: Largest talent pool, minimal onboarding
+- **Framework-Agnostic Path**: Easy vanilla JS layer extraction
+- **TypeScript Excellence**: Best-in-class type safety and IDE support
+- **Stable & Mature**: React 18+ with minimal breaking changes
 
-**Pros:**
--  **Largest Ecosystem**: Unmatched library availability, tooling, and resources
--  **Massive Developer Pool**: Largest talent pool, easier hiring and onboarding
--  **Enterprise Proven**: Used by Meta, Netflix, Airbnb, Microsoft, etc.
--  **Excellent TypeScript Support**: First-class TS integration with strong typing
--  **Component-First**: Perfect mental model for design system component libraries
--  **Stable API**: React 18+ is mature with minimal breaking changes
--  **Framework-Agnostic Path**: Easy to create vanilla JS layer that React wraps
--  **Best-in-Class Tooling**: Vite, Next.js, React DevTools, Storybook, etc.
--  **Testing Infrastructure**: Jest, RTL, Playwright - industry standard tools
--  **Performance**: React Compiler (19+), Concurrent features, automatic optimizations
--  **Documentation**: Excellent docs, countless tutorials, large community support
-
-**Cons:**
--  **Not a Framework**: Need to make decisions about routing, state management, etc.
--  **Hooks Learning Curve**: Mental model shift from classes (though now standard)
--  **Bundle Size**: ~45KB (gzipped) - larger than some alternatives
--  **JSX Requirement**: Requires build step (though this is standard now)
-
-**Ecosystem Stats (2025):**
-```
-NPM Downloads/week: ~25M
-GitHub Stars: 225K+
-Stack Overflow Questions: 500K+
-Job Postings (% of frontend): 65%
-Enterprise Adoption: 95% of Fortune 500
-```
+**Trade-offs:**
+- Larger bundle (~45KB) vs alternatives
+- Requires build tooling (standard practice)
 
 ---
 
 #### **2. Vue 3**
 
-**Overview:**
-Progressive JavaScript framework with excellent developer experience and growing enterprise adoption.
+**Key Strengths:**
+- Excellent DX with intuitive API
+- Smaller bundle (~35KB) and faster benchmarks
+- Growing ecosystem (5M weekly downloads, 15% job market)
 
-**Pros:**
--  **Excellent DX**: Intuitive API, single-file components, great documentation
--  **Smaller Bundle**: ~35KB (gzipped) - smaller than React
--  **Better Performance**: Generally faster than React in benchmarks
--  **TypeScript Support**: Good TS support with Composition API
--  **Less Boilerplate**: Cleaner component syntax
--  **Growing Ecosystem**: Nuxt, Vite (created by Vue team), Pinia
--  **Two-Way Binding**: Simpler forms and input handling
+**Limitations:**
+- Smaller talent pool and enterprise adoption
+- SFC approach less suitable for design systems
+- Harder to create framework-agnostic layer
 
-**Cons:**
--  **Smaller Ecosystem**: Fewer libraries compared to React (though improving)
--  **Smaller Developer Pool**: Harder to hire Vue experts (~15% market share)
--  **Less Enterprise Adoption**: Fewer large companies using Vue
--  **Framework-Specific**: Harder to create framework-agnostic layer
--  **Composition API Shift**: Vue 2 to Vue 3 migration still ongoing in many projects
--  **Component Library Approach**: SFC (Single File Components) less suitable for design systems
--  **Template Syntax**: Template-based approach harder to make framework-agnostic
-
-**Ecosystem Stats (2025):**
-```
-NPM Downloads/week: ~5M
-GitHub Stars: 208K+
-Job Postings (% of frontend): 15%
-Enterprise Adoption: ~30% of Fortune 500
-```
 ---
 
 #### **3. Angular**
 
-**Overview:**
-Full-featured framework by Google with strong TypeScript integration and enterprise focus.
+**Key Strengths:**
+- Full-featured framework with everything included
+- TypeScript-native with strong typing
 
-**Pros:**
--  **Full Framework**: Everything included (routing, state, HTTP, etc.)
--  **TypeScript Native**: Built with TS from the ground up
--  **Enterprise Focus**: Great for large-scale applications
--  **Dependency Injection**: Powerful DI system
--  **Angular CLI**: Excellent tooling and generators
--  **Stable Release Cycle**: Predictable updates every 6 months
--  **Strong Typing**: Excellent type safety throughout
+**Limitations:**
+- Declining adoption (~8% market share)
+- Largest bundle (~60-80KB) and steeper learning curve
+- Not optimized for component library architecture
+- Difficult framework-agnostic extraction
 
-**Cons:**
--  **Smaller Market Share**: Declining popularity (~8% frontend market)
--  **Steeper Learning Curve**: Most complex of major frameworks
--  **Larger Bundle Size**: ~60-80KB (gzipped) base
--  **Verbose Syntax**: More boilerplate than React/Vue
--  **Breaking Changes History**: Angular 2+ was complete rewrite
--  **Less Suitable for Libraries**: Framework designed for apps, not component libraries
--  **Smaller Developer Pool**: Harder to find Angular developers
--  **Framework-Specific**: Difficult to create framework-agnostic layer
-
-**Ecosystem Stats (2025):**
-```
-NPM Downloads/week: ~3M
-GitHub Stars: 95K+
-Job Postings (% of frontend): 8%
-Enterprise Adoption: ~40% of Fortune 500 (legacy apps)
-```
 ---
 
 ### **Decision Rationale: Why React**
