@@ -23,8 +23,11 @@ npm install
 # Build all packages
 npm run build
 
-# Start Storybook (port 6006 or 6007)
+# Start Storybook (port 6006)
 npm run storybook
+
+# Run unit test for core component
+npm run test-core
 ```
 
 ### Basic Usage
