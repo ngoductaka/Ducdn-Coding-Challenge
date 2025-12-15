@@ -14,6 +14,450 @@ This proposal outlines a comprehensive architecture for an enterprise-grade desi
 
 ---
 
+## Technology Selection & Framework Analysis
+
+### UI Framework Comparison: Why React?
+
+This section analyzes the selection of React as the primary UI framework for the design system, comparing it against other popular frameworks and justifying the architectural decision.
+
+#### **Evaluation Criteria**
+
+| Criteria | Weight | Description |
+|----------|--------|-------------|
+| Ecosystem Maturity |  Critical | Community size, library availability, enterprise adoption |
+| Developer Pool |  Critical | Availability of skilled developers in the market |
+| Component Model |  High | Suitability for building reusable component libraries |
+| TypeScript Support |  High | Type safety, IDE tooling, developer experience |
+| Performance |  High | Runtime performance, bundle size, optimization capabilities |
+| Stability |  Critical | Breaking changes frequency, long-term support |
+| Framework Agnostic Path |  High | Ability to create framework-agnostic layers |
+| Tooling & DevEx |  High | Build tools, debugging, testing infrastructure |
+
+---
+
+#### **1. React**  **SELECTED**
+
+**Overview:**
+Meta's declarative UI library focused on component composition, with massive ecosystem and industry adoption.
+
+**Pros:**
+-  **Largest Ecosystem**: Unmatched library availability, tooling, and resources
+-  **Massive Developer Pool**: Largest talent pool, easier hiring and onboarding
+-  **Enterprise Proven**: Used by Meta, Netflix, Airbnb, Microsoft, etc.
+-  **Excellent TypeScript Support**: First-class TS integration with strong typing
+-  **Component-First**: Perfect mental model for design system component libraries
+-  **Stable API**: React 18+ is mature with minimal breaking changes
+-  **Framework-Agnostic Path**: Easy to create vanilla JS layer that React wraps
+-  **Best-in-Class Tooling**: Vite, Next.js, React DevTools, Storybook, etc.
+-  **Testing Infrastructure**: Jest, RTL, Playwright - industry standard tools
+-  **Performance**: React Compiler (19+), Concurrent features, automatic optimizations
+-  **Documentation**: Excellent docs, countless tutorials, large community support
+
+**Cons:**
+-  **Not a Framework**: Need to make decisions about routing, state management, etc.
+-  **Hooks Learning Curve**: Mental model shift from classes (though now standard)
+-  **Bundle Size**: ~45KB (gzipped) - larger than some alternatives
+-  **JSX Requirement**: Requires build step (though this is standard now)
+
+**Ecosystem Stats (2025):**
+```
+NPM Downloads/week: ~25M
+GitHub Stars: 225K+
+Stack Overflow Questions: 500K+
+Job Postings (% of frontend): 65%
+Enterprise Adoption: 95% of Fortune 500
+```
+
+---
+
+#### **2. Vue 3**
+
+**Overview:**
+Progressive JavaScript framework with excellent developer experience and growing enterprise adoption.
+
+**Pros:**
+-  **Excellent DX**: Intuitive API, single-file components, great documentation
+-  **Smaller Bundle**: ~35KB (gzipped) - smaller than React
+-  **Better Performance**: Generally faster than React in benchmarks
+-  **TypeScript Support**: Good TS support with Composition API
+-  **Less Boilerplate**: Cleaner component syntax
+-  **Growing Ecosystem**: Nuxt, Vite (created by Vue team), Pinia
+-  **Two-Way Binding**: Simpler forms and input handling
+
+**Cons:**
+-  **Smaller Ecosystem**: Fewer libraries compared to React (though improving)
+-  **Smaller Developer Pool**: Harder to hire Vue experts (~15% market share)
+-  **Less Enterprise Adoption**: Fewer large companies using Vue
+-  **Framework-Specific**: Harder to create framework-agnostic layer
+-  **Composition API Shift**: Vue 2 to Vue 3 migration still ongoing in many projects
+-  **Component Library Approach**: SFC (Single File Components) less suitable for design systems
+-  **Template Syntax**: Template-based approach harder to make framework-agnostic
+
+**Ecosystem Stats (2025):**
+```
+NPM Downloads/week: ~5M
+GitHub Stars: 208K+
+Job Postings (% of frontend): 15%
+Enterprise Adoption: ~30% of Fortune 500
+```
+---
+
+#### **3. Angular**
+
+**Overview:**
+Full-featured framework by Google with strong TypeScript integration and enterprise focus.
+
+**Pros:**
+-  **Full Framework**: Everything included (routing, state, HTTP, etc.)
+-  **TypeScript Native**: Built with TS from the ground up
+-  **Enterprise Focus**: Great for large-scale applications
+-  **Dependency Injection**: Powerful DI system
+-  **Angular CLI**: Excellent tooling and generators
+-  **Stable Release Cycle**: Predictable updates every 6 months
+-  **Strong Typing**: Excellent type safety throughout
+
+**Cons:**
+-  **Smaller Market Share**: Declining popularity (~8% frontend market)
+-  **Steeper Learning Curve**: Most complex of major frameworks
+-  **Larger Bundle Size**: ~60-80KB (gzipped) base
+-  **Verbose Syntax**: More boilerplate than React/Vue
+-  **Breaking Changes History**: Angular 2+ was complete rewrite
+-  **Less Suitable for Libraries**: Framework designed for apps, not component libraries
+-  **Smaller Developer Pool**: Harder to find Angular developers
+-  **Framework-Specific**: Difficult to create framework-agnostic layer
+
+**Ecosystem Stats (2025):**
+```
+NPM Downloads/week: ~3M
+GitHub Stars: 95K+
+Job Postings (% of frontend): 8%
+Enterprise Adoption: ~40% of Fortune 500 (legacy apps)
+```
+---
+
+### **Decision Rationale: Why React**
+
+**Primary Reasons:**
+
+1. **Largest Ecosystem (Critical)**: 
+   - 25M+ weekly NPM downloads
+   - Unmatched library availability
+   - Design system specific tooling (Storybook, React Aria, Radix UI, etc.)
+   - Most community resources and solutions to common problems
+
+2. **Developer Availability (Critical)**:
+   - 65% of frontend job postings require React
+   - Easiest to hire experienced developers
+   - Minimal onboarding time for most frontend engineers
+   - Large internal knowledge base in most companies
+
+3. **Enterprise Adoption (Critical)**:
+   - 95% of Fortune 500 use React in some capacity
+   - Meta-backed with long-term commitment
+   - Battle-tested at massive scale
+   - Clear roadmap and stability guarantees
+
+4. **Component Library Focus (High Priority)**:
+   - React's component model is perfect for design systems
+   - Easy to create composable, reusable components
+   - Props-based API is intuitive for consumers
+   - Ref forwarding, context, hooks all support library patterns
+
+5. **Framework-Agnostic Strategy (High Priority)**:
+   - React components can wrap vanilla JS/CSS layer
+   - Easy to create adapters for other frameworks
+   - Web Components can be built from React components
+   - Doesn't lock consumers into React-only approach
+
+6. **TypeScript Excellence (High Priority)**:
+   - Industry-leading TypeScript support
+   - Excellent type inference for props and components
+   - Strong typing helps prevent API misuse
+   - Great IDE experience with autocomplete
+
+7. **Tooling Maturity (High Priority)**:
+   - Vite for lightning-fast builds
+   - Storybook for component documentation
+   - Jest + React Testing Library for testing
+   - React DevTools for debugging
+   - Best-in-class development experience
+
+8. **Stability and Longevity**:
+   - React 18+ is mature and stable
+   - Minimal breaking changes between versions
+   - Long-term support guaranteed by Meta
+   - Clear upgrade paths with codemods
+
+**Trade-offs Accepted:**
+
+-  **Larger Bundle Size**: React is ~45KB vs Svelte's ~2KB
+  - *Acceptable because*: Most apps already use React, incremental cost is minimal
+  
+-  **Not the Fastest**: Vue and Svelte benchmark better
+  - *Acceptable because*: React performance is excellent for 99% of use cases, React Compiler improves this further
+
+---
+
+### **Hybrid Architecture: React + Web Components**
+
+**Recommended Approach:**
+
+```
+Layer 1: Vanilla JS/CSS (Vanilla Extract)
+         
+Layer 2: React Components (@company/react)
+         
+Layer 3: Web Components (@company/web-components) [Optional]
+         
+Layer 4: Framework Adapters (Vue, Angular, etc.)
+```
+
+**Why This Works:**
+
+1. **Primary consumers use React directly** - Best DX, smallest bundle
+2. **Non-React apps can use Web Components** - Framework agnostic
+3. **Single source of truth** - All implementations wrap same vanilla layer
+4. **Progressive adoption** - Teams can migrate at their own pace
+
+**Example Implementation:**
+
+```typescript
+// Layer 1: Vanilla (framework-agnostic)
+// packages/vanilla/src/button/button.css.ts
+export const button = style({ /* styles */ });
+
+// Layer 2: React (primary)
+// packages/react/src/Button/Button.tsx
+export const Button = ({ children, ...props }) => (
+  <button className={button} {...props}>
+    {children}
+  </button>
+);
+
+// Layer 3: Web Component (for non-React)
+// packages/web-components/src/button.ts
+@customElement('ds-button')
+export class DSButton extends LitElement {
+  render() {
+    return html`<button class="${button}"><slot></slot></button>`;
+  }
+}
+
+// Layer 4: Vue Adapter (if needed)
+// packages/vue/src/Button.vue
+<template>
+  <ds-button><slot /></ds-button>
+</template>
+```
+
+---
+
+### **Alternative Scenario Recommendations**
+
+**If starting fresh with no existing React investment:**
+- **Still choose React** - Ecosystem and hiring advantages outweigh performance differences
+
+**If performance is absolute top priority:**
+- **Consider Svelte or Solid** - But accept significant ecosystem trade-offs
+
+**If you need true framework-agnostic from day one:**
+- **Start with Lit (Web Components)** - But wrap with React for React consumers
+
+**If your organization is Vue-heavy:**
+- **Consider Vue** - But you'll struggle with third-party library availability
+
+**If building for internal use only:**
+- **Match your organization's primary framework** - Developer familiarity trumps ecosystem size
+
+---
+
+### CSS-in-JS Framework Comparison
+
+This section provides a comprehensive analysis of styling solutions evaluated for the design system, with focus on CSP compliance, performance, developer experience, and production readiness.
+
+#### **Evaluation Criteria**
+
+| Criteria | Weight | Description |
+|----------|--------|-------------|
+| CSP Compliance | Critical | Must work with `style-src 'self'` (no `'unsafe-inline'`) |
+| Performance |  High | Bundle size, runtime overhead, build time |
+| Developer Experience |  High | TypeScript support, IDE tooling, learning curve |
+| Framework Agnostic |  High | Ability to support React, Vue, Angular, etc. |
+| Production Ready | Critical | Stability, maintenance, community support |
+| Theming Support | Medium | Runtime theme switching capabilities |
+
+---
+
+#### **1. Vanilla Extract**
+**Overview:**
+Zero-runtime CSS-in-JS library that extracts styles to static CSS files at build time, using TypeScript for type-safe styling.
+
+**Pros:**
+-  **Perfect CSP Compliance**: All CSS extracted at build time, zero runtime injection
+-  **Zero Runtime Overhead**: No JavaScript executed for styling at runtime
+-  **Type Safety**: Full TypeScript integration with autocomplete
+-  **Small Bundle Size**: Only CSS class name strings in JS bundle (~1-2KB per component)
+-  **CSS Variables Support**: First-class support for CSS custom properties
+-  **Framework Agnostic**: Outputs standard CSS that works everywhere
+-  **Modern CSS Features**: Supports all modern CSS including container queries, layers
+-  **Great DX**: Excellent IDE support, clear error messages
+-  **Active Development**: Maintained by Seek (large Australian company)
+
+**Cons:**
+-  **Build Time Required**: Cannot generate styles dynamically at runtime (by design)
+-  **Learning Curve**: New API to learn vs standard CSS
+-  **Smaller Ecosystem**: Fewer third-party integrations compared to Styled Components
+
+**CSP Compatibility:**  **100%** - No inline styles generated
+
+#### **2. Styled Components**
+
+**Overview:**
+Popular CSS-in-JS library using tagged template literals, with runtime style injection.
+
+**Pros:**
+-  **Large Ecosystem**: Extensive community, plugins, tooling
+-  **Familiar Syntax**: CSS syntax in JavaScript
+-  **Dynamic Styling**: Easy to use props for conditional styling
+-  **Great DX**: Mature tooling, good documentation
+-  **Server-Side Rendering**: Good SSR support
+
+**Cons:**
+-  **CSP Incompatible**: Requires `'unsafe-inline'` or complex nonce/hash setup
+-  **Runtime Overhead**: ~15-20KB base + parsing CSS at runtime
+-  **Performance Issues**: Style injection causes layout thrashing
+-  **Bundle Size**: Larger JavaScript bundles
+-  **Server Overhead**: Increases SSR time
+
+**CSP Compatibility:**  **0%** - Requires `unsafe-inline` or per-request nonces
+
+**Verdict:**  **Not suitable for strict CSP environments**
+
+---
+
+#### **3. CSS Modules**
+
+**Overview:**
+Traditional CSS files with scoped class names, no JavaScript involved.
+
+**Pros:**
+-  **Perfect CSP**: Standard CSS, no runtime
+-  **Zero Runtime**: Pure CSS
+-  **Universal Support**: Works with all build tools
+-  **Simple**: Just regular CSS
+-  **Fast Build**: No extra processing
+-  **Easy Migration**: Can use existing CSS
+
+**Cons:**
+-  **No Type Safety**: No TypeScript integration for styles
+-  **No Dynamic Values**: Can't access JS variables
+-  **Theming Complexity**: Requires CSS variables or duplicate files
+-  **Boilerplate**: Separate files for each component
+-  **Limited Composition**: Harder to share styles between components
+-  **No Autocomplete**: No IDE suggestions for class names
+
+**CSP Compatibility:**  **100%** - Standard CSS
+
+---
+
+#### **4. Tailwind CSS**
+
+**Overview:**
+Utility-first CSS framework with no JavaScript runtime.
+
+**Pros:**
+-  **Perfect CSP**: Pure CSS
+-  **Zero Runtime**: No JavaScript
+-  **Small Production Bundles**: Purged unused styles
+-  **Fast Development**: Pre-built utilities
+-  **Great Ecosystem**: Plugins, tools, community
+-  **Easy Learning**: Just CSS classes
+
+**Cons:**
+-  **Not CSS-in-JS**: Doesn't meet the requirement
+-  **Verbose JSX**: Long className strings
+-  **No Type Safety**: Class names are strings
+-  **Component Abstraction**: Harder to create reusable components
+-  **Design Token Management**: Different approach than traditional design systems
+-  **Framework Specificity**: Harder to make truly framework-agnostic
+
+**CSP Compatibility:**  **100%** - Standard CSS
+**Verdict:**  **Not suitable for component-based design system architecture**
+
+---
+
+### **Decision Rationale: Why Vanilla Extract**
+
+**Primary Reasons:**
+
+1. **CSP Compliance** (Critical): Only solution that achieves 100% CSP compliance with zero compromises. No nonces, no hashes, no `unsafe-inline` needed.
+
+2. **Performance** (High Priority): 
+   - Zero runtime overhead
+   - Smallest JavaScript bundle size
+   - All CSS can be cached and served via CDN
+   - No FOUC (Flash of Unstyled Content) issues
+
+3. **Developer Experience** (High Priority):
+   - Full TypeScript integration with type-safe styles
+   - Excellent IDE autocomplete and error checking
+   - Clear and helpful error messages
+   - Modern API that feels natural
+
+4. **Framework Agnostic** (High Priority):
+   - Outputs standard CSS that works anywhere
+   - Can be consumed by React, Vue, Angular, Web Components
+   - No framework-specific runtime requirements
+
+5. **Production Readiness** (Critical):
+   - Used by major companies (Seek, etc.)
+   - Active development and maintenance
+   - Stable API with semantic versioning
+   - Good documentation and examples
+
+6. **Design Token Integration**:
+   - First-class CSS variables support
+   - Perfect for design token systems
+   - Easy theme switching without runtime overhead
+
+7. **Modern CSS Features**:
+   - CSS Container Queries
+   - CSS Cascade Layers
+   - CSS Nesting (via PostCSS)
+   - All future CSS features work automatically
+
+**Trade-offs Accepted:**
+
+-  **No Dynamic Styles**: Cannot generate completely new styles at runtime (use CSS variables instead)
+-  **Build Step Required**: Adds ~2-3 seconds to build time
+-  **New API**: Team needs to learn Vanilla Extract API
+
+**These trade-offs are acceptable because:**
+- Design systems rarely need truly dynamic styles (CSS variables handle 99% of use cases)
+- Build time is negligible compared to security and performance benefits
+- API is intuitive and well-documented, team ramp-up time is minimal
+
+---
+
+### **Alternative Scenario Recommendations**
+
+**If CSP is NOT a hard requirement:**
+- **Use Emotion** - More mature ecosystem, good DX, acceptable performance
+
+**If targeting a single framework (React only):**
+- **Consider Panda CSS** - Modern DX, great performance, growing ecosystem
+
+**If simplicity is paramount:**
+- **Use CSS Modules** - Simple, fast, universally supported
+
+**If you need the absolute smallest bundles:**
+- **Monitor StyleX** - Best performance metrics, but wait for ecosystem maturity
+
+**If you want utility-first approach:**
+- **Use Tailwind** - But with component wrapper layer for design system APIs
+
+---
+
 ## I. Architecture & Strategy
 
 ### 1. Reusability Across Multiple Applications and Frameworks
@@ -191,6 +635,8 @@ export class DSButton extends LitElement {
 
 - Each package follows semantic versioning independently
 - Monorepo managed with Changesets for coordinated releases
+- Git tags for tracking releases and enabling rollbacks
+- Automated npm publishing via CI/CD pipeline
 - Clear deprecation policy with migration guides
 
 **Version Compatibility Matrix:**
@@ -204,6 +650,177 @@ export class DSButton extends LitElement {
     "@company/tokens": "^3.0.0",
     "@company/vanilla": "^2.0.0"
   }
+}
+```
+
+---
+
+#### **Git Tagging Strategy**
+
+**Automated Tags:**
+- Format: `@company/react@2.4.0`
+- Created automatically by Changesets
+- Includes changelog in tag annotation
+- Pushed with `--follow-tags`
+
+---
+
+#### **Automated Publishing Pipeline**
+
+**On Tag Push (`@company/*@*.*.*`):**
+1. Run tests + type-check + build
+2. Upload coverage to Codecov
+3. Verify bundle sizes
+4. Publish to NPM with provenance
+5. Create GitHub release
+6. Deploy Storybook
+7. Notify team via Slack
+
+**Package Configuration Essentials:**
+```json
+{
+  "publishConfig": { "access": "public", "provenance": true },
+  "exports": {
+    ".": { "import": "./dist/index.js", "types": "./dist/index.d.ts" },
+    "./styles.css": "./dist/styles.css"
+  },
+  "sideEffects": ["*.css"]
+}
+```
+
+---
+
+#### **Quality Gates**
+
+**Pre-commit (Husky + Lint-staged):**
+- Auto-fix: ESLint + Prettier
+- Type-check changed files
+- Block console.log statements
+- Enforce conventional commits: `feat(scope): description`
+
+**Commit Scopes:** core, react, tokens, icons, vanilla, utils
+
+**CI/CD Pipeline (Parallel Jobs):**
+- Lint (ESLint + Prettier)
+- Type-check (TypeScript)
+- Test (Jest, 80% coverage minimum)
+- Build verification
+- Bundle size check (fails if >50KB increase)
+- Visual regression (Chromatic)
+
+**4. Bundle Size Monitoring**
+
+```typescript
+// scripts/size-check.ts
+import { exec } from 'child_process';
+import { promisify } from 'util';
+import fs from 'fs/promises';
+import path from 'path';
+import { gzipSize } from 'gzip-size';
+
+const execAsync = promisify(exec);
+
+interface SizeReport {
+  package: string;
+  size: number;
+  gzipSize: number;
+  delta: number;
+}
+
+async function checkBundleSize() {
+  const packages = ['core', 'react', 'tokens', 'vanilla', 'icons'];
+  const reports: SizeReport[] = [];
+
+  for (const pkg of packages) {
+    const distPath = path.join(process.cwd(), 'packages', pkg, 'dist');
+
+    try {
+      // Get main bundle size
+      const indexPath = path.join(distPath, 'index.js');
+      const content = await fs.readFile(indexPath);
+
+      const size = content.length;
+      const gzip = await gzipSize(content);
+
+      // Compare with baseline
+      const baselinePath = path.join(process.cwd(), '.size-snapshot.json');
+      let baseline: Record<string, number> = {};
+
+      try {
+        baseline = JSON.parse(await fs.readFile(baselinePath, 'utf-8'));
+      } catch {
+        // No baseline exists
+      }
+
+      const previousSize = baseline[pkg] || 0;
+      const delta = size - previousSize;
+
+      reports.push({
+        package: pkg,
+        size,
+        gzipSize: gzip,
+        delta,
+      });
+
+      // Update baseline
+      baseline[pkg] = size;
+      await fs.writeFile(baselinePath, JSON.stringify(baseline, null, 2));
+    } catch (error) {
+      console.error(`Failed to check size for ${pkg}:`, error);
+    }
+  }
+
+  // Print report
+  console.log('\n Bundle Size Report\n');
+  console.table(
+    reports.map((r) => ({
+      Package: r.package,
+      'Size (KB)': (r.size / 1024).toFixed(2),
+      'Gzip (KB)': (r.gzipSize / 1024).toFixed(2),
+      'Delta (KB)': (r.delta / 1024).toFixed(2),
+    }))
+  );
+
+  // Check if any package exceeded threshold
+  const threshold = 50 * 1024; // 50KB increase limit
+  const exceeded = reports.filter((r) => r.delta > threshold);
+
+  if (exceeded.length > 0) {
+    console.error('\n Bundle size increased significantly:');
+    exceeded.forEach((r) => {
+      console.error(`  - ${r.package}: +${(r.delta / 1024).toFixed(2)}KB`);
+    });
+    process.exit(1);
+  }
+
+  console.log('\n Bundle sizes are within acceptable limits\n');
+}
+
+checkBundleSize().catch(console.error);
+```
+
+**5. Changesets Configuration**
+
+```json
+// .changeset/config.json
+{
+  "changelog": [
+    "@changesets/changelog-github",
+    {
+      "repo": "company/design-system"
+    }
+  ],
+  "commit": false,
+  "fixed": [],
+  "linked": [
+    ["@company/core", "@company/react"]
+  ],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": [
+    "@company/storybook"
+  ]
 }
 ```
 
@@ -235,48 +852,77 @@ export default function transformer(file: FileInfo, api: API) {
 }
 ```
 
-#### **Release Process**
+---
 
-**1. Changesets Workflow**
+#### **Testing Strategy**
+
+**Coverage Requirements:**
+- Minimum: 80% (branches, functions, lines, statements)
+- Excludes: `.stories.tsx`, `.css.ts`, `dist/`
+
+**Test Types:**
+- Unit tests: Jest + React Testing Library
+- Smoke tests: Verify build artifacts exist and import correctly
+- Visual regression: Chromatic on Storybook stories
+- Accessibility: Automated a11y checks in Storybook
+
+---
+
+#### **Developer Workflow**
 
 ```bash
-pnpm changeset
-# Select packages changed, type of change (major/minor/patch)
-# On merge to main, changesets bot creates PR with:
-# - Updated versions
-# - Updated CHANGELOG.md
-# - Package.json updates
+# 1. Create branch
+git checkout -b feat/add-tooltip
+
+# 2. Develop + add changeset
+pnpm changeset  # Select package, type (major/minor/patch), description
+
+# 3. Local checks (auto-run on commit)
+pnpm run lint && pnpm run test && pnpm run build
+
+# 4. Commit
+git commit -m "feat(core): add Tooltip component"
+# Pre-commit hook: lint-staged, type-check, no console.log
+
+# 5. Push + PR
+git push origin feat/add-tooltip
+# CI: lint, test, type-check, build, bundle size, visual regression
+
+# 6. Merge → Auto-publish
+# Changesets → version bump → git tag → NPM publish → Storybook deploy
 ```
 
-**2. Version Strategy Matrix**
+**Version Strategy Matrix**
 
-| Change Type         | Version Bump | Example           | Breaking?  |
-| ------------------- | ------------ | ----------------- | ---------- |
-| New component       | Minor        | 1.0.0 → 1.1.0     | No         |
-| New prop (optional) | Minor        | 1.1.0 → 1.2.0     | No         |
-| Bug fix             | Patch        | 1.2.0 → 1.2.1     | No         |
-| Prop removed        | Major        | 1.2.1 → 2.0.0     | Yes        |
-| Required prop added | Major        | 2.0.0 → 3.0.0     | Yes        |
-| Token value changed | Patch/Minor  | Context-dependent | Usually No |
+| Change Type         | Version Bump | Git Tag                     | Example           | Breaking?  |
+| ------------------- | ------------ | --------------------------- | ----------------- | ---------- |
+| New component       | Minor        | @company/core@1.1.0         | 1.0.0 → 1.1.0     | No         |
+| New prop (optional) | Minor        | @company/react@1.2.0        | 1.1.0 → 1.2.0     | No         |
+| Bug fix             | Patch        | @company/tokens@1.2.1       | 1.2.0 → 1.2.1     | No         |
+| Prop removed        | Major        | @company/core@2.0.0         | 1.2.1 → 2.0.0     | Yes        |
+| Required prop added | Major        | @company/react@3.0.0        | 2.0.0 → 3.0.0     | Yes        |
+| Token value changed | Patch/Minor  | @company/tokens@3.1.0       | Context-dependent | Usually No |
 
-**3. Pre-release Channels**
+**Pre-release Tags**
 
-```json
-{
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/",
-    "access": "public"
-  },
-  "version": "2.4.0-beta.3"
-}
+```bash
+# Alpha releases (experimental)
+@company/react@2.4.0-alpha.1
+@company/react@2.4.0-alpha.2
+
+# Beta releases (feature complete)
+@company/react@2.4.0-beta.1
+@company/react@2.4.0-beta.2
+
+# Release candidates (production testing)
+@company/react@2.4.0-rc.1
+@company/react@2.4.0-rc.2
+
+# Stable release
+@company/react@2.4.0
 ```
 
-- `alpha`: Experimental features, breaking changes expected
-- `beta`: Feature complete, API stabilizing
-- `rc`: Release candidate, production-ready testing
-- `latest`: Stable release
-
-**4. Compatibility Layer**
+**Compatibility Layer**
 
 ```typescript
 // packages/react/src/compat/v1.ts
@@ -974,7 +1620,7 @@ export const avatarSizes = styleVariants({
 // Usage <img className={avatarSizes.md} src={url} alt={name} />
 ```
 
-#### **Strategy 3: Data Attributes + CSS Selectors**
+#### **Strategy 2: Data Attributes + CSS Selectors**
 
 ```typescript
 // packages/vanilla/src/badge/badge.css.ts
@@ -1009,7 +1655,7 @@ export const badge = style({
 </span>;
 ```
 
-#### **Strategy 4: CSS Grid/Flexbox for Layout**
+#### **Strategy 3: CSS Grid/Flexbox for Layout**
 
 Avoid inline positioning styles:
 
@@ -1028,7 +1674,7 @@ export const gridSpans = styleVariants({
 <div className={gridSpans[columns]}>
 ```
 
-#### **Strategy 5: Complex Dynamic Scenarios**
+#### **Strategy 4: Complex Dynamic Scenarios**
 
 For truly dynamic scenarios (e.g., drag-and-drop positioning):
 
@@ -1124,895 +1770,7 @@ export function setupCSPReporting() {
 
 ---
 
-## IV. Bonus Considerations
-
-### 1. Accessibility (WCAG 2.1 AA Compliance)
-
-#### **Comprehensive Accessibility Strategy**
-
-**A. Token-Level Accessibility**
-
-```typescript
-// packages/tokens/src/accessibility.ts
-export const a11yTokens = {
-  // WCAG AA compliant contrast ratios
-  contrastRatios: {
-    normalText: 4.5, // WCAG AA for normal text
-    largeText: 3, // WCAG AA for large text (18pt+)
-    aa: 4.5,
-    aaa: 7,
-  },
-
-  // Focus indicators
-  focus: {
-    outlineWidth: '2px',
-    outlineStyle: 'solid',
-    outlineOffset: '2px',
-    outlineColor: '#4A90E2', // High contrast blue
-  },
-
-  // Touch targets (WCAG 2.5.5)
-  touchTarget: {
-    minSize: '44px', // Minimum 44x44px
-  },
-
-  // Motion preferences
-  motion: {
-    reducedTransition: '0.01ms', // Nearly instant for prefers-reduced-motion
-    normalTransition: '200ms',
-  },
-};
-```
-
-**B. Automatic Contrast Validation**
-
-```typescript
-// packages/tokens/src/utils/contrastChecker.ts
-import { getLuminance, getContrastRatio } from 'polished';
-
-export function validateContrast(
-  foreground: string,
-  background: string,
-  level: 'AA' | 'AAA' = 'AA',
-  isLargeText = false
-): { isValid: boolean; ratio: number; required: number } {
-  const ratio = getContrastRatio(foreground, background);
-
-  const required = level === 'AAA' ? (isLargeText ? 4.5 : 7) : isLargeText ? 3 : 4.5;
-
-  return {
-    isValid: ratio >= required,
-    ratio,
-    required,
-  };
-}
-
-// Build-time validation
-const textOnPrimary = validateContrast(
-  semanticLight.colors.text.primary,
-  semanticLight.colors.background.primary
-);
-
-if (!textOnPrimary.isValid) {
-  throw new Error(
-    `Insufficient contrast ratio: ${textOnPrimary.ratio.toFixed(2)} ` +
-      `(required: ${textOnPrimary.required})`
-  );
-}
-```
-
-**C. Accessible Component Patterns**
-
-#### **Example 1: Modal Component**
-
-```typescript
-// packages/react/src/Modal/Modal.tsx
-import React, { useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import FocusTrap from 'focus-trap-react';
-import * as styles from '@company/vanilla/modal.css';
-
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  children: React.ReactNode;
-  closeOnOverlayClick?: boolean;
-  closeOnEsc?: boolean;
-}
-
-export const Modal: React.FC<ModalProps> = ({
-  isOpen,
-  onClose,
-  title,
-  children,
-  closeOnOverlayClick = true,
-  closeOnEsc = true,
-}) => {
-  const titleId = useRef(
-    `modal-title-${Math.random().toString(36).substr(2, 9)}`
-  );
-  const descriptionId = useRef(
-    `modal-desc-${Math.random().toString(36).substr(2, 9)}`
-  );
-
-  // A11y: Focus management
-  useEffect(() => {
-    if (!isOpen) return;
-
-    // Store previously focused element
-    const previouslyFocused = document.activeElement as HTMLElement;
-
-    return () => {
-      // Restore focus on close
-      previouslyFocused?.focus();
-    };
-  }, [isOpen]);
-
-  // A11y: Keyboard navigation
-  useEffect(() => {
-    if (!isOpen || !closeOnEsc) return;
-
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, closeOnEsc, onClose]);
-
-  // A11y: Prevent body scroll when modal open
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, [isOpen]);
-
-  if (!isOpen) return null;
-
-  return createPortal(
-    <div
-      className={styles.overlay}
-      onClick={closeOnOverlayClick ? onClose : undefined}
-      // A11y: Inert background
-      aria-hidden='false'
-    >
-      <FocusTrap
-        focusTrapOptions={{
-          // A11y: Trap focus within modal
-          initialFocus: false,
-          returnFocusOnDeactivate: false,
-          clickOutsideDeactivates: closeOnOverlayClick,
-        }}
-      >
-        <div
-          className={styles.modal}
-          onClick={(e) => e.stopPropagation()}
-          role='dialog'
-          aria-modal='true'
-          // A11y: Associate title and description
-          aria-labelledby={titleId.current}
-          aria-describedby={descriptionId.current}
-        >
-          <div className={styles.header}>
-            <h2 id={titleId.current} className={styles.title}>
-              {title}
-            </h2>
-
-            <button
-              className={styles.closeButton}
-              onClick={onClose}
-              // A11y: Accessible button label
-              aria-label='Close dialog'
-              type='button'
-            >
-              <CloseIcon aria-hidden='true' />
-            </button>
-          </div>
-
-          <div id={descriptionId.current} className={styles.content}>
-            {children}
-          </div>
-        </div>
-      </FocusTrap>
-    </div>,
-    document.body
-  );
-};
-```
-
-**Modal Styles with A11y Features:**
-
-```typescript
-// packages/vanilla/src/modal/modal.css.ts
-import { style, globalStyle } from '@vanilla-extract/css';
-import { vars } from '@company/tokens';
-
-export const overlay = style({
-  position: 'fixed',
-  inset: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  zIndex: 1000,
-
-  // A11y: Respect prefers-reduced-motion
-  '@media': {
-    '(prefers-reduced-motion: no-preference)': {
-      animation: 'fadeIn 200ms ease-out',
-    },
-    '(prefers-reduced-motion: reduce)': {
-      animation: 'none',
-    },
-  },
-});
-
-export const modal = style({
-  backgroundColor: vars.colors.background.primary,
-  borderRadius: vars.borderRadius.lg,
-  maxWidth: '600px',
-  width: '90%',
-  maxHeight: '90vh',
-  overflow: 'auto',
-  boxShadow: vars.shadows.xl,
-
-  // A11y: Focus indicator
-  ':focus': {
-    outline: `${vars.focus.outlineWidth} ${vars.focus.outlineStyle} ${vars.focus.outlineColor}`,
-    outlineOffset: vars.focus.outlineOffset,
-  },
-
-  ':focus:not(:focus-visible)': {
-    outline: 'none', // Remove outline for mouse users
-  },
-});
-
-export const closeButton = style({
-  // A11y: Minimum touch target size
-  minWidth: '44px',
-  minHeight: '44px',
-  padding: 0,
-  border: 'none',
-  background: 'transparent',
-  cursor: 'pointer',
-  borderRadius: vars.borderRadius.sm,
-
-  // A11y: High contrast focus
-  ':focus-visible': {
-    outline: `2px solid ${vars.colors.action.primary}`,
-    outlineOffset: '2px',
-  },
-
-  // A11y: Clear hover state
-  ':hover': {
-    backgroundColor: vars.colors.background.tertiary,
-  },
-});
-```
-
-#### **Example 2: Dropdown/Select Component**
-
-```typescript
-// packages/react/src/Select/Select.tsx
-import React, { useState, useRef, useEffect } from 'react';
-import * as styles from '@company/vanilla/select.css';
-
-interface SelectProps {
-  label: string;
-  options: Array<{ value: string; label: string; disabled?: boolean }>;
-  value?: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  disabled?: boolean;
-  error?: string;
-  required?: boolean;
-}
-
-export const Select: React.FC<SelectProps> = ({
-  label,
-  options,
-  value,
-  onChange,
-  placeholder,
-  disabled,
-  error,
-  required,
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [focusedIndex, setFocusedIndex] = useState(-1);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const listRef = useRef<HTMLUListElement>(null);
-
-  const selectId = useRef(`select-${Math.random().toString(36).substr(2, 9)}`);
-  const listId = useRef(`listbox-${Math.random().toString(36).substr(2, 9)}`);
-
-  // A11y: Keyboard navigation (ARIA 1.2 compliant)
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    switch (e.key) {
-      case 'Enter':
-      case ' ':
-        if (!isOpen) {
-          setIsOpen(true);
-        } else if (focusedIndex >= 0) {
-          onChange(options[focusedIndex].value);
-          setIsOpen(false);
-        }
-        e.preventDefault();
-        break;
-
-      case 'ArrowDown':
-        if (!isOpen) {
-          setIsOpen(true);
-        } else {
-          setFocusedIndex((prev) => Math.min(prev + 1, options.length - 1));
-        }
-        e.preventDefault();
-        break;
-
-      case 'ArrowUp':
-        if (isOpen) {
-          setFocusedIndex((prev) => Math.max(prev - 1, 0));
-          e.preventDefault();
-        }
-        break;
-
-      case 'Home':
-        if (isOpen) {
-          setFocusedIndex(0);
-          e.preventDefault();
-        }
-        break;
-
-      case 'End':
-        if (isOpen) {
-          setFocusedIndex(options.length - 1);
-          e.preventDefault();
-        }
-        break;
-
-      case 'Escape':
-        setIsOpen(false);
-        triggerRef.current?.focus();
-        e.preventDefault();
-        break;
-    }
-  };
-
-  // A11y: Scroll focused option into view
-  useEffect(() => {
-    if (isOpen && focusedIndex >= 0) {
-      const option = listRef.current?.children[focusedIndex] as HTMLElement;
-      option?.scrollIntoView({ block: 'nearest' });
-    }
-  }, [focusedIndex, isOpen]);
-
-  // A11y: Close on outside click
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleClickOutside = (e: MouseEvent) => {
-      if (!triggerRef.current?.contains(e.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen]);
-
-  const selectedOption = options.find((opt) => opt.value === value);
-
-  return (
-    <div className={styles.selectWrapper}>
-      {/* A11y: Associated label */}
-      <label htmlFor={selectId.current} className={styles.label}>
-        {label}
-        {required && <span aria-label='required'> *</span>}
-      </label>
-
-      {/* A11y: Combobox pattern (ARIA 1.2) */}
-      <button
-        ref={triggerRef}
-        id={selectId.current}
-        className={styles.trigger}
-        onClick={() => setIsOpen(!isOpen)}
-        onKeyDown={handleKeyDown}
-        disabled={disabled}
-        aria-haspopup='listbox'
-        aria-expanded={isOpen}
-        aria-labelledby={`${selectId.current}-label`}
-        aria-controls={listId.current}
-        aria-invalid={!!error}
-        aria-describedby={error ? `${selectId.current}-error` : undefined}
-        type='button'
-      >
-        <span className={styles.selectedValue}>
-          {selectedOption?.label || placeholder || 'Select...'}
-        </span>
-        <ChevronIcon aria-hidden='true' className={styles.chevron} />
-      </button>
-
-      {/* A11y: Error message */}
-      {error && (
-        <div
-          id={`${selectId.current}-error`}
-          className={styles.error}
-          role='alert'
-        >
-          {error}
-        </div>
-      )}
-
-      {/* A11y: Listbox with proper ARIA */}
-      {isOpen && (
-        <ul
-          ref={listRef}
-          id={listId.current}
-          className={styles.list}
-          role='listbox'
-          aria-labelledby={selectId.current}
-          tabIndex={-1}
-        >
-          {options.map((option, index) => (
-            <li
-              key={option.value}
-              className={styles.option}
-              role='option'
-              aria-selected={option.value === value}
-              aria-disabled={option.disabled}
-              data-focused={index === focusedIndex}
-              onClick={() => {
-                if (!option.disabled) {
-                  onChange(option.value);
-                  setIsOpen(false);
-                  triggerRef.current?.focus();
-                }
-              }}
-              onMouseEnter={() => setFocusedIndex(index)}
-            >
-              {option.label}
-              {option.value === value && (
-                <CheckIcon aria-hidden='true' className={styles.checkIcon} />
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-};
-```
-
-**D. Automated Accessibility Testing**
-
-```typescript
-// packages/react/src/__tests__/a11y.test.tsx
-import { render } from '@testing-library/react';
-import { axe, toHaveNoViolations } from 'jest-axe';
-import { Modal, Button, Select } from '../index';
-
-expect.extend(toHaveNoViolations);
-
-describe('Accessibility Tests', () => {
-  it('Modal should have no accessibility violations', async () => {
-    const { container } = render(
-      <Modal isOpen={true} onClose={() => {}} title='Test Modal'>
-        <p>Modal content</p>
-      </Modal>
-    );
-
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
-
-  it('Button should meet WCAG AA contrast requirements', async () => {
-    const { container } = render(<Button>Click me</Button>);
-    const results = await axe(container, {
-      rules: {
-        'color-contrast': { enabled: true },
-      },
-    });
-    expect(results).toHaveNoViolations();
-  });
-
-  it('Select should support keyboard navigation', async () => {
-    const { getByRole } = render(
-      <Select
-        label='Choose option'
-        options={[{ value: '1', label: 'Option 1' }]}
-        onChange={() => {}}
-      />
-    );
-
-    const trigger = getByRole('button');
-    expect(trigger).toHaveAttribute('aria-haspopup', 'listbox');
-    expect(trigger).toHaveAttribute('aria-expanded');
-  });
-});
-```
-
-**E. Storybook Accessibility Addon**
-
-```typescript
-// .storybook/main.ts
-export default {
-  addons: [
-    '@storybook/addon-a11y', // Automated a11y testing in Storybook
-    '@storybook/addon-essentials',
-  ],
-};
-
-// Modal.stories.tsx
-import { Meta, StoryObj } from '@storybook/react';
-import { Modal } from './Modal';
-
-const meta: Meta<typeof Modal> = {
-  title: 'Components/Modal',
-  component: Modal,
-  parameters: {
-    // Configure a11y addon
-    a11y: {
-      config: {
-        rules: [
-          {
-            id: 'color-contrast',
-            enabled: true,
-          },
-          {
-            id: 'aria-required-attr',
-            enabled: true,
-          },
-        ],
-      },
-    },
-  },
-};
-
-export default meta;
-```
-
----
-
-### 2. Collaboration & Governance
-
-#### **Design-Development Workflow**
-
-**A. Design Token Synchronization**
-
-```typescript
-// tooling/token-sync/figma-to-tokens.ts
-import { Api } from 'figma-api';
-import fs from 'fs/promises';
-
-interface FigmaVariable {
-  name: string;
-  resolvedType: string;
-  valuesByMode: Record<string, any>;
-}
-
-async function syncFigmaTokens() {
-  const api = new Api({ personalAccessToken: process.env.FIGMA_TOKEN });
-
-  // Fetch variables from Figma
-  const file = await api.getFileVariables(process.env.FIGMA_FILE_KEY!);
-
-  const tokens = {
-    colors: {},
-    spacing: {},
-    typography: {},
-  };
-
-  // Transform Figma variables to design tokens
-  Object.values(file.meta.variables).forEach((variable: FigmaVariable) => {
-    const [category, ...path] = variable.name.split('/');
-
-    if (category === 'color') {
-      // Extract RGB values
-      const rgb = variable.valuesByMode[Object.keys(variable.valuesByMode)[0]];
-      tokens.colors[path.join('.')] = rgbToHex(rgb);
-    }
-    // ... handle spacing, typography, etc.
-  });
-
-  // Write to tokens package
-  await fs.writeFile('packages/tokens/src/generated/figma.json', JSON.stringify(tokens, null, 2));
-
-  console.log('Tokens synced from Figma');
-}
-
-// Run as GitHub Action on Figma webhook
-```
-
-**B. Contribution Guidelines**
-
-````markdown
-# CONTRIBUTING.md
-
-## Design System Contribution Guidelines
-
-### For Designers
-
-#### 1. Proposing New Components
-
-1. Create component spec in Figma with all states:
-   - Default, hover, active, focus, disabled
-   - Light and dark themes
-   - All size variants
-   - Error states
-2. Document in RFC template:
-   - Use cases
-   - Accessibility requirements
-   - Interaction patterns
-   - Open questions
-
-3. Present in Design System Guild meeting
-
-#### 2. Token Changes
-
-- All token changes must go through Figma
-- Update documentation with rationale
-- Consider backward compatibility
-
-### For Developers
-
-#### 1. Adding Components
-
-```bash
-# Use generator
-pnpm run generate:component
-
-# This creates:
-# - packages/vanilla/src/ComponentName/
-#   - component.css.ts
-#   - index.ts
-# - packages/react/src/ComponentName/
-#   - ComponentName.tsx
-#   - ComponentName.test.tsx
-#   - ComponentName.stories.tsx
-# - Documentation stubs
-```
-
-#### 2. Component Checklist
-
-- [ ] TypeScript types with JSDoc
-- [ ] WCAG 2.1 AA compliant
-- [ ] Unit tests (>80% coverage)
-- [ ] Integration tests for complex interactions
-- [ ] Storybook stories with all variants
-- [ ] Documentation with code examples
-- [ ] Changeset added
-- [ ] Reviewed by Design System team
-
-#### 3. Code Review Requirements
-
-- 2 approvals required (1 designer, 1 engineer)
-- Automated checks must pass:
-  - Linting (ESLint + Prettier)
-  - Type checking (TypeScript)
-  - Tests (Jest)
-  - Visual regression (Chromatic)
-  - Accessibility (axe)
-  - Bundle size impact
-````
-
-**C. Governance Structure**
-
-```typescript
-// RFC (Request for Comments) Template
-/**
- * RFC: [Component Name]
- *
- * Author: [Name]
- * Date: [YYYY-MM-DD]
- * Status: [Draft | In Review | Approved | Implemented]
- *
- * ## Summary
- * Brief description of the proposed component/change.
- *
- * ## Motivation
- * Why is this needed? What problem does it solve?
- *
- * ## Detailed Design
- * - Component API
- * - Props/variants
- * - Accessibility considerations
- * - Example usage
- *
- * ## Alternatives Considered
- * What other approaches were considered?
- *
- * ## Adoption Strategy
- * - Migration path for existing consumers
- * - Breaking changes (if any)
- * - Deprecation timeline
- *
- * ## Open Questions
- * Unresolved issues or areas needing discussion
- */
-```
-
-**D. Release Process**
-
-```yaml
-# .github/workflows/release.yml
-name: Release
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - uses: pnpm/action-setup@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Build packages
-        run: pnpm run build
-
-      - name: Run tests
-        run: pnpm run test
-
-      - name: Visual regression tests
-        run: pnpm run test:visual
-
-      - name: Create Release PR
-        uses: changesets/action@v1
-        with:
-          publish: pnpm run release
-          commit: 'chore: release packages'
-          title: 'chore: release packages'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Deploy Storybook
-        run: pnpm run deploy:storybook
-        env:
-          CHROMATIC_PROJECT_TOKEN: ${{ secrets.CHROMATIC_TOKEN }}
-```
-
-**E. Communication Channels**
-
-```typescript
-// Slack Integration for Releases
-// .github/workflows/notify-release.yml
-- name: Notify Slack
-  uses: slackapi/slack-github-action@v1
-  with:
-    payload: |
-      {
-        "text": "Design System v${{ steps.version.outputs.version }} released!",
-        "blocks": [
-          {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "*Design System Release*\n\nVersion: `${{ steps.version.outputs.version }}`\n\n*Changes:*\n${{ steps.changelog.outputs.changes }}"
-            }
-          },
-          {
-            "type": "actions",
-            "elements": [
-              {
-                "type": "button",
-                "text": {
-                  "type": "plain_text",
-                  "text": "View Changelog"
-                },
-                "url": "${{ steps.release.outputs.url }}"
-              },
-              {
-                "type": "button",
-                "text": {
-                  "type": "plain_text",
-                  "text": "View Storybook"
-                },
-                "url": "https://storybook.company.com"
-              }
-            ]
-          }
-        ]
-      }
-  env:
-    SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
-```
-
-**F. Version Migration Guides**
-
-````markdown
-# Migration Guide: v2.x to v3.x
-
-## Breaking Changes
-
-### Button Component
-
-**Changed:** `style` prop renamed to `variant`
-
-```diff
-- <Button style="primary">Click</Button>
-+ <Button variant="primary">Click</Button>
-```
-
-**Automated migration:**
-
-```bash
-npx @company/codemods v2-to-v3
-```
-
-### Theme API
-
-**Changed:** Theme provider now requires explicit brand
-
-```diff
-- <ThemeProvider>
-+ <ThemeProvider brand="acme">
-```
-
-## New Features
-
-### Select Component
-
-New accessible select component with keyboard navigation.
-
-```tsx
-<Select label="Choose option" options={options} value={value} onChange={setValue} />
-```
-
-See full documentation: https://storybook.company.com
-````
-
-**G. Design System Guild**
-
-```typescript
-// Guild Structure
-const guild = {
-  meetings: {
-    frequency: 'Bi-weekly',
-    duration: '1 hour',
-    agenda: ['RFC reviews', 'Component demos', 'Adoption metrics', 'Q&A'],
-  },
-
-  roles: {
-    chair: 'Rotates quarterly',
-    designers: '2-3 representatives',
-    engineers: '2-3 representatives',
-    productManagers: '1 representative',
-  },
-
-  responsibilities: [
-    'Review and approve RFCs',
-    'Prioritize roadmap',
-    'Maintain documentation',
-    'Support consumers',
-  ],
-};
-```
-
----
-
-## V. Storybook Implementation
+## IV. Storybook Implementation
 
 ### Storybook Configuration
 
@@ -2100,7 +1858,7 @@ export default preview;
 
 ---
 
-## VI. Performance
+## V. Performance
 
 ### Code Splitting Strategy
 
